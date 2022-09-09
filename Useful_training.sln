@@ -3,9 +3,36 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2994F7CC-75A6-40E9-9F24-FE66B97E451F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Neural_network", "Neural_network", "{73FFFFB0-89EA-42E8-8984-BF57FD5B62FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Useful_training.Core.Neural_network.Neuron", "Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.Neuron.csproj", "{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Useful_training.Core.Neural_network.Neuron.Tests", "Useful_training.Core.Neural_network.Neuron.Tests\Useful_training.Core.Neural_network.Neuron.Tests.csproj", "{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{73FFFFB0-89EA-42E8-8984-BF57FD5B62FA} = {2994F7CC-75A6-40E9-9F24-FE66B97E451F}
+		{623E4970-F91E-4B40-8AB7-1A38DC14AEFA} = {73FFFFB0-89EA-42E8-8984-BF57FD5B62FA}
+		{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F} = {73FFFFB0-89EA-42E8-8984-BF57FD5B62FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A962DBA-2B88-4A77-B8B8-11EBAE54F8B9}
