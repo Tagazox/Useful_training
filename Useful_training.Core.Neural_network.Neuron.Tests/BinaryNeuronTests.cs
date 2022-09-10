@@ -1,5 +1,5 @@
 ﻿
-using Useful_training.Core.Neural_network.Neuron.Exceptions;
+
 
 namespace Useful_training.Core.Neural_network.Neuron.Tests
 {

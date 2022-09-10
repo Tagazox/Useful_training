@@ -53,10 +53,9 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldThrowCantInitialiseWithZeroInputException()
         {
             DerivativeSigmoidNeuron derivativeSigmoidNeuron = new DerivativeSigmoidNeuron();
-            derivativeSigmoidNeuron.InitialiseWithRandomValues(0);
             Action Calculate = () =>
             {
-                double outputOfTheNeuron = derivativeSigmoidNeuron.GetCalculationResult(_inputs);
+                derivativeSigmoidNeuron.InitialiseWithRandomValues(0);
             };
             Calculate.Should().Throw<CantInitialiseWithZeroInputException>();
         }

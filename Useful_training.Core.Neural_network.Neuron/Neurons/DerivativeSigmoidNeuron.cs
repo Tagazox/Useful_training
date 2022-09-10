@@ -11,7 +11,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            var SigmoidResult = SigmoidFunction(GetCalculationResult(input));
+            var SigmoidResult = SigmoidFunction(GetInterpolationResult(input));
             return SigmoidResult * (1.0- SigmoidResult);
         }
         private double SigmoidFunction(double x)

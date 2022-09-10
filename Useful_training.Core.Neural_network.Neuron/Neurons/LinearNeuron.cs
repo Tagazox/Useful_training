@@ -11,7 +11,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            return GetCalculationResult(input);
+            return GetInterpolationResult(input);
         }
     }
 }

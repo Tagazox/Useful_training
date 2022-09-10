@@ -26,10 +26,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
             SeLuNeuron seLuNeuron = new SeLuNeuron();
             seLuNeuron.InitialiseWithRandomValues(_numberOnInputs);
             double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
-            if (outputOfTheNeuron > 0)
-                outputOfTheNeuron.Should().BeOfType(typeof(double));
-            else
-                outputOfTheNeuron.Should().Be(0);
+                outputOfTheNeuron.Should().BeGreaterThan(-2);
         }
         [Fact]
         public void NeuroneCloneShouldBeOk()

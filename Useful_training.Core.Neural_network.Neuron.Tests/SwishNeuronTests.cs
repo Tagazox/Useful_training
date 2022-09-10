@@ -58,7 +58,6 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldThrowCantInitialiseWithZeroInputException()
         {
             SwishNeuron swishNeuron = new SwishNeuron();
-            swishNeuron.InitialiseWithRandomValues(0);
             Action Initialise = () =>
             {
                 swishNeuron.InitialiseWithRandomValues(0);

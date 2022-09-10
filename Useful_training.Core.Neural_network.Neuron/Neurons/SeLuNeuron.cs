@@ -11,7 +11,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            var result = GetCalculationResult(input);
+            var result = GetInterpolationResult(input);
             if(result >=0)
                 return result;
             else

@@ -11,7 +11,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            var result = GetCalculationResult(input);
+            var result = GetInterpolationResult(input);
             return .5 * result * (1+ Math.Tanh(Math.Sqrt(2/Math.PI)*(result+Math.Pow(0.044715*result,3))));
         }
     }
