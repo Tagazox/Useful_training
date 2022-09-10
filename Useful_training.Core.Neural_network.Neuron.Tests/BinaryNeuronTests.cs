@@ -6,14 +6,14 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
     public class BinaryNeuronTests
     {
         Random _rand;
-        int _numberOnInputs;
+        int _numberOfInputs;
         List<double> _inputs;
         public BinaryNeuronTests()
         {
             _rand = new Random();
-            _numberOnInputs = _rand.Next(1, 10);
+            _numberOfInputs = _rand.Next(1, 10);
             _inputs = new List<double>();
-            for (int i = 0; i < _numberOnInputs; i++)
+            for (int i = 0; i < _numberOfInputs; i++)
             {
                 _inputs.Add(_rand.NextDouble() * 2 - 1);
             }
@@ -23,7 +23,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             BinaryNeuron binaryNeuron = new BinaryNeuron();
-            binaryNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            binaryNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = binaryNeuron.GetCalculationResult(_inputs);
             outputOfTheNeuron.Should().BeInRange(0, 1);
         }
@@ -31,7 +31,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCloneShouldBeOk()
         {
             BinaryNeuron binaryNeuron = new BinaryNeuron();
-            binaryNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            binaryNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = binaryNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = binaryNeuron.Clone();
@@ -63,7 +63,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
         {
             BinaryNeuron binaryNeuron = new BinaryNeuron();
-            binaryNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            binaryNeuron.InitialiseWithRandomValues(_numberOfInputs);
             _inputs.RemoveAt(0);
             Action Calculate = () =>
             {

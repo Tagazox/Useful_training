@@ -7,14 +7,14 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
     public class SigmoidNeuronTests
     {
         Random _rand;
-        int _numberOnInputs;
+        int _numberOfInputs;
         List<double> _inputs;
         public SigmoidNeuronTests()
         {
             _rand = new Random();
-            _numberOnInputs = _rand.Next(1, 10);
+            _numberOfInputs = _rand.Next(1, 10);
             _inputs = new List<double>();
-            for (int i = 0; i < _numberOnInputs; i++)
+            for (int i = 0; i < _numberOfInputs; i++)
             {
                 _inputs.Add(_rand.NextDouble() * 2 - 1);
             }
@@ -24,7 +24,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            sigmoidNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            sigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = sigmoidNeuron.GetCalculationResult(_inputs);
             outputOfTheNeuron.Should().BeInRange(0, 1);
         }
@@ -32,7 +32,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCloneShouldBeOk()
         {
             SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            sigmoidNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            sigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = sigmoidNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = sigmoidNeuron.Clone();
@@ -65,7 +65,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
         {
             SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            sigmoidNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            sigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             _inputs.RemoveAt(0);
             Action Calculate = () =>
             {

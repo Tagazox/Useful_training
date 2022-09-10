@@ -7,14 +7,14 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
     public class SeLuNeuronTests
     {
         Random _rand;
-        int _numberOnInputs;
+        int _numberOfInputs;
         List<double> _inputs;
         public SeLuNeuronTests()
         {
             _rand = new Random();
-            _numberOnInputs = _rand.Next(1, 10);
+            _numberOfInputs = _rand.Next(1, 10);
             _inputs = new List<double>();
-            for (int i = 0; i < _numberOnInputs; i++)
+            for (int i = 0; i < _numberOfInputs; i++)
             {
                 _inputs.Add(_rand.NextDouble() * 2 - 1);
             }
@@ -24,7 +24,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             SeLuNeuron seLuNeuron = new SeLuNeuron();
-            seLuNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            seLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
                 outputOfTheNeuron.Should().BeGreaterThan(-2);
         }
@@ -32,7 +32,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCloneShouldBeOk()
         {
             SeLuNeuron seLuNeuron = new SeLuNeuron();
-            seLuNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            seLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = seLuNeuron.Clone();
@@ -65,7 +65,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
         {
             SeLuNeuron seLuNeuron = new SeLuNeuron();
-            seLuNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            seLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             _inputs.RemoveAt(0);
             Action Calculate = () =>
             {

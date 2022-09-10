@@ -6,14 +6,14 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
     public class DerivativeSigmoidNeuronTests
     {
         Random _rand;
-        int _numberOnInputs;
+        int _numberOfInputs;
         List<double> _inputs;
         public DerivativeSigmoidNeuronTests()
         {
             _rand = new Random();
-            _numberOnInputs = _rand.Next(1, 10);
+            _numberOfInputs = _rand.Next(1, 10);
             _inputs = new List<double>();
-            for (int i = 0; i < _numberOnInputs; i++)
+            for (int i = 0; i < _numberOfInputs; i++)
             {
                 _inputs.Add(_rand.NextDouble() * 2 - 1);
             }
@@ -23,7 +23,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             DerivativeSigmoidNeuron derivativeSigmoidNeuron = new DerivativeSigmoidNeuron();
-            derivativeSigmoidNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            derivativeSigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = derivativeSigmoidNeuron.GetCalculationResult(_inputs);
             outputOfTheNeuron.Should().BeInRange(0, 0.3);
         }
@@ -31,7 +31,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCloneShouldBeOk()
         {
             DerivativeSigmoidNeuron derivativeSigmoidNeuron = new DerivativeSigmoidNeuron();
-            derivativeSigmoidNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            derivativeSigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = derivativeSigmoidNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = derivativeSigmoidNeuron.Clone();
@@ -63,7 +63,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
         {
             DerivativeSigmoidNeuron derivativeSigmoidNeuron = new DerivativeSigmoidNeuron();
-            derivativeSigmoidNeuron.InitialiseWithRandomValues(_numberOnInputs);
+            derivativeSigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             _inputs.RemoveAt(0);
             Action Calculate = () =>
             {
