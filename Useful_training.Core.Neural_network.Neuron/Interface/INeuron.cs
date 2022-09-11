@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Useful_training.Core.Neural_network.Neuron.Interface
+namespace Useful_training.Core.Neural_network.Interface
 {
     public interface INeuron
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Useful_training.Core.Neural_network.Neuron.Neurons
+namespace Useful_training.Core.Neural_network
 {
     public enum NeuronType
     {

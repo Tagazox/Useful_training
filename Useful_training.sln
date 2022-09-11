@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2994F7CC-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Neural_network", "Neural_network", "{73FFFFB0-89EA-42E8-8984-BF57FD5B62FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neural_network.Neuron", "Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.Neuron.csproj", "{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neural_network", "Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj", "{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neural_network.Neuron.Tests", "Useful_training.Core.Neural_network.Neuron.Tests\Useful_training.Core.Neural_network.Neuron.Tests.csproj", "{B516434A-4DCC-4FCE-B138-DBCBD6AF0A2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Useful_training.Core.Neural_network.LayerOfNeuronsTests", "Useful_training.Core.Neural_network.LayerOfNeurons.Tests\Useful_training.Core.Neural_network.LayerOfNeuronsTests.csproj", "{639AD000-6A6D-42D7-84A2-DF1BCB80DD07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neural_network.LayerOfNeuronsTests", "Useful_training.Core.Neural_network.LayerOfNeurons.Tests\Useful_training.Core.Neural_network.LayerOfNeuronsTests.csproj", "{639AD000-6A6D-42D7-84A2-DF1BCB80DD07}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{44BE5F6F-D7EF-41D7-97B7-CF956D527BA4}"
 EndProject

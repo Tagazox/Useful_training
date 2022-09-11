@@ -1,7 +1,7 @@
 ﻿
-using Useful_training.Core.Neural_network.Neuron.Exceptions;
+using Useful_training.Core.Neural_network.Exceptions;
 
-namespace Useful_training.Core.Neural_network.Neuron.Tests
+namespace Useful_training.Core.Neural_network.Tests
 {
     public class DerivativeSigmoidNeuronTests
     {
@@ -50,7 +50,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         }
 
         [Fact]
-        public void NeuroneCalculationShouldThrowCantInitialiseWithZeroInputException()
+        public void NeuroneInitialisationShouldThrowCantInitialiseWithZeroInputException()
         {
             DerivativeSigmoidNeuron derivativeSigmoidNeuron = new DerivativeSigmoidNeuron();
             Action Calculate = () =>

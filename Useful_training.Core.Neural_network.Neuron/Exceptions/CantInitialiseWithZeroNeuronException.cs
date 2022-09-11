@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Useful_training.Core.Neural_network.Neuron.Exceptions
+namespace Useful_training.Core.Neural_network.Exceptions
 {
-    public class CantInitialiseWithZeroNeuronException : Exception
+    public class CantInitializeWithZeroNeuronException : Exception
     {
-            public CantInitialiseWithZeroNeuronException(string message) : base(message)
+            public CantInitializeWithZeroNeuronException(string message) : base(message)
             {
             }
     }

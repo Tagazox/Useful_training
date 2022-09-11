@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace Useful_training.Core.Neural_network.Neuron.Tests
+namespace Useful_training.Core.Neural_network.Tests
 {
     public class BinaryNeuronTests
     {
@@ -50,7 +50,7 @@ namespace Useful_training.Core.Neural_network.Neuron.Tests
         }
 
         [Fact]
-        public void NeuroneCalculationShouldThrowCantInitialiseWithZeroInputException()
+        public void NeuroneInitialisationShouldThrowCantInitialiseWithZeroInputException()
         {
             BinaryNeuron binaryNeuron = new BinaryNeuron();
             Action Initialise = () =>

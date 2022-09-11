@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Neuron.Exceptions;
-using Useful_training.Core.Neural_network.Neuron.Interface;
-using Useful_training.Core.Neural_network.Neuron.Neurons;
+using Useful_training.Core.Neural_network.Exceptions;
+using Useful_training.Core.Neural_network.Interface;
+using Useful_training.Core.Neural_network.Neurons;
 
-namespace Useful_training.Core.Neural_network.Neuron
+[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.LayerOfNeuronsTests")]
+namespace Useful_training.Core.Neural_network
 {
-    public class LayerOfNeurons : ILayerOfNeurons
+    internal class LayerOfNeurons : ILayerOfNeurons
     {
         protected IList<INeuron> _neurons { get; set; }
         public LayerOfNeurons()
@@ -30,7 +32,7 @@ namespace Useful_training.Core.Neural_network.Neuron
         public void Initialize(uint numberOfNeuron, int numberOfInput, NeuronType neuronType)
         {
             if (numberOfNeuron == 0)
-                throw new CantInitialiseWithZeroNeuronException("NumberOfNeuron need to be greater than 0");
+                throw new CantInitializeWithZeroNeuronException("NumberOfNeuron need to be greater than 0");
             
             for (int i = 0; i < numberOfNeuron; i++)
             {

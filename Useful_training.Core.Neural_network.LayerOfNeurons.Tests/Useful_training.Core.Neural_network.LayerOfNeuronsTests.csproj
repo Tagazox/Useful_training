@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.Neuron.csproj" />
+    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj" />
   </ItemGroup>
 
 </Project>

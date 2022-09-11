@@ -1,6 +1,7 @@
-using Useful_training.Core.Neural_network.Neuron;
-using Useful_training.Core.Neural_network.Neuron.Exceptions;
-using Useful_training.Core.Neural_network.Neuron.Neurons;
+using Useful_training.Core.Neural_network;
+using Useful_training.Core.Neural_network.Exceptions;
+using Useful_training.Core.Neural_network.Interface;
+using Useful_training.Core.Neural_network.Neurons;
 
 namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
 {
@@ -22,7 +23,6 @@ namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
                 _inputs.Add(_rand.NextDouble() * 2 - 1);
             }
             NeuronTypeAvailable = Enum.GetValues(typeof(NeuronType)).Cast<NeuronType>();
-
         }
         [Fact]
         public void LayerOfNeuronsShouldInitializeGoodWithAllNeuroneTypeTest()
@@ -32,7 +32,7 @@ namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
                 layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, type);
         }
         [Fact]
-        public void LayerOfNeuronsShouldThrowExceptionTest()
+        public void LayerOfNeuronsInitializeShouldThrowExceptionTest()
         {
             LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
             Action Initialise = () =>
@@ -42,17 +42,17 @@ namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
             Initialise.Should().Throw<Exception>();
         }
         [Fact]
-        public void LayerOfNeuronsInitializeShouldThrowCantInitialiseWithZeroNeuronExceptionTest()
+        public void LayerOfNeuronsInitializeShouldThrowCantInitializeWithZeroNeuronExceptionTest()
         {
             LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
             Action Initialise = () =>
             {
                 layerOfNeurons.Initialize(0, _numberOfInputs, NeuronTypeAvailable.First());
             };
-            Initialise.Should().Throw<CantInitialiseWithZeroNeuronException>();
+            Initialise.Should().Throw<CantInitializeWithZeroNeuronException>();
         }
         [Fact]
-        public void LayerOfNeuronsShouldCalculateGoodTest()
+        public void LayerOfNeuronsCalculateShouldBeGoodTest()
         {
             LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
             layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, NeuronTypeAvailable.First());
@@ -60,7 +60,18 @@ namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
             returnedData.Count.Should().Be((int)_numberOfNeurons);
         }
         [Fact]
-        public void LayerOfNeuronsShouldCalculateThrowWrongInputForCalculationExceptionTest()
+        public void LayerOfNeuronsCloneShouldBeGoodTest()
+        {
+            LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
+            layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, NeuronTypeAvailable.First());
+            IList<double> returnedData = layerOfNeurons.Calculate(_inputs);
+            returnedData.Count.Should().Be((int)_numberOfNeurons);
+            ILayerOfNeurons clonedLayerOfNeurons = layerOfNeurons.Clone();
+            IList<double> cloneReturnedData = layerOfNeurons.Calculate(_inputs);
+            cloneReturnedData.Should().BeEquivalentTo(returnedData);
+        }
+        [Fact]
+        public void LayerOfNeuronsCalculateShouldThrowWrongInputForCalculationExceptionTest()
         {
             LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
             layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, NeuronTypeAvailable.First());
