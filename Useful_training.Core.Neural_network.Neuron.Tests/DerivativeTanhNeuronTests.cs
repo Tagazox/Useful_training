@@ -6,12 +6,12 @@ namespace Useful_training.Core.Neural_network.Tests
     public class DerivativeTanhNeuronTests
     {
         Random _rand;
-        int _numberOfInputs;
+        uint _numberOfInputs;
         List<double> _inputs;
         public DerivativeTanhNeuronTests()
         {
             _rand = new Random();
-            _numberOfInputs = _rand.Next(1, 10);
+            _numberOfInputs =(uint) _rand.Next(1, 10);
             _inputs = new List<double>();
             for (int i = 0; i < _numberOfInputs; i++)
             {
@@ -50,14 +50,14 @@ namespace Useful_training.Core.Neural_network.Tests
         }
 
         [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitialiseWithZeroInputException()
+        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
         {
             DerivativeTanhNeuron derivativeTanhNeuron = new DerivativeTanhNeuron();
             Action Initialise = () =>
             {
                 derivativeTanhNeuron.InitialiseWithRandomValues(0);
             };
-            Initialise.Should().Throw<CantInitialiseWithZeroInputException>();
+            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
         }
         [Fact]
         public void NeuroneCalculationShouldThrowWrongInputForCalculationException()

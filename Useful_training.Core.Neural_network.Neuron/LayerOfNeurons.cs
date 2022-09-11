@@ -29,7 +29,7 @@ namespace Useful_training.Core.Neural_network
         {
             return (ILayerOfNeurons)this.MemberwiseClone();
         }
-        public void Initialize(uint numberOfNeuron, int numberOfInput, NeuronType neuronType)
+        public void Initialize(uint numberOfNeuron, uint numberOfInput, NeuronType neuronType)
         {
             if (numberOfNeuron == 0)
                 throw new CantInitializeWithZeroNeuronException("NumberOfNeuron need to be greater than 0");

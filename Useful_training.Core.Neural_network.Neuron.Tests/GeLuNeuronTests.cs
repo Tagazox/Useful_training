@@ -7,12 +7,12 @@ namespace Useful_training.Core.Neural_network.Tests
     public class GeLuNeuronTests
     {
         Random _rand;
-        int _numberOfInputs;
+        uint _numberOfInputs;
         List<double> _inputs;
         public GeLuNeuronTests()
         {
             _rand = new Random();
-            _numberOfInputs = _rand.Next(1, 10);
+            _numberOfInputs =(uint) _rand.Next(1, 10);
             _inputs = new List<double>();
             for (int i = 0; i < _numberOfInputs; i++)
             {
@@ -26,7 +26,7 @@ namespace Useful_training.Core.Neural_network.Tests
             GeLuNeuron geLuNeuron = new GeLuNeuron();
             geLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = geLuNeuron.GetCalculationResult(_inputs);
-            outputOfTheNeuron.Should().BeInRange(-0.2, 1.5);
+            outputOfTheNeuron.Should().BeInRange(-0.2, 2);
         }
         [Fact]
         public void NeuroneCloneShouldBeOk()
@@ -51,14 +51,14 @@ namespace Useful_training.Core.Neural_network.Tests
         }
 
         [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitialiseWithZeroInputException()
+        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
         {
             GeLuNeuron geLuNeuron = new GeLuNeuron();
             Action Initialise = () =>
             {
                 geLuNeuron.InitialiseWithRandomValues(0);
             };
-            Initialise.Should().Throw<CantInitialiseWithZeroInputException>();
+            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
         }
         [Fact]
         public void NeuroneCalculationShouldThrowWrongInputForCalculationException()

@@ -5,17 +5,17 @@ using Useful_training.Core.Neural_network.Neurons;
 
 namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
 {
-    public class LayerOfNeuronsTest
+    public class LayerOfNeuronsTests
     {
         uint _numberOfNeurons;
-        int _numberOfInputs;
+        uint _numberOfInputs;
         IList<double> _inputs;
         Random _rand;
         IEnumerable<NeuronType> NeuronTypeAvailable;
-        public LayerOfNeuronsTest()
+        public LayerOfNeuronsTests()
         {
             _rand = new Random();
-            _numberOfInputs = _rand.Next(1, 5);
+            _numberOfInputs = (uint)_rand.Next(1, 5);
             _numberOfNeurons = (uint)_rand.Next(1, 5);
             _inputs = new List<double>();
             for (int i = 0; i < _numberOfInputs; i++)

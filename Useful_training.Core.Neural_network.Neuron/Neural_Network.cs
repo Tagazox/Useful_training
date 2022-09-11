@@ -1,14 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Useful_training.Core.Neural_network.Exceptions;
+using Useful_training.Core.Neural_network.Interface;
 
+[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
 namespace Useful_training.Core.Neural_network
 {
     public class Neural_Network
     {
-        private LayerOfNeurons LayersOfNeuron { get; set; }
+        internal IList<ILayerOfNeurons> _layersOfNeurons { get; set; }
+        internal Neural_Network()
+        {
+            _layersOfNeurons = new List<ILayerOfNeurons>();
+        }
+        internal void AddLayer(uint _numberOfInput, uint _numberOfNeuron, NeuronType typeOfNeuron)
+        {
+            LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
+            layerOfNeurons.Initialize(_numberOfNeuron, _numberOfInput , typeOfNeuron);
+            _layersOfNeurons.Add(layerOfNeurons);
+        }
+
+        public IList<double> Calculate(List<double> inputs)
+        {
+            if (_layersOfNeurons.Count == 0)
+                throw new NeedToBeCreatedByTheBuilderException("Neural network need to be created by the builder");
+            IList<double> outputs = inputs;
+            for (int i = 0; i < _layersOfNeurons.Count; i++)
+            {
+                outputs = _layersOfNeurons[i].Calculate(outputs);
+            }
+            return outputs;
+        }
 
     }
 }

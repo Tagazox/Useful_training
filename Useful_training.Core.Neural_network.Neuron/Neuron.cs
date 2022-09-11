@@ -24,10 +24,10 @@ namespace Useful_training.Core.Neural_network
             return (INeuron)this.MemberwiseClone();
         }
 
-        public void InitialiseWithRandomValues(int NumberOfInputs)
+        public void InitialiseWithRandomValues(uint NumberOfInputs)
         {
             if (NumberOfInputs <= 0)
-                throw new CantInitialiseWithZeroInputException("Neuron need to be initialise with a positive number, greater than 0");
+                throw new CantInitializeWithZeroInputException("Neuron need to be initialise with a positive number, greater than 0");
             NumberOfInputs++;
             for (int i = 0; i < NumberOfInputs; i++)
                 _weight.Add(_rand.NextDouble() * 2 - 1);

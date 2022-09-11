@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Useful_training.Core.Neural_network.Exceptions
 {
-    public class CantInitializeWithZeroInputException : Exception
+    public class NeedToBeCreatedByTheBuilderException : Exception
     {
-            public CantInitializeWithZeroInputException(string message) : base(message)
+            public NeedToBeCreatedByTheBuilderException(string message) : base(message)
             {
             }
     }
