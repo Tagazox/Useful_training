@@ -39,7 +39,7 @@ namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
             {
                 layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, (NeuronType)int.MaxValue);
             };
-            Initialise.Should().Throw<Exception>();
+            Initialise.Should().Throw<NeuronTypeDontExsistException>();
         }
         [Fact]
         public void LayerOfNeuronsInitializeShouldThrowCantInitializeWithZeroNeuronExceptionTest()

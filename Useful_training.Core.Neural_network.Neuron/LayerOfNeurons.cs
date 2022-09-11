@@ -51,7 +51,7 @@ namespace Useful_training.Core.Neural_network
                     NeuronType.Sigmoid => new SigmoidNeuron(),
                     NeuronType.Swish => new SwishNeuron(),
                     NeuronType.Tanh => new TanhNeuron(),
-                    _ => throw new Exception("This neuron type don't exist"),
+                    _ => throw new NeuronTypeDontExsistException("This neuron type don't exist"),
                 };
                 neuron.InitialiseWithRandomValues(numberOfInput);
                 _neurons.Add(neuron);
