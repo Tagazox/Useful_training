@@ -13,7 +13,11 @@ namespace Useful_training.Core.Neural_network.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            return Math.Tanh(GetInterpolationResult(input));
+            return _outputResult = Math.Tanh(GetInterpolationResult(input));
+        }
+        internal override double DerivativeFunctionResultCalculation()
+        {
+            return (Math.Exp(-_outputResult) * (_outputResult + 1) + 1) / (Math.Pow(1 + Math.Exp(-_outputResult), 2));
         }
     }
 }

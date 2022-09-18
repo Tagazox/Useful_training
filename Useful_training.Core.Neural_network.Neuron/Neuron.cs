@@ -10,14 +10,23 @@ namespace Useful_training.Core.Neural_network
 {
     public abstract class Neuron : INeuron
     {
-        private int bias = 1;
+        private double bias = 1;
+        protected double biasDelta;
+        protected double _outputResult;
+        protected List<double> _weightDelta;
+        protected double _learnRate;
+        protected double _momentum;
         protected List<double> _weight;
         static Random _rand = new Random();
         public abstract double GetCalculationResult(IList<double> input);
+        internal abstract double DerivativeFunctionResultCalculation();
 
         public Neuron()
         {
             _weight = new List<double>();
+            _weightDelta = new List<double>();  
+            _learnRate = 0.4;
+            _momentum = 0.9;
         }
         public INeuron Clone()
         {
@@ -28,15 +37,16 @@ namespace Useful_training.Core.Neural_network
         {
             if (NumberOfInputs <= 0)
                 throw new CantInitializeWithZeroInputException("Neuron need to be initialise with a positive number, greater than 0");
-            NumberOfInputs++;
             for (int i = 0; i < NumberOfInputs; i++)
                 _weight.Add(_rand.NextDouble() * 2 - 1);
+            for (int i = 0; i < NumberOfInputs; i++)
+                _weightDelta.Add(0);
         }
-        protected double GetInterpolationResult(IList<double> input)
+        public double GetInterpolationResult(IList<double> input)
         {
             if (_weight.Count == 0)
                 throw new NeuronNotInitialisedException("Neuron need to be initialise");
-            if (input == null || input.Count+1 != _weight.Count)
+            if (input == null || input.Count != _weight.Count)
                 throw new WrongInputForCalculationException("Wrong input, input is null or not equal the count of weight");
 
             double result = 0;
@@ -44,8 +54,26 @@ namespace Useful_training.Core.Neural_network
             {
                 result += _weight[i] * input[i];
             }
-            result += _weight.Last() * bias;
+            result +=  bias;
             return result;
+        }
+
+        public IList<double> UpdateWeights(double target)
+        {
+            double errorValue = (target)- (_outputResult);
+            double Gradient = errorValue * DerivativeFunctionResultCalculation();
+
+            var prevDelta = biasDelta;
+            biasDelta = _learnRate * Gradient;
+            bias += biasDelta + _momentum * prevDelta;
+
+            for (int i = 0; i < _weight.Count; i++)
+            {
+                double _previousWeightDelta = _weightDelta[i];
+                _weightDelta[i] = _learnRate * Gradient * _weight[i];
+                _weight[i] += _weightDelta[i] + _momentum * _previousWeightDelta;
+            }
+            return _weight.Select(w => w * Gradient).ToList();
         }
     }
 }

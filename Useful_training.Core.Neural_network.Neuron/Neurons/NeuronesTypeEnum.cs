@@ -8,14 +8,8 @@ namespace Useful_training.Core.Neural_network
 {
     public enum NeuronType
     {
-        Binary,
-        DerivativeLeakyRelu,
-        DerivativeSigmoid,
-        DerivativeTanh,
         Elu,
-        Gelu,
         LeakyRelu,
-        Linear,
         Relu,
         Selu,
         Sigmoid,

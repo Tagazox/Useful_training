@@ -26,7 +26,7 @@ namespace Useful_training.Core.Neural_network.Tests
             SwishNeuron swishNeuron = new SwishNeuron();
             swishNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = swishNeuron.GetCalculationResult(_inputs);
-            outputOfTheNeuron.Should().BeInRange(-1, 1);
+            outputOfTheNeuron.Should().BeOfType(typeof(double));
 
         }
         [Fact]

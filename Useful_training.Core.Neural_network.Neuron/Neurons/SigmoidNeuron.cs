@@ -13,7 +13,17 @@ namespace Useful_training.Core.Neural_network.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            return 1 / (1 + Math.Exp(-GetInterpolationResult(input)));
+            _outputResult = SigmoidFunction(GetInterpolationResult(input));
+         
+            return _outputResult;
+        }
+        private double SigmoidFunction(double x)
+        {
+            return 1 / (1 + Math.Exp(-x));
+        }
+        internal override double DerivativeFunctionResultCalculation()
+        {
+            return SigmoidFunction(_outputResult) * (1 - SigmoidFunction(_outputResult));
         }
     }
 }

@@ -23,7 +23,6 @@ namespace Useful_training.Core.Neural_network
             layerOfNeurons.Initialize(_numberOfNeuron, _numberOfInput , typeOfNeuron);
             _layersOfNeurons.Add(layerOfNeurons);
         }
-
         public IList<double> Calculate(List<double> inputs)
         {
             if (_layersOfNeurons.Count == 0)
@@ -35,6 +34,18 @@ namespace Useful_training.Core.Neural_network
             }
             return outputs;
         }
-
+        public void BackPropagate(List<double> targets)
+        {
+            _layersOfNeurons=_layersOfNeurons.Reverse().ToList();
+            foreach (ILayerOfNeurons layers in _layersOfNeurons)
+            {   
+                IList<IList<double>> outputsRetropropagation = layers.BackPropagate(targets);
+                int countOfOutputs = outputsRetropropagation.First().Count;
+                targets = new List<double>();
+                for (int i = 0; i < countOfOutputs; i++)
+                    targets.Add(outputsRetropropagation.Sum(o => o[i]));
+            }
+            _layersOfNeurons= _layersOfNeurons.Reverse().ToList();
+        }
     }
 }

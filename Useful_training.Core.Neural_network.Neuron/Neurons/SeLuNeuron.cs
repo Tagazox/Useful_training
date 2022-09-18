@@ -14,10 +14,14 @@ namespace Useful_training.Core.Neural_network.Neurons
         public override double GetCalculationResult(IList<double> input)
         {
             var result = GetInterpolationResult(input);
-            if(result >=0)
-                return result;
+            if (result >= 0)
+                return _outputResult = result;
             else
-                return (Math.Exp(result)-1);
+                return _outputResult = (Math.Exp(result) - 1);
+        }
+        internal override double DerivativeFunctionResultCalculation()
+        {
+            return ((double)_outputResult) <= 0 ? Math.Exp(_outputResult) : 1;
         }
     }
 }

@@ -14,11 +14,15 @@ namespace Useful_training.Core.Neural_network.Neurons
         public override double GetCalculationResult(IList<double> input)
         {
             var result = GetInterpolationResult(input);
-            return result* SigmoidFunction(result);
+            return _outputResult = result * SigmoidFunction(result);
         }
         private double SigmoidFunction(double x)
         {
             return 1 / (1 + Math.Exp(-x));
+        }
+        internal override double DerivativeFunctionResultCalculation()
+        {
+            return (Math.Exp(-_outputResult)*(_outputResult+1)+1)/(Math.Pow(1+Math.Exp(-_outputResult),2));
         }
     }
 }

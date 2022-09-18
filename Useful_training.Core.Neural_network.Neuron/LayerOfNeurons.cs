@@ -38,14 +38,8 @@ namespace Useful_training.Core.Neural_network
             {
                 INeuron neuron = neuronType switch
                 {
-                    NeuronType.Binary => new BinaryNeuron(),
-                    NeuronType.DerivativeLeakyRelu => new DerivativeLeakyReLuNeuron(),
-                    NeuronType.DerivativeSigmoid => new DerivativeSigmoidNeuron(),
-                    NeuronType.DerivativeTanh => new DerivativeTanhNeuron(),
                     NeuronType.Elu => new EluNeuron(),
-                    NeuronType.Gelu => new GeLuNeuron(),
                     NeuronType.LeakyRelu => new LeakyReLuNeuron(),
-                    NeuronType.Linear => new LinearNeuron(),
                     NeuronType.Relu => new ReLuNeuron(),
                     NeuronType.Selu => new SeLuNeuron(),
                     NeuronType.Sigmoid => new SigmoidNeuron(),
@@ -57,6 +51,20 @@ namespace Useful_training.Core.Neural_network
                 _neurons.Add(neuron);
             }
         }
+        public IList<IList<double>> BackPropagate(List<double> targets)
+        {
+            IList<IList<double>> gradiantPropagationsValues = new List<IList<double>>();
+            if (targets.Count != _neurons.Count)
+            {
+                throw new WrongTargetsForBackpropagationCalculationException("Targets need to have the same count of neurones in the layer.");
+            }
+            for (int i = 0; i < _neurons.Count; i++)
+            {
+                gradiantPropagationsValues.Add(_neurons[i].UpdateWeights(targets[i]));
+            }
+            return gradiantPropagationsValues;
 
+
+        }
     }
 }
