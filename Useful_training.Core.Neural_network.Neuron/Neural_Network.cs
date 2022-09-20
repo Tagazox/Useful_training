@@ -17,10 +17,10 @@ namespace Useful_training.Core.Neural_network
         {
             _layersOfNeurons = new List<ILayerOfNeurons>();
         }
-        internal void AddLayer(uint _numberOfInput, uint _numberOfNeuron, NeuronType typeOfNeuron)
+        internal void AddLayer(uint _numberOfInput, uint _numberOfNeuron, NeuronType typeOfNeurons)
         {
             LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
-            layerOfNeurons.Initialize(_numberOfNeuron, _numberOfInput , typeOfNeuron);
+            layerOfNeurons.Initialize(_numberOfNeuron, _numberOfInput , typeOfNeurons);
             _layersOfNeurons.Add(layerOfNeurons);
         }
         public IList<double> Calculate(List<double> inputs)

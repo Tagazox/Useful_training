@@ -37,7 +37,7 @@ namespace Useful_training.Core.Neural_network.LayerOfNeuronsTests
             LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
             Action Initialise = () =>
             {
-                layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, (NeuronType)int.MaxValue);
+                layerOfNeurons.Initialize(_numberOfNeurons, _numberOfInputs, (NeuronType)50);
             };
             Initialise.Should().Throw<NeuronTypeDontExsistException>();
         }

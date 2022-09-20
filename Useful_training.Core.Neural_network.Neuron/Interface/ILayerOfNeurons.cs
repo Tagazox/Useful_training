@@ -9,6 +9,7 @@ namespace Useful_training.Core.Neural_network.Interface
 {
     public interface ILayerOfNeurons
     {
+        internal IList<INeuron> neurons { get; set; }
         internal ILayerOfNeurons Clone();
         internal void Initialize(uint numberOfNeuron,uint numberOfInput, NeuronType neuronType);
         internal IList<double> Calculate(IList<double> inputs);

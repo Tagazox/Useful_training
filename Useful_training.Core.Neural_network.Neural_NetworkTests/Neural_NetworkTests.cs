@@ -41,15 +41,16 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         public void Neural_NetworkShouldBeTrainedGood()
         {
             uint NumberOfOutput = 2;
-            _neural_Network.AddLayer(numberOfInput, numberOfNeurons, NeuronType.Sigmoid);
+            _neural_Network.AddLayer(numberOfInput, numberOfNeurons, NeuronType.Elu);
             uint PreviousNumberOfNeurones = numberOfNeurons;
-            for (int i = 0; i < 3; i++)
+            int nbHiddenLayer = rand.Next(5, 20);
+            for (int i = 0; i < nbHiddenLayer; i++)
             {
                 numberOfNeurons = (uint)rand.Next(2, 5);
-                _neural_Network.AddLayer(PreviousNumberOfNeurones, numberOfNeurons, NeuronType.Sigmoid);
+                _neural_Network.AddLayer(PreviousNumberOfNeurones, numberOfNeurons, NeuronType.Elu);
                 PreviousNumberOfNeurones = numberOfNeurons;
             }
-            _neural_Network.AddLayer(PreviousNumberOfNeurones, NumberOfOutput, NeuronType.Sigmoid);
+            _neural_Network.AddLayer(PreviousNumberOfNeurones, NumberOfOutput, NeuronType.Elu);
 
             _neural_Network.Calculate(input).Count.Should().Be((int)NumberOfOutput);
             List<double> target = new List<double>();

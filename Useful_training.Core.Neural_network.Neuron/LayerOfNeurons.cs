@@ -13,7 +13,9 @@ namespace Useful_training.Core.Neural_network
 {
     internal class LayerOfNeurons : ILayerOfNeurons
     {
-        protected IList<INeuron> _neurons { get; set; }
+        internal IList<INeuron> _neurons { get; set; }
+        IList<INeuron> ILayerOfNeurons.neurons { get => _neurons; set => _neurons= value; }
+
         public LayerOfNeurons()
         {
             _neurons = new List<INeuron>();
@@ -66,5 +68,6 @@ namespace Useful_training.Core.Neural_network
 
 
         }
+
     }
 }
