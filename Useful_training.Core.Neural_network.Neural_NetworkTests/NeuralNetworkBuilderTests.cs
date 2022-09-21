@@ -16,9 +16,9 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             testBuilder = new NeuralNetworkBuilder();  
             rand = new Random();
             enumTypeNeuronMaxNumber = Enum.GetValues(typeof(NeuronType)).Cast<NeuronType>().Count();
-            numberOfInputs = (uint)rand.Next(10);
-            numberOfOutputs = (uint)rand.Next(10);
-            numberOfHiddenLayers = (uint)rand.Next(10);
+            numberOfInputs = (uint)rand.Next(1,10);
+            numberOfOutputs = (uint)rand.Next(1,10);
+            numberOfHiddenLayers = (uint)rand.Next(1,10);
             numberOfNeuronesByHiddenLayer = (uint)rand.Next(10);
             numbersOfNeuronesByHiddenLayerList = new List<uint>();
         }

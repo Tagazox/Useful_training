@@ -14,7 +14,7 @@ namespace Useful_training.Core.Neural_network.Neurons
         public override double GetCalculationResult(IList<double> input)
         {
             var result = GetInterpolationResult(input);
-            return _outputResult = result >= 0 ? result : (Math.Exp(result)-1);
+            return _outputResult = result+bias >= 0 ? result + bias : (Math.Exp(result + bias) -1);
         }
         internal override double DerivativeFunctionResultCalculation()
         {

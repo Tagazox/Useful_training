@@ -37,9 +37,12 @@ namespace Useful_training.Core.Neural_network
         public void BackPropagate(List<double> targets)
         {
             _layersOfNeurons=_layersOfNeurons.Reverse().ToList();
+            if (_layersOfNeurons.First().neurons.Count != targets.Count)
+                throw new ArgumentException("targets need to have the same number as the neurones outputs");
             foreach (ILayerOfNeurons layers in _layersOfNeurons)
             {   
-                IList<IList<double>> outputsRetropropagation = layers.BackPropagate(targets);
+                
+                IList<IList<double>> outputsRetropropagation = layers.BackPropagate(targets, _layersOfNeurons.First() == layers);
                 int countOfOutputs = outputsRetropropagation.First().Count;
                 targets = new List<double>();
                 for (int i = 0; i < countOfOutputs; i++)

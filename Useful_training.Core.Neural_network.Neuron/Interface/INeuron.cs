@@ -11,7 +11,7 @@ namespace Useful_training.Core.Neural_network.Interface
         internal void InitialiseWithRandomValues(uint NumberOfInputs);
         internal INeuron Clone();
         internal abstract double GetCalculationResult(IList<double> input);
-        internal IList<double> UpdateWeights(double target);
+        internal IList<double> UpdateWeights(double target, bool IsFirstLayer);
 
     }
 }

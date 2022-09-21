@@ -13,6 +13,6 @@ namespace Useful_training.Core.Neural_network.Interface
         internal ILayerOfNeurons Clone();
         internal void Initialize(uint numberOfNeuron,uint numberOfInput, NeuronType neuronType);
         internal IList<double> Calculate(IList<double> inputs);
-        internal IList<IList<double>> BackPropagate(List<double> targets);
+        internal IList<IList<double>> BackPropagate(List<double> targets, bool IsFirstLayer);
     }
 }

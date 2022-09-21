@@ -38,7 +38,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             _neural_Network.Calculate(input).Count.Should().Be((int)numberOfNeurons);
         }
         [Fact]
-        public void Neural_NetworkShouldBeTrainedGood()
+        public void Neural_NetworkShouldBackPropagateGood()
         {
             uint NumberOfOutput = 2;
             _neural_Network.AddLayer(numberOfInput, numberOfNeurons, NeuronType.Elu);
@@ -57,25 +57,56 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             for (int i = 0; i < NumberOfOutput; i++)
                 target.Add(rand.NextDouble());
 
-            int counter = 3;
+            bool trainfinish = false;
             double deltaError = double.MaxValue;
-            while (counter != 0)
+            while (!trainfinish)
             {
+                trainfinish = true;
                 IList<double> results = _neural_Network.Calculate(input);
-                deltaError = 0;
                 for (int i = 0; i < results.Count; i++)
                 {
-                    deltaError+= results[i] - target[i];
+                    deltaError = results[i] - target[i];
+                    if (Math.Abs(deltaError) > 0.00001 && trainfinish)
+                    {
+                        trainfinish = false;
+                    }
                 }
-
-                if (deltaError<0.00001)
-                {
-                    counter--;
-                }
+                
                 _neural_Network.BackPropagate(target);
-                if (double.IsNaN(results.First()))
-                    throw new Exception("Error");
             }
+
+        }
+        [Fact]
+        public void Neural_NetworkBackPropagateShoudthrowArgumentException()
+        {
+            uint NumberOfOutput = 2;
+            _neural_Network.AddLayer(numberOfInput, numberOfNeurons, NeuronType.Elu);
+            uint PreviousNumberOfNeurones = numberOfNeurons;
+            int nbHiddenLayer = rand.Next(5, 20);
+            for (int i = 0; i < nbHiddenLayer; i++)
+            {
+                numberOfNeurons = (uint)rand.Next(2, 5);
+                _neural_Network.AddLayer(PreviousNumberOfNeurones, numberOfNeurons, NeuronType.Elu);
+                PreviousNumberOfNeurones = numberOfNeurons;
+            }
+            _neural_Network.AddLayer(PreviousNumberOfNeurones, NumberOfOutput, NeuronType.Elu);
+
+            _neural_Network.Calculate(input).Count.Should().Be((int)NumberOfOutput);
+            List<double> target = new List<double>();
+            for (int i = 0; i < NumberOfOutput - 1; i++)
+                target.Add(rand.NextDouble());
+
+            int counter = 3;
+            double deltaError = double.MaxValue;
+
+            IList<double> results = _neural_Network.Calculate(input);
+            Action BackPropagate = () =>
+            {
+                _neural_Network.BackPropagate(target);
+            };
+            BackPropagate.Should().Throw<ArgumentException>();
+
+
         }
         [Fact]
         public void Neural_NetworkCalculateShouldThrowNeedToBeCreatedByTheBuilderException()

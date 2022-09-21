@@ -53,7 +53,7 @@ namespace Useful_training.Core.Neural_network
                 _neurons.Add(neuron);
             }
         }
-        public IList<IList<double>> BackPropagate(List<double> targets)
+        public IList<IList<double>> BackPropagate(List<double> targets, bool IsFirstLayer)
         {
             IList<IList<double>> gradiantPropagationsValues = new List<IList<double>>();
             if (targets.Count != _neurons.Count)
@@ -62,7 +62,7 @@ namespace Useful_training.Core.Neural_network
             }
             for (int i = 0; i < _neurons.Count; i++)
             {
-                gradiantPropagationsValues.Add(_neurons[i].UpdateWeights(targets[i]));
+                gradiantPropagationsValues.Add(_neurons[i].UpdateWeights(targets[i], IsFirstLayer));
             }
             return gradiantPropagationsValues;
 

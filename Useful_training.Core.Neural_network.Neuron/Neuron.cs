@@ -10,7 +10,7 @@ namespace Useful_training.Core.Neural_network
 {
     public abstract class Neuron : INeuron
     {
-        private double bias = 1;
+        protected double bias = 1;
         protected double biasDelta;
         protected double _outputResult;
         protected List<double> _weightDelta;
@@ -24,7 +24,7 @@ namespace Useful_training.Core.Neural_network
         public Neuron()
         {
             _weight = new List<double>();
-            _weightDelta = new List<double>();  
+            _weightDelta = new List<double>();
             _learnRate = 0.4;
             _momentum = 0.9;
         }
@@ -54,19 +54,21 @@ namespace Useful_training.Core.Neural_network
             {
                 result += _weight[i] * input[i];
             }
-            result +=  bias;
             return result;
         }
 
-        public IList<double> UpdateWeights(double target)
+        public IList<double> UpdateWeights(double target, bool IsFirstLayer)
         {
-            double errorValue = (target)- (_outputResult);
-            double Gradient = errorValue * DerivativeFunctionResultCalculation();
-
+            double errorValue = (target) - (_outputResult);
+            double Gradient;
+            //if (IsFirstLayer)
+                Gradient = errorValue * DerivativeFunctionResultCalculation();
+            //else
+            //    Gradient= target*  DerivativeFunctionResultCalculation();
             var prevDelta = biasDelta;
             biasDelta = _learnRate * Gradient;
             bias += biasDelta + _momentum * prevDelta;
-
+            bias= Math.Clamp(bias, -1, 1);
             for (int i = 0; i < _weight.Count; i++)
             {
                 double _previousWeightDelta = _weightDelta[i];

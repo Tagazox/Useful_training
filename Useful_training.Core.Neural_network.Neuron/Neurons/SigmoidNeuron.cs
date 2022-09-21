@@ -13,7 +13,7 @@ namespace Useful_training.Core.Neural_network.Neurons
     {
         public override double GetCalculationResult(IList<double> input)
         {
-            _outputResult = SigmoidFunction(GetInterpolationResult(input));
+            _outputResult = SigmoidFunction(GetInterpolationResult(input) + bias);
          
             return _outputResult;
         }
