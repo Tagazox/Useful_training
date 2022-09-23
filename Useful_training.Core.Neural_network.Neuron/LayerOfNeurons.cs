@@ -64,14 +64,21 @@ namespace Useful_training.Core.Neural_network
 			throw new NotImplementedException();
 		}
 
-		void ILayerOfNeurons.Initialize(uint numberOfNeuron, NeuronType neuronType, ILayerOfInputNeurons inputLayer)
+		public void CalculateGradiant(List<double> targets = null)
 		{
-			throw new NotImplementedException();
-		}
+            int targetCounter = 0;
 
-		void ILayerOfNeurons.Calculate()
-		{
-			throw new NotImplementedException();
-		}
-	}
+            if (targets == null)
+                foreach (INeuron neuron in _Neurons)
+                    neuron.CalculateGradient();
+			else
+                foreach (INeuron neuron in _Neurons)
+					neuron.CalculateGradient(targets[targetCounter++]);
+        }
+        public void UpdateWeights(double learnRate, double momentum)
+        {
+                foreach (INeuron neuron in _Neurons)
+                    neuron.UpdateWeights(learnRate, momentum);
+        }
+    }
 }

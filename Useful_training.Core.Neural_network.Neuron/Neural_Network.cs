@@ -37,8 +37,8 @@ namespace Useful_training.Core.Neural_network
 		{
 			if (inputs == null || inputs.Count == 0 || InputLayer.InputNeurons.Count() != inputs.Count)
 				throw new WrongInputForCalculationException("Inputs for the calculation need to be equal as the input number specified at the creation of the neural network");
-			int inputCounter = 0;
 
+			int inputCounter = 0;
 			foreach (IInputNeurons inputNeurons in InputLayer.InputNeurons)
 				inputNeurons.OutputResult = inputs[inputCounter++];
 
@@ -50,23 +50,21 @@ namespace Useful_training.Core.Neural_network
 		public void BackPropagate(List<double> targets)
 		{
 			LayersOfNeurons = LayersOfNeurons.Reverse().ToList();
-			if (LayersOfNeurons.First().Neurons.Count != targets.Count)
-				throw new ArgumentException("targets need to have the same number as the outputs layer number of neurones");
-			var i = 0;
-			foreach (var neuron in LayersOfNeurons.First().Neurons)
-				neuron.CalculateGradient(targets[i++]);
 
-			foreach (ILayerOfNeurons layers in LayersOfNeurons.Skip(1).Take(LayersOfNeurons.Count - 2))
+			ILayerOfNeurons outputLayer = LayersOfNeurons.First();
+			List<ILayerOfNeurons> hiddenLayers = LayersOfNeurons.Skip(1).ToList();
+
+			if (outputLayer.Neurons.Count != targets.Count)
+				throw new ArgumentException("Targets need to have the same count as the outputs layer number of neurones");
+
+			outputLayer.CalculateGradiant(targets);
+			foreach (ILayerOfNeurons layers in hiddenLayers)
 			{
-				foreach (var neuron in layers.Neurons)
-				{
-					neuron.CalculateGradient();
-					neuron.UpdateWeights(LearnRate, Momentum);
-				}
+				layers.CalculateGradiant();
+				layers.UpdateWeights(LearnRate, Momentum);
 			}
+			outputLayer.UpdateWeights(LearnRate, Momentum);
 
-			foreach (var neuron in LayersOfNeurons.First().Neurons)
-				neuron.UpdateWeights(LearnRate, Momentum);
 			LayersOfNeurons = LayersOfNeurons.Reverse().ToList();
 		}
 	}

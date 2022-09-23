@@ -13,6 +13,8 @@ namespace Useful_training.Core.Neural_network.Interface
         internal IList<INeuron> Neurons { get; set; }
         internal new ILayerOfNeurons Clone();
         internal void Initialize(uint numberOfNeuron, NeuronType neuronType, ILayerOfInputNeurons inputLayer);
-		void Calculate();
-	}
+		void UpdateWeights(double learnRate, double momentum);
+        void CalculateGradiant(List<double> targets=null);
+        void Calculate();
+    }
 }
