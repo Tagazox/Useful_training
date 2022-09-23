@@ -11,13 +11,16 @@ namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class ReLuNeuron : Neuron
     {
-        public override double GetCalculationResult(IList   <double> input)
+        public ReLuNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
         {
-            return _outputResult = Math.Max(0, GetInterpolationResult(input));
+        }
+        public override void GetCalculationResult()
+        {
+            OutputResult = Math.Max(0, GetInterpolationResult());
         }
         internal override double DerivativeFunctionResultCalculation()
         {
-            return ((double)_outputResult) >= 0 ? 1 : 0;
+            return ((double)OutputResult) >= 0 ? 1 : 0;
         }
     }
 }

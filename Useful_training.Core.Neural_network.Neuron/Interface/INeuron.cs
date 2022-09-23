@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Useful_training.Core.Neural_network.Interface
 {
-    public interface INeuron
-    {
-        internal void InitialiseWithRandomValues(uint NumberOfInputs);
-        internal INeuron Clone();
-        internal abstract double GetCalculationResult(IList<double> input);
-        internal IList<double> UpdateWeights(double target, bool IsFirstLayer);
-
-    }
+	internal interface INeuron : IInputNeurons
+	{
+		double Gradiant { get; set; }
+		double CalculateError(double target);
+		double CalculateGradient(double? target = null);
+		new INeuron Clone();
+		void GetCalculationResult();
+		void UpdateWeights(double learnRate, double momentum);
+	}
 }

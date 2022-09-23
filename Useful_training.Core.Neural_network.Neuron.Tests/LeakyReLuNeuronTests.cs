@@ -24,7 +24,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             LeakyReLuNeuron leakyReLu = new LeakyReLuNeuron();
-            leakyReLu.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = leakyReLu.GetCalculationResult(_inputs);
             outputOfTheNeuron.Should().BeOfType(typeof(double));
         }
@@ -32,45 +31,11 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCloneShouldBeOk()
         {
             LeakyReLuNeuron leakyReLu = new LeakyReLuNeuron();
-            leakyReLu.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = leakyReLu.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = leakyReLu.Clone();
             double outputOfTheClonedNeuron = cloneNeuron.GetCalculationResult(_inputs);
             outputOfTheClonedNeuron.Should().Be(outputOfTheNeuron);
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowNeuronNotInitialisedException()
-        {
-            LeakyReLuNeuron leakyReLu = new LeakyReLuNeuron();
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = leakyReLu.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<NeuronNotInitialisedException>();
-        }
-
-        [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
-        {
-            LeakyReLuNeuron leakyReLu = new LeakyReLuNeuron();
-            Action Initialise = () =>
-            {
-                leakyReLu.InitialiseWithRandomValues(0);
-            };
-            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
-        {
-            LeakyReLuNeuron leakyReLu = new LeakyReLuNeuron();
-            leakyReLu.InitialiseWithRandomValues(_numberOfInputs);
-            _inputs.RemoveAt(0);
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = leakyReLu.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<WrongInputForCalculationException>();
         }
     }
 }

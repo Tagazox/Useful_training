@@ -11,11 +11,12 @@ namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class SigmoidNeuron : Neuron
     {
-        public override double GetCalculationResult(IList<double> input)
+        public SigmoidNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
         {
-            _outputResult = SigmoidFunction(GetInterpolationResult(input) + bias);
-         
-            return _outputResult;
+        }
+        public override void GetCalculationResult()
+        {
+            OutputResult = SigmoidFunction(GetInterpolationResult());
         }
         private double SigmoidFunction(double x)
         {
@@ -23,7 +24,7 @@ namespace Useful_training.Core.Neural_network.Neurons
         }
         internal override double DerivativeFunctionResultCalculation()
         {
-            return SigmoidFunction(_outputResult) * (1 - SigmoidFunction(_outputResult));
+            return SigmoidFunction(OutputResult) * (1 - SigmoidFunction(OutputResult));
         }
     }
 }

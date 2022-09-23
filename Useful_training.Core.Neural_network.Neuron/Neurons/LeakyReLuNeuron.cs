@@ -11,14 +11,17 @@ namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class LeakyReLuNeuron : Neuron
     {
-        public override double GetCalculationResult(IList<double> input)
+        public LeakyReLuNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
         {
-            var result = GetInterpolationResult(input);
-            return _outputResult = Math.Max(0.1 * result, result);
+        }
+        public override void GetCalculationResult()
+        {
+            var result = GetInterpolationResult();
+            OutputResult = Math.Max(0.1 * result, result);
         }
         internal override double DerivativeFunctionResultCalculation()
         {
-            return ((double)_outputResult) >= 0 ? 1 : 0.01;
+            return ((double)OutputResult) >= 0 ? 1 : 0.01;
         }
     }
 }

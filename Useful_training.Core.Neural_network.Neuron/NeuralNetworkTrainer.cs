@@ -14,31 +14,31 @@ namespace Useful_training.Core.Neural_network
             _neural_Network = neuralNetworkContainer.GetNeuralNetwork();
         }
 
-        public Neural_Network GetTrainedNeuralNetwork(List<double> inputSample,List<double> targetOutputsValues)
+        public Neural_Network GetTrainedNeuralNetwork(List<DataSet> dataSets)
         {
             double deltaError = double.MaxValue;
-            bool trainFinish = false;   
+            int trainFinish = 10;
+            Random random = new Random();
             IList<double> results;
-            while (!trainFinish)
+            while (trainFinish !=0)
             {
-                trainFinish = true;
-
-                results = _neural_Network.Calculate(inputSample);
-                if (results.Count != targetOutputsValues.Count)
+                DataSet dataSet = dataSets[random.Next(dataSets.Count)];
+                results = _neural_Network.Calculate(dataSet.Values);
+                if (results.Count != dataSet.Targets.Count)
                     throw new ArgumentException("targetOutputsValues need to have the same number as the neurones outputs");
                 for (int i = 0; i < results.Count; i++)
                 {
-                    deltaError = results[i] - targetOutputsValues[i];
-                    if (Math.Abs(deltaError) > 0.00001 && trainFinish)
+                    deltaError = results[i] - dataSet.Targets[i];
+                    if (Math.Abs(deltaError) > 0.00001)
                     {
-                        trainFinish = false;
+                        trainFinish = 10;
                     }
+                    else
+                        trainFinish--;
                 }
-
-                
-                _neural_Network.BackPropagate(targetOutputsValues);
-                if (double.IsNaN(results.First()))
-                    throw new Exception("Corrupted network");
+                _neural_Network.BackPropagate(dataSet.Targets);
+                if (results.Any(d => double.IsNaN(d)) )
+                    return null;
             }
             return _neural_Network;
         }

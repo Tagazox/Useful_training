@@ -3,73 +3,51 @@ using Useful_training.Core.Neural_network.Exceptions;
 
 namespace Useful_training.Core.Neural_network.Tests
 {
-    public class EluNeuronTests
-    {
-        Random _rand;
-        uint _numberOfInputs;
-        List<double> _inputs;
-        public EluNeuronTests()
-        {
-            _rand = new Random();
-            _numberOfInputs =(uint) _rand.Next(1, 10);
-            _inputs = new List<double>();
-            for (int i = 0; i < _numberOfInputs; i++)
-            {
-                _inputs.Add(_rand.NextDouble() * 2 - 1);
-            }
-        }
+	public class EluNeuronTests
+	{
+		Random _rand;
+		uint _numberOfInputs;
+		IList<EluNeuron> InputNeurons;
+		public EluNeuronTests()
+		{
+			_rand = new Random();
+			_numberOfInputs = (uint)_rand.Next(1, 10);
+			InputNeurons=new List<EluNeuron>();
+			for (int i = 0; i < _numberOfInputs; i++)
+			{
+				EluNeuron InputNeuron = new EluNeuron();
+				InputNeuron.OutputResult = (_rand.NextDouble() * 2 - 1);
+				InputNeurons.Add(InputNeuron);
+			}
+		}
+		[Fact]
+		public void NeuroneCalculationShouldBeOk()
+		{
+			EluNeuron eluNeuron = new EluNeuron(InputNeurons);
+			double outputOfTheNeuron = eluNeuron.GetCalculationResult();
+			outputOfTheNeuron.Should().BeInRange(-1, double.MaxValue);
+		}
+		[Fact]
+		public void NeuroneCloneShouldBeOk()
+		{
+			EluNeuron eluNeuron = new EluNeuron(InputNeurons);
+			double outputOfTheNeuron = eluNeuron.GetCalculationResult();
 
-        [Fact]
-        public void NeuroneCalculationShouldBeOk()
-        {
-            EluNeuron eluNeuron = new EluNeuron();
-            eluNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            double outputOfTheNeuron = eluNeuron.GetCalculationResult(_inputs);
-            outputOfTheNeuron.Should().BeInRange(-1, double.MaxValue);
-        }
-        [Fact]
-        public void NeuroneCloneShouldBeOk()
-        {
-            EluNeuron eluNeuron = new EluNeuron();
-            eluNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            double outputOfTheNeuron = eluNeuron.GetCalculationResult(_inputs);
+			INeuron cloneNeuron = eluNeuron.Clone();
+			double outputOfTheClonedNeuron = cloneNeuron.GetCalculationResult();
+			outputOfTheClonedNeuron.Should().Be(outputOfTheNeuron);
+		}
+		[Fact]
+		public void NeuroneCalculationShouldThrowCantCalculateWithInputNeurons()
+		{
+			EluNeuron eluNeuron = new EluNeuron();
+			Action Calculate = () =>
+			{
+				double outputOfTheNeuron = eluNeuron.GetCalculationResult();
+			};
+			Calculate.Should().Throw<CantCalculateWithInputNeurons>();
+		}
 
-            INeuron cloneNeuron = eluNeuron.Clone();
-            double outputOfTheClonedNeuron = cloneNeuron.GetCalculationResult(_inputs);
-            outputOfTheClonedNeuron.Should().Be(outputOfTheNeuron);
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowNeuronNotInitialisedException()
-        {
-            EluNeuron eluNeuron = new EluNeuron();
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = eluNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<NeuronNotInitialisedException>();
-        }
 
-        [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
-        {
-            EluNeuron eluNeuron = new EluNeuron();
-            Action Initialise = () =>
-            {
-                eluNeuron.InitialiseWithRandomValues(0);
-            };
-            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
-        {
-            EluNeuron eluNeuron = new EluNeuron();
-            eluNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            _inputs.RemoveAt(0);
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = eluNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<WrongInputForCalculationException>();
-        }
-    }
+	}
 }

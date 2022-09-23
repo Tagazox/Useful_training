@@ -24,7 +24,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            sigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = sigmoidNeuron.GetCalculationResult(_inputs);
             outputOfTheNeuron.Should().BeInRange(0, 1);
         }
@@ -32,7 +31,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCloneShouldBeOk()
         {
             SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            sigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = sigmoidNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = sigmoidNeuron.Clone();
@@ -40,38 +38,6 @@ namespace Useful_training.Core.Neural_network.Tests
             outputOfTheClonedNeuron.Should().Be(outputOfTheNeuron);
         }
 
-        [Fact]
-        public void NeuroneCalculationShouldThrowNeuronNotInitialisedException()
-        {
-            SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = sigmoidNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<NeuronNotInitialisedException>();
-        }
-
-        [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
-        {
-            SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            Action Initialise = () =>
-            {
-                sigmoidNeuron.InitialiseWithRandomValues(0);
-            };
-            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
-        {
-            SigmoidNeuron sigmoidNeuron = new SigmoidNeuron();
-            sigmoidNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            _inputs.RemoveAt(0);
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = sigmoidNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<WrongInputForCalculationException>();
-        }
+       
     }
 }

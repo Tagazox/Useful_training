@@ -24,7 +24,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             SeLuNeuron seLuNeuron = new SeLuNeuron();
-            seLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
                 outputOfTheNeuron.Should().BeGreaterThan(-2);
         }
@@ -32,7 +31,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCloneShouldBeOk()
         {
             SeLuNeuron seLuNeuron = new SeLuNeuron();
-            seLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = seLuNeuron.Clone();
@@ -40,38 +38,5 @@ namespace Useful_training.Core.Neural_network.Tests
             outputOfTheClonedNeuron.Should().Be(outputOfTheNeuron);
         }
 
-        [Fact]
-        public void NeuroneCalculationShouldThrowNeuronNotInitialisedException()
-        {
-            SeLuNeuron seLuNeuron = new SeLuNeuron();
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<NeuronNotInitialisedException>();
-        }
-
-        [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
-        {
-            SeLuNeuron seLuNeuron = new SeLuNeuron();
-            Action Initialise = () =>
-            {
-                seLuNeuron.InitialiseWithRandomValues(0);
-            };
-            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
-        {
-            SeLuNeuron seLuNeuron = new SeLuNeuron();
-            seLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            _inputs.RemoveAt(0);
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = seLuNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<WrongInputForCalculationException>();
-        }
     }
 }

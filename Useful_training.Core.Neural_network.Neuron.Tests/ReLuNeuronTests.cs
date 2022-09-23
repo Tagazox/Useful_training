@@ -24,7 +24,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             ReLuNeuron reLuNeuron = new ReLuNeuron();
-            reLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = reLuNeuron.GetCalculationResult(_inputs);
             if (outputOfTheNeuron > 0)
                 outputOfTheNeuron.Should().BeOfType(typeof(double));
@@ -35,45 +34,11 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCloneShouldBeOk()
         {
             ReLuNeuron reLuNeuron = new ReLuNeuron();
-            reLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = reLuNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = reLuNeuron.Clone();
             double outputOfTheClonedNeuron = cloneNeuron.GetCalculationResult(_inputs);
             outputOfTheClonedNeuron.Should().Be(outputOfTheNeuron);
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowNeuronNotInitialisedException()
-        {
-            ReLuNeuron reLuNeuron = new ReLuNeuron();
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = reLuNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<NeuronNotInitialisedException>();
-        }
-
-        [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
-        {
-            ReLuNeuron reLuNeuron = new ReLuNeuron();
-            Action Initialise = () =>
-            {
-                reLuNeuron.InitialiseWithRandomValues(0);
-            };
-            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
-        {
-            ReLuNeuron reLuNeuron = new ReLuNeuron();
-            reLuNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            _inputs.RemoveAt(0);
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = reLuNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<WrongInputForCalculationException>();
         }
     }
 }

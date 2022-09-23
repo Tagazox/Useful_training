@@ -11,14 +11,17 @@ namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class EluNeuron : Neuron
     {
-        public override double GetCalculationResult(IList<double> input)
+		public EluNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
+		{
+		}
+		public override void GetCalculationResult()
         {
-            var result = GetInterpolationResult(input);
-            return _outputResult = result+bias >= 0 ? result + bias : (Math.Exp(result + bias) -1);
+            var result = GetInterpolationResult();
+            OutputResult = result >= 0 ? result  : (Math.Exp(result ) -1);
         }
         internal override double DerivativeFunctionResultCalculation()
         {
-            return ((double)_outputResult) >= 1 ? 1 : (_outputResult >= 0 ? _outputResult : (Math.Exp(_outputResult) - 1));
+            return ((double)OutputResult) >= 1 ? 1 : (OutputResult >= 0 ? OutputResult : (Math.Exp(OutputResult) - 1));
         }
     }
 }

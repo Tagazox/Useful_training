@@ -21,16 +21,16 @@ namespace Useful_training.Core.Neural_network
             Neural_Network = new Neural_Network();
         }
 
-        public void AddInputLayer(uint numberOfInputs, uint numberOfNeurones, NeuronType typeOfNeurons)
+        public void AddInputLayer(uint numberOfInputs)
         {
-            Neural_Network.AddLayer(numberOfInputs, numberOfNeurones, typeOfNeurons);
+            Neural_Network.AddInputLayer(numberOfInputs);
         }
         public void AddHiddenLayers(uint numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons)
         {
-            if (Neural_Network._layersOfNeurons.Count == 0)
+            if (Neural_Network..Count == 0)
                 throw new YouNeedToCreateInputLayerFirstException("Hidden layers can't be created alone.");
             for (int i = 0; i < numberOfHiddenLayers; i++)
-                Neural_Network.AddLayer((uint)Neural_Network._layersOfNeurons.Last().neurons.Count, numberOfNeuronesBylayers, typeOfNeurons);
+                Neural_Network.AddLayer((uint)Neural_Network._layersOfNeurons.Last().neurons.Count, numberOfNeuronesBylayers, typeOfNeurons, Neural_Network.LayersOfNeurons[i]);
         }
         public void AddHiddenLayers(List<uint> numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons)
         {
@@ -40,13 +40,13 @@ namespace Useful_training.Core.Neural_network
                 throw new ArgumentException("numberOfNeuronesBylayers arrays need to be equal as the number of hidden layers.");
 
             for (int i = 0; i < numberOfHiddenLayers; i++)
-                Neural_Network.AddLayer((uint)Neural_Network._layersOfNeurons.Last().neurons.Count, numberOfNeuronesBylayers[i], typeOfNeurons);
+                Neural_Network.AddLayer((uint)Neural_Network._layersOfNeurons.Last().neurons.Count, numberOfNeuronesBylayers[i], typeOfNeurons, Neural_Network.LayersOfNeurons[i]);
         }
         public void AddOutputLayers(uint numberOfOutputs, NeuronType typeOfNeurons)
         {
             if (Neural_Network._layersOfNeurons.Count == 0)
                 throw new YouNeedToCreateInputLayerFirstException("Outputs layers can't be created alone.");
-            Neural_Network.AddLayer((uint)Neural_Network._layersOfNeurons.Last().neurons.Count, numberOfOutputs, typeOfNeurons);
+            Neural_Network.AddLayer((uint)Neural_Network._layersOfNeurons.Last().neurons.Count, numberOfOutputs, typeOfNeurons, Neural_Network._layersOfNeurons.Last());
         }
 
         public Neural_Network GetNeural_Network()

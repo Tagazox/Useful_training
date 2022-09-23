@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Useful_training.Core.Neural_network.Exceptions
 {
-    public class NeuronNotInitialisedException : Exception
+    public class CantCalculateWithInputNeurons : Exception
     {
-            public NeuronNotInitialisedException(string message) : base(message)
+            public CantCalculateWithInputNeurons(string message) : base(message)
             {
             }
     }

@@ -18,7 +18,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         public void BuilderShouldBuildNeuranNetworkFine()
         {
             uint numberOfHiddenLayers = (uint)rand.Next(1, 50);
-            testBuilder.AddInputLayer((uint)rand.Next(1, 50), (uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
+            testBuilder.AddInputLayer((uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
             testBuilder.AddHiddenLayers((uint)rand.Next(1, 50), numberOfHiddenLayers, (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
             testBuilder.AddOutputLayers((uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
 
@@ -29,7 +29,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         public void BuilderCaseTwoShouldBuildNeuranNetworkFine()
         {
             uint numberOfHiddenLayers = (uint)rand.Next(1, 50);
-            testBuilder.AddInputLayer((uint)rand.Next(1, 50), (uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
+            testBuilder.AddInputLayer((uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
             List<uint> numberOfNeuronesByHiddenLayerList = new List<uint>();
             for (int i = 0; i < numberOfHiddenLayers; i++)
                 numberOfNeuronesByHiddenLayerList.Add((uint)rand.Next(1, 50));
@@ -65,7 +65,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         public void BuilderShouldThrowArgumentException()
         {
             uint numberOfHiddenLayers =(uint) rand.Next(1, 50);
-            testBuilder.AddInputLayer((uint)rand.Next(1, 50), (uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
+            testBuilder.AddInputLayer((uint)rand.Next(1, 50), (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
             List<uint> numberOfNeuronesByHiddenLayer = new List<uint>();
             for (int i = 0; i < numberOfHiddenLayers-3; i++)
                 numberOfNeuronesByHiddenLayer.Add((uint)rand.Next(1, 50));

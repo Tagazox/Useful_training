@@ -13,61 +13,65 @@ namespace Useful_training.Core.Neural_network
 {
     internal class LayerOfNeurons : ILayerOfNeurons
     {
-        internal IList<INeuron> _neurons { get; set; }
-        IList<INeuron> ILayerOfNeurons.neurons { get => _neurons; set => _neurons= value; }
+        private IList<INeuron> _Neurons { get; set; }
+		IList<double> ILayerOfNeurons.Outputs { get => _Neurons.Select(n => n.OutputResult).ToList(); }
+        IList<INeuron> ILayerOfNeurons.Neurons { get => _Neurons; set => _Neurons = value; }
+		IEnumerable<IInputNeurons> ILayerOfInputNeurons.InputNeurons { get => _Neurons.Select(n => (IInputNeurons) n);  }
 
-        public LayerOfNeurons()
+		public LayerOfNeurons()
         {
-            _neurons = new List<INeuron>();
+            _Neurons = new List<INeuron>();
         }
-        public IList<double> Calculate(IList<double> inputs)
+        public void Initialize(uint numberOfNeuron, NeuronType neuronType, ILayerOfInputNeurons inputLayer)
         {
-            IList<double> outputs = new List<double>();
-            foreach (var neuron in _neurons)
-                outputs.Add(neuron.GetCalculationResult(inputs));
-            return outputs;
+            if (numberOfNeuron == 0)
+                throw new CantInitializeWithZeroNeuronException("NumberOfNeuron need to be greater than 0, you can't create a layer with 0 neurons");
+            if(inputLayer==null || inputLayer.InputNeurons.Count() == 0)
+                throw new BadInputLayerException("Input Layer cannot be null or have 0 neurons");
+
+            for (int i = 0; i < numberOfNeuron; i++)
+            {
+                INeuron neuron = neuronType switch
+                {
+                    NeuronType.Elu => new EluNeuron(inputLayer.InputNeurons),
+                    NeuronType.LeakyRelu => new LeakyReLuNeuron(inputLayer.InputNeurons),
+                    NeuronType.Relu => new ReLuNeuron(inputLayer.InputNeurons),
+                    NeuronType.Selu => new SeLuNeuron(inputLayer.InputNeurons),
+                    NeuronType.Sigmoid => new SigmoidNeuron(inputLayer.InputNeurons),
+                    NeuronType.Swish => new SwishNeuron(inputLayer.InputNeurons),
+                    NeuronType.Tanh => new TanhNeuron(inputLayer.InputNeurons),
+                    _ => throw new NeuronTypeDontExsistException("This neuron type don't exist"),
+                };
+                _Neurons.Add(neuron);
+            }
         }
         public ILayerOfNeurons Clone()
         {
             return (ILayerOfNeurons)this.MemberwiseClone();
         }
-        public void Initialize(uint numberOfNeuron, uint numberOfInput, NeuronType neuronType)
-        {
-            if (numberOfNeuron == 0)
-                throw new CantInitializeWithZeroNeuronException("NumberOfNeuron need to be greater than 0");
-            
-            for (int i = 0; i < numberOfNeuron; i++)
-            {
-                INeuron neuron = neuronType switch
-                {
-                    NeuronType.Elu => new EluNeuron(),
-                    NeuronType.LeakyRelu => new LeakyReLuNeuron(),
-                    NeuronType.Relu => new ReLuNeuron(),
-                    NeuronType.Selu => new SeLuNeuron(),
-                    NeuronType.Sigmoid => new SigmoidNeuron(),
-                    NeuronType.Swish => new SwishNeuron(),
-                    NeuronType.Tanh => new TanhNeuron(),
-                    _ => throw new NeuronTypeDontExsistException("This neuron type don't exist"),
-                };
-                neuron.InitialiseWithRandomValues(numberOfInput);
-                _neurons.Add(neuron);
-            }
+        ILayerOfInputNeurons ILayerOfInputNeurons.Clone()
+		{
+            return (ILayerOfInputNeurons)this.MemberwiseClone();
         }
-        public IList<IList<double>> BackPropagate(List<double> targets, bool IsFirstLayer)
-        {
-            IList<IList<double>> gradiantPropagationsValues = new List<IList<double>>();
-            if (targets.Count != _neurons.Count)
-            {
-                throw new WrongTargetsForBackpropagationCalculationException("Targets need to have the same count of neurones in the layer.");
-            }
-            for (int i = 0; i < _neurons.Count; i++)
-            {
-                gradiantPropagationsValues.Add(_neurons[i].UpdateWeights(targets[i], IsFirstLayer));
-            }
-            return gradiantPropagationsValues;
+		public void Calculate()
+		{
+			foreach (INeuron neuron in _Neurons)
+                neuron.GetCalculationResult();
+		}
 
+		ILayerOfNeurons ILayerOfNeurons.Clone()
+		{
+			throw new NotImplementedException();
+		}
 
-        }
+		void ILayerOfNeurons.Initialize(uint numberOfNeuron, NeuronType neuronType, ILayerOfInputNeurons inputLayer)
+		{
+			throw new NotImplementedException();
+		}
 
-    }
+		void ILayerOfNeurons.Calculate()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

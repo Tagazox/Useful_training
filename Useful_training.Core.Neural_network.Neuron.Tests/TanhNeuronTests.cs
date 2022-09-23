@@ -24,7 +24,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCalculationShouldBeOk()
         {
             TanhNeuron tanhNeuron = new TanhNeuron();
-            tanhNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = tanhNeuron.GetCalculationResult(_inputs);
             outputOfTheNeuron.Should().BeInRange(-1, 1);
         }
@@ -32,7 +31,6 @@ namespace Useful_training.Core.Neural_network.Tests
         public void NeuroneCloneShouldBeOk()
         {
             TanhNeuron tanhNeuron = new TanhNeuron();
-            tanhNeuron.InitialiseWithRandomValues(_numberOfInputs);
             double outputOfTheNeuron = tanhNeuron.GetCalculationResult(_inputs);
 
             INeuron cloneNeuron = tanhNeuron.Clone();
@@ -49,30 +47,9 @@ namespace Useful_training.Core.Neural_network.Tests
             {
                 double outputOfTheNeuron = tanhNeuron.GetCalculationResult(_inputs);
             };
-            Calculate.Should().Throw<NeuronNotInitialisedException>();
+            Calculate.Should().Throw<CantCalculateWithInputNeurons>();
         }
 
-        [Fact]
-        public void NeuroneInitialisationShouldThrowCantInitializeWithZeroInputException()
-        {
-            TanhNeuron tanhNeuron = new TanhNeuron();
-            Action Initialise = () =>
-            {
-                tanhNeuron.InitialiseWithRandomValues(0);
-            };
-            Initialise.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-        [Fact]
-        public void NeuroneCalculationShouldThrowWrongInputForCalculationException()
-        {
-            TanhNeuron tanhNeuron = new TanhNeuron();
-            tanhNeuron.InitialiseWithRandomValues(_numberOfInputs);
-            _inputs.RemoveAt(0);
-            Action Calculate = () =>
-            {
-                double outputOfTheNeuron = tanhNeuron.GetCalculationResult(_inputs);
-            };
-            Calculate.Should().Throw<WrongInputForCalculationException>();
-        }
+      
     }
 }

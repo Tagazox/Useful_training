@@ -11,17 +11,20 @@ namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class SeLuNeuron : Neuron
     {
-        public override double GetCalculationResult(IList<double> input)
+        public SeLuNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
         {
-            var result = GetInterpolationResult(input);
+        }
+        public override void GetCalculationResult()
+        {
+            var result = GetInterpolationResult();
             if (result >= 0)
-                return _outputResult = result;
+                OutputResult = result;
             else
-                return _outputResult = (Math.Exp(result) - 1);
+                OutputResult = (Math.Exp(result) - 1);
         }
         internal override double DerivativeFunctionResultCalculation()
         {
-            return ((double)_outputResult) <= 0 ? Math.Exp(_outputResult) : 1;
+            return ((double)OutputResult) <= 0 ? Math.Exp(OutputResult) : 1;
         }
     }
 }

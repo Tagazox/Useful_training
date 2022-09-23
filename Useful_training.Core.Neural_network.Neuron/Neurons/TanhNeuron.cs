@@ -11,13 +11,16 @@ namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class TanhNeuron : Neuron
     {
-        public override double GetCalculationResult(IList<double> input)
+        public TanhNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
         {
-            return _outputResult = Math.Tanh(GetInterpolationResult(input));
+        }
+        public override void GetCalculationResult()
+        {
+            OutputResult = Math.Tanh(GetInterpolationResult());
         }
         internal override double DerivativeFunctionResultCalculation()
         {
-            return (Math.Exp(-_outputResult) * (_outputResult + 1) + 1) / (Math.Pow(1 + Math.Exp(-_outputResult), 2));
+            return (Math.Exp(-OutputResult) * (OutputResult + 1) + 1) / (Math.Pow(1 + Math.Exp(-OutputResult), 2));
         }
     }
 }

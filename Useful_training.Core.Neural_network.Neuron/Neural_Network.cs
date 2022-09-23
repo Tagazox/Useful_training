@@ -10,45 +10,64 @@ using Useful_training.Core.Neural_network.Interface;
 [assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
 namespace Useful_training.Core.Neural_network
 {
-    public class Neural_Network
-    {
-        internal IList<ILayerOfNeurons> _layersOfNeurons { get; set; }
-        internal Neural_Network()
-        {
-            _layersOfNeurons = new List<ILayerOfNeurons>();
-        }
-        internal void AddLayer(uint _numberOfInput, uint _numberOfNeuron, NeuronType typeOfNeurons)
-        {
-            LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
-            layerOfNeurons.Initialize(_numberOfNeuron, _numberOfInput , typeOfNeurons);
-            _layersOfNeurons.Add(layerOfNeurons);
-        }
-        public IList<double> Calculate(List<double> inputs)
-        {
-            if (_layersOfNeurons.Count == 0)
-                throw new NeedToBeCreatedByTheBuilderException("Neural network need to be created by the builder");
-            IList<double> outputs = inputs;
-            for (int i = 0; i < _layersOfNeurons.Count; i++)
-            {
-                outputs = _layersOfNeurons[i].Calculate(outputs);
-            }
-            return outputs;
-        }
-        public void BackPropagate(List<double> targets)
-        {
-            _layersOfNeurons=_layersOfNeurons.Reverse().ToList();
-            if (_layersOfNeurons.First().neurons.Count != targets.Count)
-                throw new ArgumentException("targets need to have the same number as the neurones outputs");
-            foreach (ILayerOfNeurons layers in _layersOfNeurons)
-            {   
-                
-                IList<IList<double>> outputsRetropropagation = layers.BackPropagate(targets, _layersOfNeurons.First() == layers);
-                int countOfOutputs = outputsRetropropagation.First().Count;
-                targets = new List<double>();
-                for (int i = 0; i < countOfOutputs; i++)
-                    targets.Add(outputsRetropropagation.Sum(o => o[i]));
-            }
-            _layersOfNeurons= _layersOfNeurons.Reverse().ToList();
-        }
-    }
+	public class Neural_Network
+	{
+		private readonly ILayerOfInputNeurons InputLayer;
+		private IList<ILayerOfNeurons> LayersOfNeurons { get; set; }
+		private double LearnRate { get; set; }
+		private double Momentum { get; set; }
+		public Neural_Network(uint _numberOfInput, double? learnRate, double? momentum)
+		{
+			LearnRate = learnRate ?? .05;
+			Momentum = momentum ?? .9;
+			LayersOfNeurons = new List<ILayerOfNeurons>();
+			InputLayer = new LayerOfInputNeurons(_numberOfInput);
+		}
+
+		internal void AddLayer(uint _numberOfNeuron, NeuronType typeOfNeurons)
+		{
+			LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
+			if (LayersOfNeurons.Count == 0)
+				layerOfNeurons.Initialize(_numberOfNeuron, typeOfNeurons, InputLayer);
+			else
+				layerOfNeurons.Initialize(_numberOfNeuron, typeOfNeurons, LayersOfNeurons.Last());
+			LayersOfNeurons.Add(layerOfNeurons);
+		}
+		public IList<double> Calculate(IList<double> inputs)
+		{
+			if (inputs == null || inputs.Count == 0 || InputLayer.InputNeurons.Count() != inputs.Count)
+				throw new WrongInputForCalculationException("Inputs for the calculation need to be equal as the input number specified at the creation of the neural network");
+			int inputCounter = 0;
+
+			foreach (IInputNeurons inputNeurons in InputLayer.InputNeurons)
+				inputNeurons.OutputResult = inputs[inputCounter++];
+
+			foreach (ILayerOfNeurons layerOfNeurons in LayersOfNeurons)
+				layerOfNeurons.Calculate();
+
+			return LayersOfNeurons.Last().Outputs;
+		}
+		public void BackPropagate(List<double> targets)
+		{
+			LayersOfNeurons = LayersOfNeurons.Reverse().ToList();
+			if (LayersOfNeurons.First().Neurons.Count != targets.Count)
+				throw new ArgumentException("targets need to have the same number as the outputs layer number of neurones");
+			var i = 0;
+			foreach (var neuron in LayersOfNeurons.First().Neurons)
+				neuron.CalculateGradient(targets[i++]);
+
+			foreach (ILayerOfNeurons layers in LayersOfNeurons.Skip(1).Take(LayersOfNeurons.Count - 2))
+			{
+				foreach (var neuron in layers.Neurons)
+				{
+					neuron.CalculateGradient();
+					neuron.UpdateWeights(LearnRate, Momentum);
+				}
+			}
+
+			foreach (var neuron in LayersOfNeurons.First().Neurons)
+				neuron.UpdateWeights(LearnRate, Momentum);
+			LayersOfNeurons = LayersOfNeurons.Reverse().ToList();
+		}
+	}
 }
