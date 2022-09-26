@@ -7,7 +7,7 @@ using Useful_training.Core.Neural_network.Exceptions;
 
 namespace Useful_training.Core.Neural_network
 {
-    internal class NeuralNetworkBuilder : INeuralNetworkBuilder
+    public class NeuralNetworkBuilder : INeuralNetworkBuilder
     {
         private Neural_Network Neural_Network;
         private uint NumberOfInput;

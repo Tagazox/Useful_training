@@ -15,14 +15,17 @@ namespace ConsoleAdapter
         {
             _neural_NetworkDirector = new NeuralNetworkDirector();
         }
-        public Neural_Network CreateNeuralNetwork(uint numberOfInputs, uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons)
+        public void CreateNeuralNetwork(uint numberOfInputs, uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons)
         {
-            throw new NotImplementedException();
+            INeuralNetworkBuilder Builder = new NeuralNetworkBuilder(numberOfInputs);
+            _neural_NetworkDirector.networkBuilder = Builder;
+            _neural_NetworkDirector.BuildComplexeNeuralNetwork(numberOfOutputs, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
+            _neural_Network = Builder.GetNeural_Network();
         }
 
         public Neural_Network GetNeuralNetwork()
         {
-            throw new NotImplementedException();
+            return _neural_Network;
         }
     }
 }

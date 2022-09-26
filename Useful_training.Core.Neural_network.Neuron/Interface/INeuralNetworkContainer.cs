@@ -9,6 +9,6 @@ namespace Useful_training.Core.Neural_network
     public interface INeuralNetworkContainer
     {
         public Neural_Network GetNeuralNetwork();
-        public Neural_Network CreateNeuralNetwork(uint numberOfInputs, uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons);
+        public void CreateNeuralNetwork(uint numberOfInputs, uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons);
     }
 }
