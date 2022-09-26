@@ -13,24 +13,28 @@ namespace Useful_training.Core.Neural_network
 	public class Neural_Network
 	{
 		private readonly ILayerOfInputNeurons InputLayer;
-		private IList<ILayerOfNeurons> LayersOfNeurons { get; set; }
+		internal IList<ILayerOfNeurons> LayersOfNeurons { get; set; }
 		private double LearnRate { get; set; }
 		private double Momentum { get; set; }
 		public Neural_Network(uint _numberOfInput, double? learnRate, double? momentum)
 		{
-			LearnRate = learnRate ?? .05;
+			if (_numberOfInput <= 0)
+				throw new CantInitializeWithZeroInputException("You can't create a neural network with 0 input");
+			LearnRate = learnRate ?? .4;
 			Momentum = momentum ?? .9;
 			LayersOfNeurons = new List<ILayerOfNeurons>();
 			InputLayer = new LayerOfInputNeurons(_numberOfInput);
 		}
 
-		internal void AddLayer(uint _numberOfNeuron, NeuronType typeOfNeurons)
+		internal void AddHiddenLayer(uint numberOfNeuron, NeuronType typeOfNeurons)
 		{
+			if (numberOfNeuron == 0)
+				throw new CantInitializeWithZeroNeuronException("_numberOfNeuron need to be greater than 0, you can't create a layer with 0 neurons");
 			LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
 			if (LayersOfNeurons.Count == 0)
-				layerOfNeurons.Initialize(_numberOfNeuron, typeOfNeurons, InputLayer);
+				layerOfNeurons.Initialize(numberOfNeuron, typeOfNeurons, InputLayer);
 			else
-				layerOfNeurons.Initialize(_numberOfNeuron, typeOfNeurons, LayersOfNeurons.Last());
+				layerOfNeurons.Initialize(numberOfNeuron, typeOfNeurons, LayersOfNeurons.Last());
 			LayersOfNeurons.Add(layerOfNeurons);
 		}
 		public IList<double> Calculate(IList<double> inputs)

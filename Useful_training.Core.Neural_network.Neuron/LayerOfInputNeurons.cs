@@ -8,7 +8,7 @@ using Useful_training.Core.Neural_network.Exceptions;
 using Useful_training.Core.Neural_network.Interface;
 using Useful_training.Core.Neural_network.Neurons;
 
-[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.LayerOfNeuronsTests")]
+[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
 namespace Useful_training.Core.Neural_network
 {
     internal class LayerOfInputNeurons : ILayerOfInputNeurons

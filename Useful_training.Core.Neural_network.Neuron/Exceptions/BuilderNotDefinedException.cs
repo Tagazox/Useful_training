@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Useful_training.Core.Neural_network.Exceptions
 {
-    public class BadInputLayerException : Exception
+    public class BuilderNotDefinedException : Exception
     {
-            public BadInputLayerException(string message) : base(message)
+            public BuilderNotDefinedException(string message) : base(message)
             {
             }
     }

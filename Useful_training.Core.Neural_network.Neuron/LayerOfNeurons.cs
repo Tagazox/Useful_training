@@ -8,7 +8,7 @@ using Useful_training.Core.Neural_network.Exceptions;
 using Useful_training.Core.Neural_network.Interface;
 using Useful_training.Core.Neural_network.Neurons;
 
-[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.LayerOfNeuronsTests")]
+[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
 namespace Useful_training.Core.Neural_network
 {
     internal class LayerOfNeurons : ILayerOfNeurons
@@ -20,7 +20,6 @@ namespace Useful_training.Core.Neural_network
 
 		public LayerOfNeurons()
         {
-            _Neurons = new List<INeuron>();
         }
         public void Initialize(uint numberOfNeuron, NeuronType neuronType, ILayerOfInputNeurons inputLayer)
         {
@@ -28,6 +27,7 @@ namespace Useful_training.Core.Neural_network
                 throw new CantInitializeWithZeroNeuronException("NumberOfNeuron need to be greater than 0, you can't create a layer with 0 neurons");
             if(inputLayer==null || inputLayer.InputNeurons.Count() == 0)
                 throw new BadInputLayerException("Input Layer cannot be null or have 0 neurons");
+            _Neurons = new List<INeuron>();
 
             for (int i = 0; i < numberOfNeuron; i++)
             {
@@ -59,11 +59,6 @@ namespace Useful_training.Core.Neural_network
                 neuron.GetCalculationResult();
 		}
 
-		ILayerOfNeurons ILayerOfNeurons.Clone()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void CalculateGradiant(List<double> targets = null)
 		{
             int targetCounter = 0;
@@ -71,9 +66,13 @@ namespace Useful_training.Core.Neural_network
             if (targets == null)
                 foreach (INeuron neuron in _Neurons)
                     neuron.CalculateGradient();
-			else
+            else
+            {
+                if (targets.Count != _Neurons.Count())
+                    throw new ArgumentException("if target is defined it should have the same count as the neurones count");
                 foreach (INeuron neuron in _Neurons)
-					neuron.CalculateGradient(targets[targetCounter++]);
+                    neuron.CalculateGradient(targets[targetCounter++]);
+            }
         }
         public void UpdateWeights(double learnRate, double momentum)
         {

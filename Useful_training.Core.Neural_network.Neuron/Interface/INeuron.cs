@@ -9,7 +9,6 @@ namespace Useful_training.Core.Neural_network.Interface
 	internal interface INeuron : IInputNeurons
 	{
 		double Gradiant { get; set; }
-		double CalculateError(double target);
 		double CalculateGradient(double? target = null);
 		new INeuron Clone();
 		void GetCalculationResult();

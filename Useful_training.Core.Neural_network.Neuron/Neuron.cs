@@ -42,6 +42,10 @@ namespace Useful_training.Core.Neural_network
 		}
 		public void UpdateWeights(double learnRate, double momentum)
 		{
+			if (learnRate <= 0)
+				throw new ArgumentException("Learn rate need to be above 0");
+			if (momentum <= 0)
+				throw new ArgumentException("Momentum need to be above 0");
 			var prevDelta = biasDelta;
 			biasDelta = learnRate * Gradiant;
 			bias += biasDelta + momentum * prevDelta;
@@ -53,7 +57,7 @@ namespace Useful_training.Core.Neural_network
 				synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
 			}
 		}
-		public double CalculateError(double target)
+		private double CalculateError(double target)
 		{
 			return target - OutputResult;
 		}

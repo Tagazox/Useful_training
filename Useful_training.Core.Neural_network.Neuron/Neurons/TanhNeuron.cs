@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Useful_training.Core.Neural_network.Interface;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neuron.Tests")]
 namespace Useful_training.Core.Neural_network.Neurons
 {
     internal class TanhNeuron : Neuron

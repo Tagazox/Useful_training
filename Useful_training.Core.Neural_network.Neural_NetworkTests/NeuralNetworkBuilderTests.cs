@@ -2,53 +2,65 @@ using Useful_training.Core.Neural_network.Exceptions;
 
 namespace Useful_training.Core.Neural_network.Neural_NetworkTests
 {
-    public class NeuralNetworkDirectorTest
+    public class NeuralNetworkBuilderTest
     {
-        NeuralNetworkDirector testDirector;
         NeuralNetworkBuilder testBuilder;
         Random rand;
-        uint  numberOfInputs, numberOfOutputs, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer;
-        int enumTypeNeuronMaxNumber;
-        List<uint> numbersOfNeuronesByHiddenLayerList;
-        public NeuralNetworkDirectorTest()
+        public NeuralNetworkBuilderTest()
         {
-            testDirector = new NeuralNetworkDirector();
-            testBuilder = new NeuralNetworkBuilder();  
+            testBuilder = new NeuralNetworkBuilder(1);
             rand = new Random();
-            enumTypeNeuronMaxNumber = Enum.GetValues(typeof(NeuronType)).Cast<NeuronType>().Count();
-            numberOfInputs = (uint)rand.Next(1,10);
-            numberOfOutputs = (uint)rand.Next(1,10);
-            numberOfHiddenLayers = (uint)rand.Next(1,10);
-            numberOfNeuronesByHiddenLayer = (uint)rand.Next(10);
-            numbersOfNeuronesByHiddenLayerList = new List<uint>();
+
         }
-
         [Fact]
-        public void DirectorShouldBuildNeuralNetworkFine()
+        public void BuilderShouldAddHiddenLayerGoodCase1()
         {
-            testDirector.NetworkBuilder = testBuilder;
-            testDirector.BuildMinimalNeuralNetwork(numberOfInputs, numberOfOutputs, (NeuronType) rand.Next(enumTypeNeuronMaxNumber));
-            testBuilder.Should().NotBeNull();
+            uint numberOfHiddenLayer = (uint)rand.Next(1, 10);
+            testBuilder.AddHiddenLayers(1, numberOfHiddenLayer, NeuronType.Sigmoid);
+            testBuilder.GetNeural_Network().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
         }
-
-
         [Fact]
-        public void DirectorShouldBuildComplexeNeuralNetworkFine()
+        public void BuilderShouldAddHiddenLayerGoodCase2()
         {
-            testDirector.NetworkBuilder = testBuilder;
-            testDirector.BuildComplexeNeuralNetwork(numberOfInputs, numberOfOutputs, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
-            testBuilder.Should().NotBeNull();
+            uint numberOfHiddenLayer = (uint)rand.Next(1, 10);
+            List<uint> numberOfNeuronesBylayers = new List<uint>();
+            for (int i = 0; i < numberOfHiddenLayer; i++)
+            {
+                numberOfNeuronesBylayers.Add((uint)rand.Next(1, 10));
+            }
+            testBuilder.AddHiddenLayers(numberOfNeuronesBylayers, numberOfHiddenLayer, NeuronType.Sigmoid);
+            testBuilder.GetNeural_Network().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
         }
-
-
         [Fact]
-        public void DirectorShouldBuildComplexeNeuralNetworkCaseTwoFine()
+        public void BuilderAddHiddenLayerShouldThrowArgumentException()
         {
-            for (int i = 0; i < numberOfHiddenLayers; i++)
-                numbersOfNeuronesByHiddenLayerList.Add((uint)rand.Next(1, 10));
-            testDirector.NetworkBuilder = testBuilder;
-            testDirector.BuildComplexeNeuralNetwork(numberOfInputs, numberOfOutputs, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, (NeuronType)rand.Next(enumTypeNeuronMaxNumber));
-            testBuilder.Should().NotBeNull();
+            uint numberOfHiddenLayer = (uint)rand.Next(1, 10);
+            List<uint> numberOfNeuronesBylayers = new List<uint>();
+            for (int i = 0; i < numberOfHiddenLayer - 1; i++)
+            {
+                numberOfNeuronesBylayers.Add((uint)rand.Next(1, 10));
+            }
+            Action AddHiddenLayer = () =>
+            {
+                testBuilder.AddHiddenLayers(numberOfNeuronesBylayers, numberOfHiddenLayer, NeuronType.Sigmoid);
+            };
+            AddHiddenLayer.Should().Throw<ArgumentException>();
+        }
+        [Fact]
+        public void BuilderShouldAddOutputLayerGood()
+        {
+            uint numberOfoutputs = (uint)rand.Next(1, 10);
+            testBuilder.AddOutputLayers(numberOfoutputs, NeuronType.Sigmoid);
+            testBuilder.GetNeural_Network().LayersOfNeurons.Should().HaveCount(1);
+        }
+        [Fact]
+        public void BuilderAddOutputLayerShouldThrowArgumentException()
+        {
+            Action AddOutputLayers = () =>
+            {
+                testBuilder.AddOutputLayers(0, NeuronType.Sigmoid);
+            };
+            AddOutputLayers.Should().Throw<ArgumentException>();
         }
     }
 }
