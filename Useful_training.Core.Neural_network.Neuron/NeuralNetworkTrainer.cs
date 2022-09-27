@@ -7,15 +7,19 @@ using System.Threading.Tasks;
 
 namespace Useful_training.Core.Neural_network
 {
-    public class NeuralNetworkTrainer
+    public class NeuralNetworkTrainer : INeuralNetworkTrainer
     {
-        private readonly Neural_Network _neural_Network;
-        public NeuralNetworkTrainer(INeuralNetworkContainer neuralNetworkContainer)
+        private readonly INeural_Network _neural_Network;
+        private readonly List<DataSet> _dataSets;
+        public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer)
         {
-            _neural_Network = neuralNetworkContainer.GetNeuralNetwork();
+            neuralNetworkContainer.CreateNeuralNetwork();
+            _neural_Network = neuralNetworkContainer.Neural_Network;
+            neuralNetworkContainer.CreateDataSets();
+            _dataSets = neuralNetworkContainer.DataSets;
         }
 
-        public Neural_Network GetTrainedNeuralNetwork(List<DataSet> dataSets)
+        public void TrainNeuralNetwork()
         {
             double deltaError = double.MaxValue;
             bool trainFinish = false;
@@ -23,12 +27,15 @@ namespace Useful_training.Core.Neural_network
             IList<double> results;
             var timer = new Stopwatch();
             timer.Start();
-
+            if (_neural_Network == null)
+                throw new NullReferenceException("Data set hasn't be fine in the container");
+            if (_dataSets == null)
+                throw new NullReferenceException("Data set hasn't be fine in the container");
             while (!trainFinish)
             {
                 deltaError = 0;
                 trainFinish = false;
-                DataSet dataSet = dataSets[random.Next(dataSets.Count)];
+                DataSet dataSet = _dataSets[random.Next(_dataSets.Count)];
                 results = _neural_Network.Calculate(dataSet.Values);
                 if (results.Count != dataSet.Targets.Count)
                     throw new ArgumentException("targetOutputsValues need to have the same number as the neurones outputs");
@@ -41,7 +48,7 @@ namespace Useful_training.Core.Neural_network
                 if (deltaError < 0.001)
                 {
                     trainFinish = true;
-                    foreach (DataSet set in dataSets.Take(20))
+                    foreach (DataSet set in _dataSets.Take(20))
                     {
                         results = _neural_Network.Calculate(set.Values);
                         for (int i = 0; i < results.Count; i++)
@@ -56,10 +63,7 @@ namespace Useful_training.Core.Neural_network
                         }
                     }
                 }
-                if (results.Any(d => double.IsNaN(d)))
-                    return null;
             }
-            return _neural_Network;
         }
     }
 }

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Useful_training.Core.Neural_network
 {
-    public interface INeuralNetworkContainer
+    public interface INeuralNetworkTrainerContainer
     {
-        public Neural_Network GetNeuralNetwork();
-        public void CreateNeuralNetwork(uint numberOfInputs, uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons);
+        List<DataSet> DataSets { get;  }
+        INeural_Network Neural_Network{ get;  }
+        public void CreateNeuralNetwork();
+        public void CreateDataSets();
     }
 }
