@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Useful_training.Core.Neural_network
+namespace Useful_training.Core.Neural_network.ValueObject
 {
 	public class DataSet
 	{

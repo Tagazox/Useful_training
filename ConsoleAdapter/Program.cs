@@ -6,7 +6,7 @@ Console.WriteLine("Hello, World!");
 
 ContainerConsoleAdapter containerConsoleAdapter = new ContainerConsoleAdapter();
 
-INeuralNetworkTrainer trainer = new NeuralNetworkTrainer(containerConsoleAdapter);
+NeuralNetworkTrainer trainer = new NeuralNetworkTrainer(containerConsoleAdapter);
 
-ConsoleTrainerAdapter trainerAdapter = new ConsoleTrainerAdapter(trainer);
+ConsoleTrainerObserverAdapter trainerAdapter = new ConsoleTrainerObserverAdapter(trainer);
 trainerAdapter.FollowNetworkTraining();
