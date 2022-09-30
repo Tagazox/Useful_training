@@ -1,5 +1,6 @@
 using Moq;
 using Useful_training.Core.Neural_network.Exceptions;
+using Useful_training.Core.Neural_network.Interface;
 using Useful_training.Core.Neural_network.ValueObject;
 
 namespace Useful_training.Core.Neural_network.Neural_NetworkTests

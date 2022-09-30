@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Useful_training.Core.Neural_network;
+using Useful_training.Core.Neural_network.Interface;
 using Useful_training.Core.Neural_network.ValueObject;
 
 namespace ConsoleAdapter

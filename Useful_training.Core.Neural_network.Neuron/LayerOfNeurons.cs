@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Useful_training.Core.Neural_network.Exceptions;
@@ -11,6 +12,7 @@ using Useful_training.Core.Neural_network.Neurons;
 [assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
 namespace Useful_training.Core.Neural_network
 {
+    [Serializable]
     internal class LayerOfNeurons : ILayerOfNeurons
     {
         private IList<INeuron> _Neurons { get; set; }
@@ -79,5 +81,14 @@ namespace Useful_training.Core.Neural_network
                 foreach (INeuron neuron in _Neurons)
                     neuron.UpdateWeights(learnRate, momentum);
         }
+        #region serialization
+        protected LayerOfNeurons(SerializationInfo info, StreamingContext context)
+        {
+        }
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("NeuronList", _Neurons.ToArray());
+        }
+        #endregion
     }
 }

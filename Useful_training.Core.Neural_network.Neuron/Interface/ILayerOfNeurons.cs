@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Useful_training.Core.Neural_network.Neurons;
@@ -9,7 +10,7 @@ using Useful_training.Core.Neural_network.Neurons;
 [assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
 namespace Useful_training.Core.Neural_network.Interface
 {
-    internal interface ILayerOfNeurons : ILayerOfInputNeurons
+    internal interface ILayerOfNeurons : ILayerOfInputNeurons, ISerializable
     {
         internal IList<double> Outputs { get;  }
         internal IList<INeuron> Neurons { get; set; }

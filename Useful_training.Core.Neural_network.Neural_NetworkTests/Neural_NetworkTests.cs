@@ -1,4 +1,6 @@
+using Newtonsoft.Json;
 using Useful_training.Core.Neural_network.Exceptions;
+using Useful_training.Core.Neural_network.Interface;
 
 namespace Useful_training.Core.Neural_network.Neural_NetworkTests
 {
@@ -113,6 +115,25 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
                 TestSubject.BackPropagate(targets);
             };
             BackPropagateCase1.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void Neural_NetworkSerialisationShouldBeGood()
+        {
+            uint lastLayerCount = 0;
+            foreach (NeuronType type in NeuronTypeAvailable)
+            {
+                lastLayerCount = (uint)rand.Next(1, 10);
+                TestSubject.AddHiddenLayer(lastLayerCount, type);
+            }
+			string json = JsonConvert.SerializeObject(TestSubject, Formatting.Indented);
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+            };
+            INeural_Network neural_NetworkDeserialized = JsonConvert.DeserializeObject<Neural_Network>(json);
+            neural_NetworkDeserialized.Calculate(input).Should().AllBeEquivalentTo(TestSubject.Calculate(input));
+
         }
     }
 }

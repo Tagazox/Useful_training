@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Useful_training.Core.Neural_network.Exceptions;
@@ -8,6 +9,7 @@ using Useful_training.Core.Neural_network.Interface;
 
 namespace Useful_training.Core.Neural_network
 {
+	[Serializable]
 	internal abstract class Neuron : INeuron
 	{
 		public double Gradiant { get; set; }
@@ -27,7 +29,7 @@ namespace Useful_training.Core.Neural_network
 			biasDelta = 0;
 			foreach (var inputNeuron in inputNeurons)
 			{
-				var synapse = new Synapse(inputNeuron, this);
+				Synapse synapse = new Synapse(inputNeuron, this);
 				inputNeuron.OutputSynapses.Add(synapse);
 				InputSynapses.Add(synapse);
 			}
@@ -73,6 +75,18 @@ namespace Useful_training.Core.Neural_network
 		{
 			return (IInputNeurons)this.MemberwiseClone();
 		}
+		#region serialization
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("Weight", InputSynapses.Select(w => w.Weight));
+			info.AddValue("WeightDelta", InputSynapses.Select(w => w.WeightDelta));
+			info.AddValue("Bias", bias);
+			info.AddValue("BiasDelta", biasDelta);
+			info.AddValue("Type", (int)GetNeuronType());
+		}
+		protected abstract NeuronType GetNeuronType();
+		#endregion
+
 	}
-	
+
 }

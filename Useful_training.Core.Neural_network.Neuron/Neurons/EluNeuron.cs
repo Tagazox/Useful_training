@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Useful_training.Core.Neural_network.Interface;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 [assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neuron.Tests")]
 namespace Useful_training.Core.Neural_network.Neurons
 {
+    [Serializable]
     internal class EluNeuron : Neuron
     {
 		public EluNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
@@ -23,5 +25,11 @@ namespace Useful_training.Core.Neural_network.Neurons
         {
             return ((double)OutputResult) >= 1 ? 1 : (OutputResult >= 0 ? OutputResult : (Math.Exp(OutputResult) - 1));
         }
+        #region serialization
+        protected override NeuronType GetNeuronType()
+        {
+            return NeuronType.Elu;
+        }
+        #endregion
     }
 }

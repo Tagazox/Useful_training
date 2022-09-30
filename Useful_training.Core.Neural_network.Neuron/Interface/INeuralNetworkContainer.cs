@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Useful_training.Core.Neural_network.ValueObject;
 
-namespace Useful_training.Core.Neural_network
+namespace Useful_training.Core.Neural_network.Interface
 {
     public interface INeuralNetworkTrainerContainer
     {
