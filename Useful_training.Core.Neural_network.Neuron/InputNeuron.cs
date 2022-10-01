@@ -13,7 +13,6 @@ namespace Useful_training.Core.Neural_network.Neurons
 	{
 		public double OutputResult { get ; set; }
 		public List<Synapse> OutputSynapses { get; set; }
-
 		public InputNeuron()
 		{
 			OutputSynapses = new List<Synapse>();

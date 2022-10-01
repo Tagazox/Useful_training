@@ -33,24 +33,24 @@ namespace FileManagerTests
         }
 
         [Fact]
-        public void SaveNeuralNetworkShouldBeGood()
+        public void SaveShouldBeGood()
         {
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
 
-            Action SaveNeuralNetwork = () =>
+            Action Save = () =>
             {
-                TestSubject.SaveNeuralNetwork(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+                TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
             };
-            SaveNeuralNetwork.Should().NotThrow();
+            Save.Should().NotThrow();
         }
 
         [Fact]
-        public void RetreiveNetworkShouldBeGood()
+        public void RetreiveShouldBeGood()
         {
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
 
-            TestSubject.SaveNeuralNetwork(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
-            INeural_Network neuralNetRecovred = TestSubject.RetreiveNeuralNetwork(nameOfTheNeuralNetwork);
+            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+            INeural_Network neuralNetRecovred = TestSubject.Retreive<Neural_Network>(nameOfTheNeuralNetwork);
             neuralNetRecovred.Calculate(input).Should().BeEquivalentTo(neural_NetworkContainer.Object.Neural_Network.Calculate(input));
         }
 
@@ -64,33 +64,43 @@ namespace FileManagerTests
             for (int i = 0; i < 10; i++)
             {
                 nameOfTheNeuralNetwork += searchTerm;
-                TestSubject.SaveNeuralNetwork(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+                TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
             }
             for (int i = 0; i < 10; i++)
-                TestSubject.SearchNeuralNetworkAvailable(BaseName, 0, i).Count().Should().Be(i);
+                TestSubject.SearchAvailable(BaseName, 0, i).Count().Should().Be(i);
         }
 
         [Fact]
-        public void SaveNeuralNetworkShouldThrowNeuralNetworkAlreadyExistException()
+        public void SaveShouldThrowAlreadyExistException()
         {
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
-            TestSubject.SaveNeuralNetwork(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
 
-            Action SaveNeuralNetwork = () =>
+            Action Save = () =>
             {
-                TestSubject.SaveNeuralNetwork(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+                TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
             };
-            SaveNeuralNetwork.Should().Throw<NeuralNetworkAlreadyExistException>();
+            Save.Should().Throw<AlreadyExistException>();
         }
         [Fact]
-        public void RetreiveNetworkShouldThrowCantFindNeuralNetworkException()
+        public void RetreiveShouldThrowCantFindNeuralNetworkException()
         {
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
-            Action SaveNeuralNetwork = () =>
+            Action Save = () =>
             {
-                INeural_Network neuralNetRecovred = TestSubject.RetreiveNeuralNetwork(nameOfTheNeuralNetwork);
+                INeural_Network neuralNetRecovred = TestSubject.Retreive<Neural_Network>(nameOfTheNeuralNetwork);
             };
-            SaveNeuralNetwork.Should().Throw<CantFindNeuralNetworkException>();
+            Save.Should().Throw<CantFindException>();
+        }
+        [Fact]
+        public void RetreiveShouldThrowException()
+        {
+            string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
+            Action Save = () =>
+            {
+                INeural_Network neuralNetRecovred = TestSubject.Retreive<INeural_Network>(nameOfTheNeuralNetwork);
+            };
+            Save.Should().Throw<Exception>();
         }
     }
 }

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
 </Project>

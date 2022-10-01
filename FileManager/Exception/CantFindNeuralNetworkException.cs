@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FileManager.Exceptions
 {
-    public class CantFindNeuralNetworkException : Exception
+    public class CantFindException : Exception
     {
-            public CantFindNeuralNetworkException(string message) : base(message)
+            public CantFindException(string message) : base(message)
             {
             }
     }
