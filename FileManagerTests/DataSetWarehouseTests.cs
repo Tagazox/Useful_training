@@ -54,7 +54,7 @@ namespace FileManagerTests
         {
             string nameOfTheDataSet = Guid.NewGuid().ToString();
 
-            TestSubject.Save(INeuralNetworkTrainerContainer.Object.DataSets, nameOfTheDataSet);
+            TestSubject.Save(INeuralNetworkTrainerContainer.Object.DataSets, nameOfTheDataSet).Wait();
             List<DataSet> DataSetsRecovred = TestSubject.Retreive<List<DataSet>>(nameOfTheDataSet);
             DataSetsRecovred.Should().BeEquivalentTo(INeuralNetworkTrainerContainer.Object.DataSets);
         }
@@ -79,11 +79,11 @@ namespace FileManagerTests
         public void SaveShouldThrowAlreadyExistException()
         {
             string nameOfTheDataSet = Guid.NewGuid().ToString();
-            TestSubject.Save(INeuralNetworkTrainerContainer.Object.DataSets, nameOfTheDataSet);
+            TestSubject.Save(INeuralNetworkTrainerContainer.Object.DataSets, nameOfTheDataSet).Wait();
 
             Action Save = () =>
             {
-                TestSubject.Save(INeuralNetworkTrainerContainer.Object.DataSets, nameOfTheDataSet);
+                TestSubject.Save(INeuralNetworkTrainerContainer.Object.DataSets, nameOfTheDataSet).Wait();
             };
             Save.Should().Throw<AlreadyExistException>();
         }

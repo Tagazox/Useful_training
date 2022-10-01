@@ -26,7 +26,8 @@ namespace FileManagerTests
             uint numberOfInputNeurons = numberOfInput;
             uint numberOfNeuronesByHiddenLayerOutput = 5;
             uint numberOfHiddenLayers = 3;
-            NeuralNetworkBuilder MockedNeuralNetworkBuilder = new NeuralNetworkBuilder(numberOfInputNeurons, .005, 0.025);
+            NeuralNetworkBuilder MockedNeuralNetworkBuilder = new NeuralNetworkBuilder();
+            MockedNeuralNetworkBuilder.Initialize(numberOfInputNeurons, .005, 0.025);
             MockedNeuralNetworkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayerOutput, numberOfHiddenLayers, NeuronType.Tanh);
             MockedNeuralNetworkBuilder.AddOutputLayers(numberOfOutput, NeuronType.Tanh);
             neural_NetworkContainer.Setup(c => c.Neural_Network).Returns(MockedNeuralNetworkBuilder.GetNeural_Network());
@@ -49,7 +50,7 @@ namespace FileManagerTests
         {
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
 
-            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork).Wait();
             INeural_Network neuralNetRecovred = TestSubject.Retreive<Neural_Network>(nameOfTheNeuralNetwork);
             neuralNetRecovred.Calculate(input).Should().BeEquivalentTo(neural_NetworkContainer.Object.Neural_Network.Calculate(input));
         }
@@ -74,11 +75,11 @@ namespace FileManagerTests
         public void SaveShouldThrowAlreadyExistException()
         {
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
-            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork).Wait();
 
             Action Save = () =>
             {
-                TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork);
+                TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork).Wait();
             };
             Save.Should().Throw<AlreadyExistException>();
         }

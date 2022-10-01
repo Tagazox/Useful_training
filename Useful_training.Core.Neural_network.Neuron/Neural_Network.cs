@@ -14,11 +14,14 @@ namespace Useful_training.Core.Neural_network
 	[Serializable]
 	public class Neural_Network : INeural_Network
 	{
-		private readonly ILayerOfInputNeurons InputLayer;
+		private ILayerOfInputNeurons InputLayer;
 		internal IList<ILayerOfNeurons> LayersOfNeurons { get; set; }
 		private double LearnRate { get; set; }
 		private double Momentum { get; set; }
-		public Neural_Network(uint _numberOfInput, double? learnRate, double? momentum)
+		public Neural_Network()
+		{
+		}
+		internal void Initialize(uint _numberOfInput, double? learnRate, double? momentum)
 		{
 			if (_numberOfInput <= 0)
 				throw new CantInitializeWithZeroInputException("You can't create a neural network with 0 input");
@@ -29,6 +32,8 @@ namespace Useful_training.Core.Neural_network
 		}
 		internal void AddHiddenLayer(uint numberOfNeuron, NeuronType typeOfNeurons)
 		{
+			if (InputLayer == null)
+				throw new NeedToBeCreatedByTheBuilderException("You need to have initalized the neural network first");
 			if (numberOfNeuron == 0)
 				throw new CantInitializeWithZeroNeuronException("_numberOfNeuron need to be greater than 0, you can't create a layer with 0 neurons");
 			LayerOfNeurons layerOfNeurons = new LayerOfNeurons();

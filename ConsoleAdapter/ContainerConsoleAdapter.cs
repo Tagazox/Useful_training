@@ -127,8 +127,7 @@ namespace ConsoleAdapter
 			if (!double.TryParse(sMomentum, NumberStyles.Any, CultureInfo.InvariantCulture, out momentum))
 				throw new WrongInputException("Momentum impossible à parser");
 
-			_neural_NetworkBuilder = new NeuralNetworkBuilder(numberOfInput, learnRate, momentum);
-			_neural_NetworkDirector.networkBuilder = _neural_NetworkBuilder;
+			
 
 			Console.WriteLine("Combien de sorties doivent être géré par ce réseau de neurones ?");
 			string? sNumberOfOutput = Console.ReadLine();
@@ -184,7 +183,9 @@ namespace ConsoleAdapter
 				default:
 					throw new WrongInputException("Ce type de neurone n'existe pas");
 			}
-			_neural_NetworkDirector.BuildComplexeNeuralNetwork(numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
+			_neural_NetworkBuilder = new NeuralNetworkBuilder();
+			_neural_NetworkDirector.networkBuilder = _neural_NetworkBuilder;
+			_neural_NetworkDirector.BuildComplexeNeuralNetwork(numberOfInput, learnRate, momentum,numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
 			Neural_Network = _neural_NetworkBuilder.GetNeural_Network();
 			Console.WriteLine("Réseau de neurones crée avec succès !");
 			Thread.Sleep(2000);

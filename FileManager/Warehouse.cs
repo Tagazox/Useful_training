@@ -39,7 +39,7 @@ namespace FileManager
             }
         }
 
-        public void Save<T>(T ObjectToSave, string name)
+        public async Task Save<T>(T ObjectToSave, string name)
         {
             if (!typeof(T).IsAssignableTo(TypeToSave))
                 throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
@@ -50,7 +50,7 @@ namespace FileManager
             if (File.Exists(FilePath))
                 throw new AlreadyExistException($"A {TypeToSave.FullName} with this name already exist");
 
-            File.WriteAllText(FilePath, json);
+            await File.WriteAllTextAsync(FilePath, json);
         }
 
         public IEnumerable<string> SearchAvailable(string seamsLike, int start, int count)

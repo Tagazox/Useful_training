@@ -15,16 +15,18 @@ namespace Useful_training.Core.Neural_network
         {
 
         }
-        public void BuildMinimalNeuralNetwork(uint numberOfOutputs, NeuronType typeOfNeurons)
+        public void BuildMinimalNeuralNetwork(uint numberOfInput, uint numberOfOutputs, NeuronType typeOfNeurons)
         {
             if (_networkBuilder == null)
                 throw new BuilderNotDefinedException("Builder need to be defined first");
+            _networkBuilder.Initialize(numberOfInput);
             _networkBuilder.AddOutputLayers(numberOfOutputs, typeOfNeurons);
         }
-        public void BuildComplexeNeuralNetwork(uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons)
+        public void BuildComplexeNeuralNetwork(uint numberOfInput,double learnRate,double momentum, uint numberOfOutputs, uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons)
         {
             if (_networkBuilder == null)
                 throw new BuilderNotDefinedException("Builder need to be defined first");
+            _networkBuilder.Initialize(numberOfInput, learnRate,momentum);
             _networkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayer, numberOfHiddenLayers, typeOfNeurons);
             _networkBuilder.AddOutputLayers(numberOfOutputs, typeOfNeurons);
         }

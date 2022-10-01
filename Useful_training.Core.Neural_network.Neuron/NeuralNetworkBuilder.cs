@@ -10,19 +10,19 @@ namespace Useful_training.Core.Neural_network
     public class NeuralNetworkBuilder : INeuralNetworkBuilder
     {
         private Neural_Network Neural_Network;
-        private uint NumberOfInput;
-        private double? LearnRate, Momentum;
-        public NeuralNetworkBuilder(uint numberOfInput, double? learnRate = null, double? momentum = null)
+
+        public NeuralNetworkBuilder()
         {
-            NumberOfInput = numberOfInput;
-            LearnRate = learnRate;
-            Momentum = momentum;
             Reset();
         }
 
         public void Reset()
         {
-            Neural_Network = new Neural_Network(NumberOfInput, LearnRate, Momentum);
+            Neural_Network = new Neural_Network();
+        }
+        public void Initialize(uint numberOfInput, double? learnRate = null, double? momentum = null)
+        {
+            Neural_Network.Initialize(numberOfInput, learnRate, momentum);
         }
 
         public void AddHiddenLayers(uint numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons)

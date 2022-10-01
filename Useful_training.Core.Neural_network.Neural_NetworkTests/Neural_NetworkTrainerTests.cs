@@ -40,7 +40,8 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             uint numberOfInputNeurons = numberOfInput;
             uint numberOfNeuronesByHiddenLayerOutput = 5;
             uint numberOfHiddenLayers = 3;
-            NeuralNetworkBuilder MockedNeuralNetworkBuilder = new NeuralNetworkBuilder(numberOfInputNeurons, .005, 0.025);
+            NeuralNetworkBuilder MockedNeuralNetworkBuilder = new NeuralNetworkBuilder();
+            MockedNeuralNetworkBuilder.Initialize(numberOfInputNeurons, .005, 0.025);
             MockedNeuralNetworkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayerOutput, numberOfHiddenLayers, NeuronType.Tanh);
             MockedNeuralNetworkBuilder.AddOutputLayers(numberOfOutput, NeuronType.Tanh);
             _neural_NetworkContainer.Setup(c => c.Neural_Network).Returns(MockedNeuralNetworkBuilder.GetNeural_Network());

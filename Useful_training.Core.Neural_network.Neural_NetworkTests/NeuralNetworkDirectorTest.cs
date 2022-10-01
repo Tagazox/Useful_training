@@ -16,13 +16,13 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         public void BuilderShouldBuildMinimalNeuralNetworkGood()
         {
             testDirector.networkBuilder = networkBuilderMock.Object;
-            testDirector.BuildMinimalNeuralNetwork(2, NeuronType.Sigmoid);
+            testDirector.BuildMinimalNeuralNetwork(2,2, NeuronType.Sigmoid);
         }
         [Fact]
         public void BuilderShouldBuildComplexeNeuralNetworkGoodCase1()
         {
             testDirector.networkBuilder = networkBuilderMock.Object;
-            testDirector.BuildComplexeNeuralNetwork(2, 2, 2, NeuronType.Sigmoid);
+            testDirector.BuildComplexeNeuralNetwork(2,.5,.5, 2, 2,2, NeuronType.Sigmoid);
         }
         [Fact]
         public void BuilderShouldBuildComplexeNeuralNetworkGoodCase2()
@@ -43,7 +43,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             Action BuildMinimalNeuralNetwork = () =>
             {
-                testDirector.BuildMinimalNeuralNetwork(2, NeuronType.Sigmoid);
+                testDirector.BuildMinimalNeuralNetwork(2,2, NeuronType.Sigmoid);
             };
             BuildMinimalNeuralNetwork.Should().Throw<BuilderNotDefinedException>();
         }
@@ -52,7 +52,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             Action BuildComplexeNeuralNetwork = () =>
             {
-                testDirector.BuildComplexeNeuralNetwork(2, 2, 2, NeuronType.Sigmoid);
+                testDirector.BuildComplexeNeuralNetwork(2,.5,.5,2, 2, 2, NeuronType.Sigmoid);
             };
             BuildComplexeNeuralNetwork.Should().Throw<BuilderNotDefinedException>();
         }

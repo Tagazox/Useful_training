@@ -8,13 +8,19 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         Random rand;
         public NeuralNetworkBuilderTest()
         {
-            testBuilder = new NeuralNetworkBuilder(1);
+            testBuilder = new NeuralNetworkBuilder();
             rand = new Random();
 
         }
         [Fact]
+        public void BuilderShouldInitializeGood()
+        {
+            testBuilder.Initialize(2);
+        }
+        [Fact]
         public void BuilderShouldAddHiddenLayerGoodCase1()
         {
+            testBuilder.Initialize(2);
             uint numberOfHiddenLayer = (uint)rand.Next(1, 10);
             testBuilder.AddHiddenLayers(1, numberOfHiddenLayer, NeuronType.Sigmoid);
             testBuilder.GetNeural_Network().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
@@ -22,6 +28,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         [Fact]
         public void BuilderShouldAddHiddenLayerGoodCase2()
         {
+            testBuilder.Initialize(2);
             uint numberOfHiddenLayer = (uint)rand.Next(1, 10);
             List<uint> numberOfNeuronesBylayers = new List<uint>();
             for (int i = 0; i < numberOfHiddenLayer; i++)
@@ -49,6 +56,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         [Fact]
         public void BuilderShouldAddOutputLayerGood()
         {
+            testBuilder.Initialize(2);
             uint numberOfoutputs = (uint)rand.Next(1, 10);
             testBuilder.AddOutputLayers(numberOfoutputs, NeuronType.Sigmoid);
             testBuilder.GetNeural_Network().LayersOfNeurons.Should().HaveCount(1);
