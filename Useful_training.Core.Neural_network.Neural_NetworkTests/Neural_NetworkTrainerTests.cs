@@ -50,7 +50,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             _neural_NetworkContainer.Setup(c => c.DataSets).Returns(dataSets);
             CreateNewNeuralNetwork();
-            _neuralNetworkTrainer = new NeuralNetworkTrainer(_neural_NetworkContainer.Object);
+            _neuralNetworkTrainer = new NeuralNetworkTrainer(_neural_NetworkContainer.Object,2);
             _neuralNetworkTrainer.TrainNeuralNetwork();
 
             INeural_Network TrainedNeuralNetwork = _neural_NetworkContainer.Object.Neural_Network;
@@ -67,13 +67,11 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         [Fact]
         public void Neural_NetworkGetTrainedNeuronShouldThrowArgumentExceptionCase1()
         {
-            INeural_Network TrainedNeuralNetwork = null;
             CreateNewNeuralNetwork();
-            _neuralNetworkTrainer = new NeuralNetworkTrainer(_neural_NetworkContainer.Object);
 
             Action TrainNeuralNetwork = () =>
             {
-                _neuralNetworkTrainer.TrainNeuralNetwork();
+                _neuralNetworkTrainer = new NeuralNetworkTrainer(_neural_NetworkContainer.Object);
             };
 
             TrainNeuralNetwork.Should().Throw<NullReferenceException>();
@@ -83,11 +81,11 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             INeural_Network TrainedNeuralNetwork = null;
             _neural_NetworkContainer.Setup(c => c.DataSets).Returns(dataSets);
-            _neuralNetworkTrainer = new NeuralNetworkTrainer(_neural_NetworkContainer.Object);
+            _neural_NetworkContainer.Setup(c => c.DataSets).Returns(dataSets);
 
             Action TrainNeuralNetwork = () =>
             {
-                _neuralNetworkTrainer.TrainNeuralNetwork();
+                _neuralNetworkTrainer = new NeuralNetworkTrainer(_neural_NetworkContainer.Object);
             };
 
             TrainNeuralNetwork.Should().Throw<NullReferenceException>();

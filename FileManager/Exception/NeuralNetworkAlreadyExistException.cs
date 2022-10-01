@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FileManager.Exceptions
 {
-    public class FileAlreadyExistException : Exception
+    public class NeuralNetworkAlreadyExistException : Exception
     {
-            public FileAlreadyExistException(string message) : base(message)
+            public NeuralNetworkAlreadyExistException(string message) : base(message)
             {
             }
     }

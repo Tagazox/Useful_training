@@ -126,13 +126,31 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
                 lastLayerCount = (uint)rand.Next(1, 10);
                 TestSubject.AddHiddenLayer(lastLayerCount, type);
             }
-			string json = JsonConvert.SerializeObject(TestSubject, Formatting.Indented);
+            List<double> targets = new List<double>();
+            for (int i = 0; i < lastLayerCount ; i++)
+            {
+                targets.Add(1);
+            }
+            TestSubject.BackPropagate(targets);
+            string json = JsonConvert.SerializeObject(TestSubject, Formatting.Indented);
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
             };
             INeural_Network neural_NetworkDeserialized = JsonConvert.DeserializeObject<Neural_Network>(json);
-            neural_NetworkDeserialized.Calculate(input).Should().AllBeEquivalentTo(TestSubject.Calculate(input));
+
+            IList<double> resultsOfDeserializedNetwork = neural_NetworkDeserialized.Calculate(input);
+            IList<double> resultsOfSerializedNetwork = TestSubject.Calculate(input);
+
+            resultsOfDeserializedNetwork.Should().BeEquivalentTo(resultsOfSerializedNetwork);
+
+            TestSubject.BackPropagate(targets);
+            neural_NetworkDeserialized.BackPropagate(targets);
+
+            resultsOfDeserializedNetwork = neural_NetworkDeserialized.Calculate(input);
+            resultsOfSerializedNetwork = TestSubject.Calculate(input);
+
+            resultsOfDeserializedNetwork.Should().BeEquivalentTo(resultsOfSerializedNetwork);
 
         }
     }

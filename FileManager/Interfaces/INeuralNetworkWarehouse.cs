@@ -10,7 +10,7 @@ namespace FileManager.Interfaces
 {
 	public interface INeuralNetworkWarehouse
 	{
-		public IEnumerable<string> RetreiveNeuralNetworkAvailable(string seamsLike, int start, int count);
+		public IEnumerable<string> SearchNeuralNetworkAvailable(string seamsLike, int start, int count);
 		public INeural_Network RetreiveNeuralNetwork(string name);
 		public void SaveNeuralNetwork(INeural_Network neuralNetToSave,string name);
 	}

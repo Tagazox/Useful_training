@@ -79,15 +79,23 @@ namespace Useful_training.Core.Neural_network
 			Momentum = info.GetDouble("Momentum");
 			LearnRate = info.GetDouble("LearnRate");
 			InputLayer = new LayerOfInputNeurons(info.GetUInt32("NumberOfInput"));
+			LayersOfNeurons = new List<ILayerOfNeurons>();
 			dynamic layerOfNeuronsData = info.GetValue("LayersOfNeurons", typeof(object));
 			foreach (var layer in layerOfNeuronsData)
 			{
 				IList<NeuronSerializedData> layerData = layer.NeuronList.ToObject(typeof(List<NeuronSerializedData>));
-			}
-		}
-		private void AddHiddenLayerWithWeight(IList<IList<double>> weight, IList<IList<double>> weightDelta, IList<double> Bias, IList<double> BiasDeltas, IList<NeuronType> Types)
-		{
+				AddHiddenLayer((uint)layerData.Count, (NeuronType)layerData.First().Type);
+				if (layerData.Count != LayersOfNeurons.Last().Neurons.Count)
+					throw new Exception("incoherent Data");
 
+                for (int i = 0; i < LayersOfNeurons.Last().Neurons.Count; i++)
+                {
+					LayersOfNeurons.Last().Neurons[i].Weight = layerData[i].Weight;
+					LayersOfNeurons.Last().Neurons[i].WeightDelta = layerData[i].WeightDelta;
+					LayersOfNeurons.Last().Neurons[i].Bias = layerData[i].Bias;
+					LayersOfNeurons.Last().Neurons[i].BiasDelta = layerData[i].BiasDelta;
+				}
+			}
 		}
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{

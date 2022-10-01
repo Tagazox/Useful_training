@@ -82,9 +82,6 @@ namespace Useful_training.Core.Neural_network
                     neuron.UpdateWeights(learnRate, momentum);
         }
         #region serialization
-        protected LayerOfNeurons(SerializationInfo info, StreamingContext context)
-        {
-        }
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("NeuronList", _Neurons.ToArray());

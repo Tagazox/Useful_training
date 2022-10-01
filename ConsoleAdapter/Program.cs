@@ -7,9 +7,6 @@ Console.WriteLine("Hello, World!");
 
 ContainerConsoleAdapter containerConsoleAdapter = new ContainerConsoleAdapter();
 
-NeuralNetworkWarehouse warehouse = new NeuralNetworkWarehouse();
-warehouse.SaveNeuralNetwork(containerConsoleAdapter.Neural_Network, "Premier test");
-
 NeuralNetworkTrainer trainer = new NeuralNetworkTrainer(containerConsoleAdapter);
 
 ConsoleTrainerObserverAdapter trainerAdapter = new ConsoleTrainerObserverAdapter(trainer);

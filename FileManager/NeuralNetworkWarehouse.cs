@@ -19,10 +19,10 @@ namespace FileManager
 		{
 			string FilePath = RetreiveFilePath(name);
 			if (!File.Exists(FilePath))
-				throw new FileNotFoundException("Any neural network with this name has been found");
+				throw new CantFindNeuralNetworkException("Any neural network with this name has been found");
 			try
 			{
-				return JsonConvert.DeserializeObject<INeural_Network>(File.ReadAllText(FilePath));
+				return JsonConvert.DeserializeObject<Neural_Network>(File.ReadAllText(FilePath));
 			}
 			catch (Exception)
 			{
@@ -31,9 +31,9 @@ namespace FileManager
 			}
 		}
 
-		public IEnumerable<string> RetreiveNeuralNetworkAvailable(string seamsLike, int start, int count)
+		public IEnumerable<string> SearchNeuralNetworkAvailable(string seamsLike, int start, int count)
 		{
-			return Directory.EnumerateFiles(RootFolder).Where(s => seamsLike.Contains(s)).Skip(0).Take(count);
+			return Directory.EnumerateFiles(RootFolder).Where(s => s.Contains(seamsLike)).Skip(start).Take(count);
 		}
 
 		public void SaveNeuralNetwork(INeural_Network neuralNetToSave, string name)
@@ -41,7 +41,7 @@ namespace FileManager
 			string json = JsonConvert.SerializeObject(neuralNetToSave, Formatting.Indented);
 			string FilePath = RetreiveFilePath(name);
 			if (File.Exists(FilePath))
-				throw new FileAlreadyExistException("A neural network with this name already exist");
+				throw new NeuralNetworkAlreadyExistException("A neural network with this name already exist");
 			File.WriteAllText(FilePath, json);
 		}
 
