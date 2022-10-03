@@ -18,7 +18,6 @@ namespace Useful_training.Core.Neural_network.Interface
 		new INeuron Clone();
 		void GetCalculationResult();
 		void UpdateWeights(double learnRate, double momentum);
-
-
-	}
+        void Reset();
+    }
 }

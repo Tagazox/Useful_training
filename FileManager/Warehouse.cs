@@ -26,7 +26,7 @@ namespace FileManager
                 throw new Exception($"Type of T can't be a interface or an abstract class");
 
             if (!File.Exists(FilePath))
-                throw new CantFindException($"Any {TypeToSave.FullName} with this name has been found");
+                throw new CantFindException($"Any {TypeToSave.Name} with this name has been found");
 
             try
             {
@@ -53,9 +53,21 @@ namespace FileManager
             await File.WriteAllTextAsync(FilePath, json);
         }
 
+        public  async Task Override<T>(T ObjectToSave, string name)
+        {
+            if (!typeof(T).IsAssignableTo(TypeToSave))
+                throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
+
+            string json = JsonConvert.SerializeObject(ObjectToSave, Formatting.Indented);
+            string FilePath = RetreiveFilePath(name);
+
+            await File.WriteAllTextAsync(FilePath, json);
+        }
+
         public IEnumerable<string> SearchAvailable(string seamsLike, int start, int count)
         {
-            return Directory.EnumerateFiles(RootFolder).Where(s => s.Contains(seamsLike)).Skip(start).Take(count);
+            string[] fileList = Directory.EnumerateFiles(RootFolder).ToArray();
+            return fileList.Where(s => s.Contains(seamsLike)).Skip(start).Take(count);
         }
 
         private string RetreiveFilePath(string name)

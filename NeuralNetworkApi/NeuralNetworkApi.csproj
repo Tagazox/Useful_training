@@ -6,8 +6,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	  <InternalsVisibleTo Include="NeuralNetworkApi.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FileManager\FileManager.csproj" />
+    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SavedNeuralNetwork\" />
   </ItemGroup>
 
 </Project>

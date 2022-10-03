@@ -33,9 +33,9 @@ namespace ConsoleAdapter
 		public void Update(INeuralNetworkObservableData subject)
 		{
 			Console.SetCursorPosition(30, 2);
-            Console.Write(string.Concat(subject.DataSet.Values.Select(v => $"{v} ")));
+            Console.Write(string.Concat(subject.DataSet.Inputs.Select(v => $"{v} ")));
             Console.SetCursorPosition(30, 3);
-            Console.Write(string.Concat(subject.DataSet.Targets.Select(v => $"{v} ")));
+            Console.Write(string.Concat(subject.DataSet.TargetOutput.Select(v => $"{v} ")));
             Console.SetCursorPosition(30, 4);
             Console.Write(string.Concat(subject.Results.Select(v => $"{v} ")));
             Console.SetCursorPosition(30, 5);

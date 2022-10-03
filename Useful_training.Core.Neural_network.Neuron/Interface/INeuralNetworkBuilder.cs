@@ -7,7 +7,7 @@ namespace Useful_training.Core.Neural_network
         void AddHiddenLayers(List<uint> numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons);
         void AddHiddenLayers(uint numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons);
         void AddOutputLayers(uint numberOfOutputs, NeuronType typeOfNeurons);
-        Neural_Network GetNeural_Network();
+        NeuralNetwork GetNeural_Network();
         void Reset();
     }
 }

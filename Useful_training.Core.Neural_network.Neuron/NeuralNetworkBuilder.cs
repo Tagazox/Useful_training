@@ -9,7 +9,7 @@ namespace Useful_training.Core.Neural_network
 {
     public class NeuralNetworkBuilder : INeuralNetworkBuilder
     {
-        private Neural_Network Neural_Network;
+        private NeuralNetwork Neural_Network;
 
         public NeuralNetworkBuilder()
         {
@@ -18,7 +18,7 @@ namespace Useful_training.Core.Neural_network
 
         public void Reset()
         {
-            Neural_Network = new Neural_Network();
+            Neural_Network = new NeuralNetwork();
         }
         public void Initialize(uint numberOfInput, double? learnRate = null, double? momentum = null)
         {
@@ -45,7 +45,7 @@ namespace Useful_training.Core.Neural_network
             Neural_Network.AddHiddenLayer(numberOfOutputs, typeOfNeurons);
         }
 
-        public Neural_Network GetNeural_Network()
+        public NeuralNetwork GetNeural_Network()
         {
             return Neural_Network;
         }

@@ -9,25 +9,25 @@ using Useful_training.Core.Neural_network.ValueObject;
 
 namespace Useful_training.Core.Neural_network
 {
-    public class NeuralNetworkTrainer : INeuralNetworkTrainer, INeuralNetworkObservable
+    public class NeuralNetworkTrainer : INeuralNetworkTrainer
     {
-        private readonly INeural_Network _neural_Network;
-        private readonly List<DataSet> _dataSets;
+        private readonly INeuralNetwork neural_Network;
+        private readonly List<DataSet> dataSets;
         private readonly int _roundedTo;
         private List<INeuralNetworkTrainerObserver> Observers;
-        public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer, int roundedTo=3)
+        public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer, int roundedTo = 3)
         {
             _roundedTo = roundedTo;
             neuralNetworkContainer.CreateNeuralNetwork();
-            _neural_Network = neuralNetworkContainer.Neural_Network;
+            neural_Network = neuralNetworkContainer.Neural_Network;
             neuralNetworkContainer.CreateDataSets();
-            _dataSets = neuralNetworkContainer.DataSets;
+            dataSets = neuralNetworkContainer.DataSets;
 
             Observers = new List<INeuralNetworkTrainerObserver>();
 
-            if (_neural_Network == null)
+            if (neural_Network == null)
                 throw new NullReferenceException("Neural_Network hasn't be find in the container");
-            if (_dataSets == null)
+            if (dataSets == null)
                 throw new NullReferenceException("Data set hasn't be find in the container");
         }
 
@@ -38,20 +38,21 @@ namespace Useful_training.Core.Neural_network
 
             while (!trainFinish)
             {
-                DataSet dataSetForThisIteration = _dataSets[random.Next(_dataSets.Count)];
+                DataSet dataSetForThisIteration = dataSets[random.Next(dataSets.Count)];
 
-                IList<double> resultsOfTheNeuralNetworkCalculation = _neural_Network.Calculate(dataSetForThisIteration.Values);
+                IList<double> resultsOfTheNeuralNetworkCalculation = neural_Network.Calculate(dataSetForThisIteration.Inputs);
+                if (resultsOfTheNeuralNetworkCalculation.Any(d => double.IsNaN(d)))
+                    neural_Network.Reset();
+                else
+                {
+                    Notify(new NeuralNetworkObservableData(dataSetForThisIteration, resultsOfTheNeuralNetworkCalculation));
+                    if (!trainFinish)
+                        neural_Network.BackPropagate(dataSetForThisIteration.TargetOutput);
+                }
 
-                if (resultsOfTheNeuralNetworkCalculation.Count != dataSetForThisIteration.Targets.Count)
-                    throw new ArgumentException("The target of the dataset need to have the same number as the neurones outputs");
 
-                Notify(new NeuralNetworkObservableData(dataSetForThisIteration, resultsOfTheNeuralNetworkCalculation));
-
-                if (CalculateError(dataSetForThisIteration.Targets, resultsOfTheNeuralNetworkCalculation) < 0.001)
+                if (CalculateError(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation) < 0.001)
                     trainFinish = VerifyIfTrainingIsFinish();
-
-                if (!trainFinish)
-                    _neural_Network.BackPropagate(dataSetForThisIteration.Targets);
             }
         }
 
@@ -65,11 +66,16 @@ namespace Useful_training.Core.Neural_network
 
         private bool VerifyIfTrainingIsFinish()
         {
-            foreach (DataSet set in _dataSets.Take(20))
+            foreach (DataSet set in dataSets.Take(20))
             {
-                IList<double> results = _neural_Network.Calculate(set.Values);
+                IList<double> results = neural_Network.Calculate(set.Inputs);
+                if (results.Any(d => double.IsNaN(d)))
+                {
+                    neural_Network.Reset();
+                    return false;
+                }
                 for (int i = 0; i < results.Count; i++)
-                    if (Math.Round(Math.Abs(results[i] - set.Targets[i]),_roundedTo) > 0.001)
+                    if (Math.Round(Math.Abs(results[i] - set.TargetOutput[i]), _roundedTo) > 0.001)
                     {
                         return false;
                     }

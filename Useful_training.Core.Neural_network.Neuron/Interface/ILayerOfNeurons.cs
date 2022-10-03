@@ -19,5 +19,6 @@ namespace Useful_training.Core.Neural_network.Interface
 		void UpdateWeights(double learnRate, double momentum);
         void CalculateGradiant(List<double> targets=null);
         void Calculate();
+        void Reset();
     }
 }

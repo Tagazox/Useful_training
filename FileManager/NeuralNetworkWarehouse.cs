@@ -7,7 +7,7 @@ namespace FileManager
 {
 	public class NeuralNetworkWarehouse : Warehouse, INeuralNetworkWarehouse
 	{
-		public NeuralNetworkWarehouse() : base("SavedNeuralNetwork\\", typeof(INeural_Network))
+		public NeuralNetworkWarehouse() : base("SavedNeuralNetwork\\", typeof(INeuralNetwork))
 		{
 		}
     }

@@ -17,7 +17,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         public void LayerOfInputNeuronsShouldCreateGoodTests()
         {
             ILayerOfInputNeurons testSubject = new LayerOfInputNeurons(_numberOfInputs);
-            testSubject.InputNeurons.Count().Should().Be((int)_numberOfInputs);
+            testSubject.InputsNeurons.Count().Should().Be((int)_numberOfInputs);
         }
         [Fact]
         public void LayerOfInputNeuronsShouldThrowCantInitializeWithZeroInputExceptionTests()
@@ -33,7 +33,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             ILayerOfInputNeurons testSubject = new LayerOfInputNeurons(_numberOfInputs);
             ILayerOfInputNeurons cloneSubject = testSubject.Clone();
-            testSubject.InputNeurons.Count().Should().Be(cloneSubject.InputNeurons.Count());
+            testSubject.InputsNeurons.Count().Should().Be(cloneSubject.InputsNeurons.Count());
         }
     }
 }

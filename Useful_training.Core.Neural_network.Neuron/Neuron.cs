@@ -26,9 +26,7 @@ namespace Useful_training.Core.Neural_network
                 if (value.Count != InputSynapses.Count)
                     throw new ArgumentException("if you set the weight delta you need to have the same count as number neuron");
                 for (int i = 0; i < value.Count; i++)
-                {
                     InputSynapses[i].WeightDelta = value[i];
-                }
             }
         }
         public List<double> Weight
@@ -38,9 +36,7 @@ namespace Useful_training.Core.Neural_network
                 if (value.Count != InputSynapses.Count)
                     throw new ArgumentException("if you set the weight you need to have the same count as number neuron");
                 for (int i = 0; i < value.Count; i++)
-                {
                     InputSynapses[i].Weight = value[i];
-                }
             }
         }
         public double Bias { set { bias = value; } }
@@ -48,17 +44,17 @@ namespace Useful_training.Core.Neural_network
         #endregion
         public abstract void GetCalculationResult();
         internal abstract double DerivativeFunctionResultCalculation();
-        public Neuron(IEnumerable<IInputNeurons> inputNeurons)
+        public Neuron(IEnumerable<IInputNeurons> InputNeurons)
         {
-            if (inputNeurons == null || inputNeurons.Count() == 0)
+            if (InputNeurons == null || !InputNeurons.Any())
                 throw new CantInitializeWithZeroInputException("Neurones need to be initialize with at leat one input");
             InputSynapses = new List<Synapse>();
             OutputSynapses = new List<Synapse>();
             biasDelta = 0;
-            foreach (var inputNeuron in inputNeurons)
+            foreach (var InputNeuron in InputNeurons)
             {
-                Synapse synapse = new Synapse(inputNeuron, this);
-                inputNeuron.OutputSynapses.Add(synapse);
+                Synapse synapse = new Synapse(InputNeuron, this);
+                InputNeuron.OutputSynapses.Add(synapse);
                 InputSynapses.Add(synapse);
             }
         }
@@ -72,10 +68,10 @@ namespace Useful_training.Core.Neural_network
         }
         public void UpdateWeights(double learnRate, double momentum)
         {
-            if (learnRate <= 0)
-                throw new ArgumentException("Learn rate need to be above 0");
-            if (momentum <= 0)
-                throw new ArgumentException("Momentum need to be above 0");
+            if (learnRate <= 0 || learnRate > 1)
+                throw new ArgumentException("Learn rate need to be between 0 and 1");
+            if (learnRate <= 0 || learnRate > 1)
+                throw new ArgumentException("Momentum need to be between 0 and 1");
             var prevDelta = biasDelta;
             biasDelta = learnRate * Gradiant;
             bias += biasDelta + momentum * prevDelta;
@@ -113,6 +109,16 @@ namespace Useful_training.Core.Neural_network
             info.AddValue("Type", (int)GetNeuronType());
         }
         protected abstract NeuronType GetNeuronType();
+
+        public void Reset()
+        {
+            foreach (Synapse synapse in InputSynapses)
+            {
+                bias = 0;
+                biasDelta = 0;
+                synapse.Reset() ;
+            }
+        }
         #endregion
 
     }

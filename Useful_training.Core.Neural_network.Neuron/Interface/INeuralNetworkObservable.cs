@@ -7,7 +7,7 @@ using Useful_training.Core.Neural_network.ValueObject;
 
 namespace Useful_training.Core.Neural_network.Interface
 {
-	internal interface INeuralNetworkObservable
+	public interface INeuralNetworkObservable
 	{
         void Attach(INeuralNetworkTrainerObserver observer);
         void Detach(INeuralNetworkTrainerObserver observer);

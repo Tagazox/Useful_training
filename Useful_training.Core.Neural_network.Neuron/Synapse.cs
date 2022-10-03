@@ -21,5 +21,12 @@ namespace Useful_training.Core.Neural_network
             Weight = _rand.NextDouble() * 2 - 1;
 
         }
+
+        internal void Reset()
+        {
+            Random _rand = new Random();
+            Weight = _rand.NextDouble() * 2 - 1;
+            WeightDelta = 0;
+        }
     }
 }

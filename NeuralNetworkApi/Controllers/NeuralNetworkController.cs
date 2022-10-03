@@ -1,33 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
+using Useful_training.Core.Neural_network;
+using Useful_training.Core.Neural_network.Interface;
 
 namespace NeuralNetworkApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]/")]
     public class NeuralNetworkController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        private readonly INeuralNetworkWarehouse NeuralNetworkWarehouse;
+        private readonly INeuralNetworkBuilder BuilderOfNeuralNetwork;
+        public NeuralNetworkController(INeuralNetworkWarehouse neuralNetworkWarehouse,INeuralNetworkBuilder builderOfNeuralNetwork)
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public NeuralNetworkController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
+            NeuralNetworkWarehouse = neuralNetworkWarehouse;
+            BuilderOfNeuralNetwork = builderOfNeuralNetwork;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get([FromQuery(Name = "str[]")] List<double> strValues)
+        [HttpPost(Name = "PostNeuralNetwork")]
+        public async Task<ActionResult<NeuralNetwork>> Post(string Name,uint numberOfInput,uint numberOfOutputs,uint numberOfHiddenLayer, uint numberOfNeuronByHiddenLayer, double learnRate,double momentum,NeuronType typeOfNeuron)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            NeuralNetworkDirector neuralNetworkDirector = new NeuralNetworkDirector();
+            neuralNetworkDirector.networkBuilder = BuilderOfNeuralNetwork;
+            neuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput,learnRate,momentum,numberOfOutputs, numberOfHiddenLayer, numberOfNeuronByHiddenLayer, typeOfNeuron);
+            await NeuralNetworkWarehouse.Save(BuilderOfNeuralNetwork.GetNeural_Network(), $"{Name}_Input-{numberOfInput}_Output-{numberOfOutputs}");
+            return Ok();
         }
+
+        [HttpGet("{seamslike}/{start}/{count}", Name = "SearchNeuralNetworkByName")]
+        public IEnumerable<string> Get(string? seamslike, int start = 0, int count = 10)
+        {
+            if (seamslike == null)
+                seamslike = "";
+            return NeuralNetworkWarehouse.SearchAvailable(seamslike, start, count).Select(p => Path.GetFileNameWithoutExtension(p));
+        }
+
+
     }
 }

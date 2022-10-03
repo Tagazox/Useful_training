@@ -83,31 +83,31 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             InputNeurons = new List<IInputNeurons>();
             Action CreationCase1 = () =>
             {
-                Neuron neuron = new EluNeuron(InputNeurons);
+                INeuron neuron = new EluNeuron(InputNeurons);
             };
             Action CreationCase2 = () =>
             {
-                Neuron neuron = new LeakyReLuNeuron(InputNeurons);
+                INeuron neuron = new LeakyReLuNeuron(InputNeurons);
             };
             Action CreationCase3 = () =>
             {
-                Neuron neuron = new ReLuNeuron(InputNeurons);
+                INeuron neuron = new ReLuNeuron(InputNeurons);
             };
             Action CreationCase4 = () =>
             {
-                Neuron neuron = new SeLuNeuron(InputNeurons);
+                INeuron neuron = new SeLuNeuron(InputNeurons);
             };
             Action CreationCase5 = () =>
             {
-                Neuron neuron = new SigmoidNeuron(InputNeurons);
+                INeuron neuron = new SigmoidNeuron(InputNeurons);
             };
             Action CreationCase6 = () =>
             {
-                Neuron neuron = new SwishNeuron(InputNeurons);
+                INeuron neuron = new SwishNeuron(InputNeurons);
             };
             Action CreationCase7 = () =>
             {
-                Neuron neuron = new TanhNeuron(InputNeurons);
+                INeuron neuron = new TanhNeuron(InputNeurons);
             };
             CreationCase1.Should().Throw<CantInitializeWithZeroInputException>();
             CreationCase2.Should().Throw<CantInitializeWithZeroInputException>();
@@ -116,29 +116,6 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             CreationCase5.Should().Throw<CantInitializeWithZeroInputException>();
             CreationCase6.Should().Throw<CantInitializeWithZeroInputException>();
             CreationCase7.Should().Throw<CantInitializeWithZeroInputException>();
-        }
-
-        [Fact]
-        public void NeuroneUpdateWeightShouldThrowArgumentExceptionTests()
-        {
-            foreach (INeuron neuron in neuronsToTest)
-            {
-                Action UpdateWeightsCase1 = () =>
-                {
-                    neuron.UpdateWeights(-1, -0.5);
-                };
-                Action UpdateWeightsCase2 = () =>
-                {
-                    neuron.UpdateWeights(-1, 0.5);
-                };
-                Action UpdateWeightsCase3 = () =>
-                {
-                    neuron.UpdateWeights(1, -0.5);
-                };
-                UpdateWeightsCase1.Should().Throw<ArgumentException>();
-                UpdateWeightsCase2.Should().Throw<ArgumentException>();
-                UpdateWeightsCase3.Should().Throw<ArgumentException>();
-            }
         }
     }
 }

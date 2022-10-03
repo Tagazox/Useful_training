@@ -51,10 +51,24 @@ namespace FileManagerTests
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
 
             TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork).Wait();
-            INeural_Network neuralNetRecovred = TestSubject.Retreive<Neural_Network>(nameOfTheNeuralNetwork);
+            INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(nameOfTheNeuralNetwork);
             neuralNetRecovred.Calculate(input).Should().BeEquivalentTo(neural_NetworkContainer.Object.Neural_Network.Calculate(input));
         }
-
+        [Fact]
+        public void OverrideShouldBeGood()
+        {
+            string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
+            TestSubject.Save(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork).Wait();
+            INeuralNetwork oldSavedNeuralNetwork = neural_NetworkContainer.Object.Neural_Network;
+           
+            CreateNewNeuralNetwork();
+            TestSubject.Override(neural_NetworkContainer.Object.Neural_Network, nameOfTheNeuralNetwork).Wait();
+            
+            INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(nameOfTheNeuralNetwork);
+            
+            oldSavedNeuralNetwork.Should().NotBeSameAs(neuralNetRecovred);
+            neuralNetRecovred.Calculate(input).Should().BeEquivalentTo(neural_NetworkContainer.Object.Neural_Network.Calculate(input));
+        }
         [Fact]
         public void SearchNeuralNetworkAvailableShouldBeGood()
         {
@@ -89,7 +103,7 @@ namespace FileManagerTests
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
             Action Save = () =>
             {
-                INeural_Network neuralNetRecovred = TestSubject.Retreive<Neural_Network>(nameOfTheNeuralNetwork);
+                INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(nameOfTheNeuralNetwork);
             };
             Save.Should().Throw<CantFindException>();
         }
@@ -99,7 +113,7 @@ namespace FileManagerTests
             string nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
             Action Save = () =>
             {
-                INeural_Network neuralNetRecovred = TestSubject.Retreive<INeural_Network>(nameOfTheNeuralNetwork);
+                INeuralNetwork neuralNetRecovred = TestSubject.Retreive<INeuralNetwork>(nameOfTheNeuralNetwork);
             };
             Save.Should().Throw<Exception>();
         }

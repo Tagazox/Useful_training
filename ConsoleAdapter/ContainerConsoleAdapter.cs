@@ -13,8 +13,8 @@ namespace ConsoleAdapter
 {
 	internal class ContainerConsoleAdapter : INeuralNetworkTrainerContainer
 	{
-		public INeural_Network Neural_Network { get; private set; }
-		public List<DataSet> DataSets { get; private set; }
+		public INeuralNetwork Neural_Network { get; set; }
+		public List<DataSet> DataSets { get; set; }
 		private uint numberOfInput, numberOutput;
 		public ContainerConsoleAdapter()
 		{

@@ -1,11 +1,31 @@
+using FileManager;
+using NeuralNetworkApi.Hubs;
+using Useful_training.Core.Neural_network;
+using Useful_training.Core.Neural_network.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7096")
+            .AllowAnyHeader()
+            .WithMethods("GET", "POST")
+            .AllowCredentials();
+        });
+});
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<INeuralNetworkWarehouse>(NeuralNetworkWarehouseProvider => new NeuralNetworkWarehouse());
+builder.Services.AddSingleton<IDataSetsListWarehouse>(DataSetsListWarehouseProvider => new DataSetsListWarehouse());
+builder.Services.AddSingleton<INeuralNetworkBuilder>(NeuralNetworkBuilderProvider => new NeuralNetworkBuilder());
 
 var app = builder.Build();
 
@@ -15,11 +35,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseCors();
 
 app.MapControllers();
+app.MapHub<NeuralNetworkTrainingHub>("/NeuralNetworkTraining");
 
 app.Run();

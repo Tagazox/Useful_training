@@ -1,0 +1,37 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background: #041d37 !important;
+}
+
+.nav-link {
+    color: #06ec7b !important;
+    transition: text-shadow .3s linear;
+}
+
+    .nav-link:hover {
+        text-shadow: 0 0 2px rgb(6 236 123 / 60%);
+    }
+.meanError {
+    height: 10px;
+    box-shadow: 0 0 2px rgb(6 236 123 / 60%);
+    background: #06ec7b !important;
+}
+.navbar-brand {
+    color: #06ec7b !important;
+    text-shadow: 0 0 2px rgb(6 236 123 / 60%);
+}

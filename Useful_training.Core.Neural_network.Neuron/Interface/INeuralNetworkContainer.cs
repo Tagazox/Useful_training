@@ -9,8 +9,8 @@ namespace Useful_training.Core.Neural_network.Interface
 {
     public interface INeuralNetworkTrainerContainer
     {
-        List<DataSet> DataSets { get;  }
-        INeural_Network Neural_Network{ get;  }
+        List<DataSet> DataSets { get; set; }
+        INeuralNetwork Neural_Network{ get; set; }
         public void CreateNeuralNetwork();
         public void CreateDataSets();
     }

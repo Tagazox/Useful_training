@@ -15,7 +15,21 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         [Fact]
         public void BuilderShouldInitializeGood()
         {
-            testBuilder.Initialize(2);
+            testBuilder.Initialize((uint)rand.Next(1, 10),rand.NextDouble(), rand.NextDouble());
+        }
+        [Fact]
+        public void BuilderShouldInitializeThrowArgumentException()
+        {
+            Action InitializeBadLearnRate = () =>
+            {
+                testBuilder.Initialize(2,-.5);
+            };
+            Action InitializeBadMomentum = () =>
+            {
+                testBuilder.Initialize(2, .5,-.5);
+            };
+            InitializeBadLearnRate.Should().Throw<ArgumentException>();
+            InitializeBadMomentum.Should().Throw<ArgumentException>();
         }
         [Fact]
         public void BuilderShouldAddHiddenLayerGoodCase1()

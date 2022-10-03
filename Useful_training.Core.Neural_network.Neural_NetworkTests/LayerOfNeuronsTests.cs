@@ -34,7 +34,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             {
                 Targets.Add(0);
             }
-            layerOfInputNeurones.Setup(s => s.InputNeurons).Returns(_inputsNeurones);
+            layerOfInputNeurones.Setup(s => s.InputsNeurons).Returns(_inputsNeurones);
             NeuronTypeAvailable = Enum.GetValues(typeof(NeuronType)).Cast<NeuronType>();
             testLayerOfNeurons = new LayerOfNeurons();
         }
@@ -63,7 +63,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                layerOfInputNeurones.Setup(s => s.InputNeurons).Returns(new List<InputNeuron>());
+                layerOfInputNeurones.Setup(s => s.InputsNeurons).Returns(new List<InputNeuron>());
 
                 Action CreationCase1 = () =>
                 {
@@ -133,31 +133,6 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
                 testLayerOfNeurons.Outputs.Should().NotBeSameAs(outputs);
             }
         }
-        [Fact]
-        public void LayerOfNeuronsShouldThrowArgumentExceptionTests()
-        {
-            foreach (NeuronType type in NeuronTypeAvailable)
-            {
-                testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
-                testLayerOfNeurons.Calculate();
-                IList<double> outputs = testLayerOfNeurons.Outputs;
-                testLayerOfNeurons.CalculateGradiant(Targets);
-                Action UpdateWeightsCase1 = () =>
-                {
-                    testLayerOfNeurons.UpdateWeights(-1, -0.5);
-                };
-                Action UpdateWeightsCase2 = () =>
-                {
-                    testLayerOfNeurons.UpdateWeights(-1, 0.5);
-                };
-                Action UpdateWeightsCase3 = () =>
-                {
-                    testLayerOfNeurons.UpdateWeights(1, -0.5);
-                };
-                UpdateWeightsCase1.Should().Throw<ArgumentException>();
-                UpdateWeightsCase2.Should().Throw<ArgumentException>();
-                UpdateWeightsCase3.Should().Throw<ArgumentException>();
-            }
-        }
+       
     }
 }
