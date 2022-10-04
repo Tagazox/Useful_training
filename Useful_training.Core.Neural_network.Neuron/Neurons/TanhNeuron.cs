@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Interface;
+﻿using Useful_training.Core.NeuralNetwork.Interfaces;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 
-namespace Useful_training.Core.Neural_network.Neurons
+[assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests")]
+namespace Useful_training.Core.NeuralNetwork.Neurons
 {
-    [Serializable]
+	[Serializable]
     internal class TanhNeuron : Neuron
     {
         public TanhNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)

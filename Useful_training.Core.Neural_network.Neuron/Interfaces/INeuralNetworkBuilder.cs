@@ -1,5 +1,4 @@
-﻿
-namespace Useful_training.Core.Neural_network
+﻿namespace Useful_training.Core.NeuralNetwork.Interfaces
 {
     public interface INeuralNetworkBuilder
     {
@@ -7,7 +6,7 @@ namespace Useful_training.Core.Neural_network
         internal void AddHiddenLayers(List<uint> numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons);
         internal void AddHiddenLayers(uint numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons);
         internal  void AddOutputLayers(uint numberOfOutputs, NeuronType typeOfNeurons);
-        NeuralNetwork GetNeural_Network();
-        void Reset();
+        public NeuralNetwork GetNeuralNetwork();
+        public void Reset();
     }
 }

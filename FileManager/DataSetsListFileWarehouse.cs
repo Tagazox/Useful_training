@@ -1,14 +1,11 @@
-﻿using FileManager.Exceptions;
-using Newtonsoft.Json;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.ValueObject;
+﻿using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace FileManager
+namespace Useful_training.Infrastructure.FileManager
 {
 	public class DataSetsListFileWarehouse : FileWarehouse, IDataSetsListWarehouse
 	{
-		public DataSetsListFileWarehouse(string rootFolderPath) : base(rootFolderPath, typeof(List<DataSet>))
+		public DataSetsListFileWarehouse(string rootFolderPath) : base(rootFolderPath, typeof(IList<DataSet>))
 		{
 		}
 	}

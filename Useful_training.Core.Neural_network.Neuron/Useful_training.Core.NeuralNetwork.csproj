@@ -5,5 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="Useful_training.Core.NeuralNetwork.NeuralNetworkTests" />
+	</ItemGroup>
 
 </Project>

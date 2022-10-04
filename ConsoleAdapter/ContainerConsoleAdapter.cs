@@ -1,19 +1,14 @@
-﻿using ConsoleAdapter.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.ValueObject;
+﻿using System.Globalization;
+using ConsoleAdapter.Exceptions;
+using Useful_training.Core.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.ValueObject;
 
 namespace ConsoleAdapter
 {
 	internal class ContainerConsoleAdapter : INeuralNetworkTrainerContainer
 	{
-		public INeuralNetwork Neural_Network { get; set; }
+		public INeuralNetwork NeuralNetwork { get; set; }
 		public List<DataSet> DataSets { get; set; }
 		private uint numberOfInput, numberOutput;
 		public ContainerConsoleAdapter()
@@ -106,8 +101,8 @@ namespace ConsoleAdapter
 			double learnRate, momentum;
 			NeuronType typeOfNeurons;
 
-			NeuralNetworkDirector _neural_NetworkDirector = new NeuralNetworkDirector();
-			NeuralNetworkBuilder _neural_NetworkBuilder;
+			NeuralNetworkDirector _NeuralNetworkDirector = new NeuralNetworkDirector();
+			NeuralNetworkBuilder _NeuralNetworkBuilder;
 			Console.Clear();
 			Console.WriteLine("-----------------------------------");
 			Console.WriteLine("Bienvenue dans le créateur de réseau de neurones");
@@ -183,10 +178,10 @@ namespace ConsoleAdapter
 				default:
 					throw new WrongInputException("Ce type de neurone n'existe pas");
 			}
-			_neural_NetworkBuilder = new NeuralNetworkBuilder();
-			_neural_NetworkDirector.networkBuilder = _neural_NetworkBuilder;
-			_neural_NetworkDirector.BuildComplexeNeuralNetwork(numberOfInput, learnRate, momentum,numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
-			Neural_Network = _neural_NetworkBuilder.GetNeural_Network();
+			_NeuralNetworkBuilder = new NeuralNetworkBuilder();
+			_NeuralNetworkDirector.networkBuilder = _NeuralNetworkBuilder;
+			_NeuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput, learnRate, momentum,numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
+			NeuralNetwork = _NeuralNetworkBuilder.GetNeuralNetwork();
 			Console.WriteLine("Réseau de neurones crée avec succès !");
 			Thread.Sleep(2000);
 			Console.WriteLine("-----------------------------------");

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Interface;
+using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network.ValueObject
+namespace Useful_training.Core.NeuralNetwork.ValueObject
 {
 	public class NeuralNetworkObservableData : INeuralNetworkObservableData
 	{
@@ -21,7 +21,6 @@ namespace Useful_training.Core.Neural_network.ValueObject
 				return deltaErrors;
 			}
 		}
-
 		public NeuralNetworkObservableData(DataSet dataSet, IList<double> results)
 		{
 			DataSet = dataSet;

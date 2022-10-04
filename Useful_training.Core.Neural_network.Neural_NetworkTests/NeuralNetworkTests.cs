@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
-using Useful_training.Core.Neural_network.Exceptions;
-using Useful_training.Core.Neural_network.Interface;
+using Useful_training.Core.NeuralNetwork.Exceptions;
+using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network.Neural_NetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
 {
     public class NeuralNetworkTests
     {
@@ -18,22 +18,20 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             rand = new Random();
             TestSubject = new NeuralNetwork();
             InitializedTestSubject = new NeuralNetwork();
-            uint lastLayerCount = 0;
-            InitializedTestSubject.Initialize((uint)input.Count, null, null);
+			InitializedTestSubject.Initialize((uint)input.Count, null, null);
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                lastLayerCount = (uint)rand.Next(1, 10);
-                InitializedTestSubject.AddHiddenLayer(lastLayerCount, type);
+				InitializedTestSubject.AddHiddenLayer((uint)rand.Next(1, 10), type);
             }
         }
         [Fact]
-        public void Neural_NetworkShouldBeInitializedGood()
+        public void NeuralNetworkInitializeShouldBeGood()
         {
             TestSubject.Initialize((uint)input.Count, null, null);
             TestSubject.Initialize((uint)input.Count, .4, .5);
         }
         [Fact]
-        public void Neural_NetworkShouldThrowArgumentException()
+        public void NeuralNetworkShouldThrowArgumentException()
         {
             Action InitializeBadLearnRate = () =>
             {
@@ -47,14 +45,14 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             InitializeBadMomentum.Should().Throw<ArgumentException>();
         }
         [Fact]
-        public void Neural_NetworkShouldBeResetGood()
+        public void NeuralNetworkShouldBeResetGood()
         {
             IList<double> result = InitializedTestSubject.Calculate(input);
             InitializedTestSubject.Reset();
             InitializedTestSubject.Calculate(input).Should().NotBeSameAs(result);
         }
         [Fact]
-        public void Neural_NetworkAddHidenLayerShouldBeGood()
+        public void NeuralNetworkAddHidenLayerShouldBeGood()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
@@ -62,7 +60,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             }
         }
         [Fact]
-        public void Neural_NetworkAddHidenLayerShouldThrowNeedToBeCreatedByTheBuilderException()
+        public void NeuralNetworkAddHidenLayerShouldThrowNeedToBeCreatedByTheBuilderException()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
@@ -74,7 +72,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             }
         }
         [Fact]
-        public void Neural_NetworkAddHidenLayerShouldThrowCantInitializeWithZeroNeuronException()
+        public void NeuralNetworkAddHidenLayerShouldThrowCantInitializeWithZeroNeuronException()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
@@ -86,7 +84,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             }
         }
         [Fact]
-        public IList<double> Neural_NetworkCalculateShouldBeGood()
+        public IList<double> NeuralNetworkCalculateShouldBeGood()
         {
             uint lastLayerCount = 0;
             TestSubject.Initialize((uint)input.Count, null, null);
@@ -100,7 +98,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             return result;
         }
         [Fact]
-        public void Neural_NetworkCalculateShouldThrowWrongInputForCalculationException()
+        public void NeuralNetworkCalculateShouldThrowWrongInputForCalculationException()
         {
             uint lastLayerCount = 0;
             TestSubject.Initialize((uint)input.Count, null, null);
@@ -125,7 +123,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             CalculateCase2.Should().Throw<WrongInputForCalculationException>();
         }
         [Fact]
-        public void Neural_NetworkBackPropagateShouldBeGood()
+        public void NeuralNetworkBackPropagateShouldBeGood()
         {
             uint lastLayerCount = 0;
             TestSubject.Initialize((uint)input.Count, null, null);
@@ -144,7 +142,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             TestSubject.Calculate(input).Should().NotBeSameAs(output);
         }
         [Fact]
-        public void Neural_NetworkBackPropagateShouldThrowArgumentException()
+        public void NeuralNetworkBackPropagateShouldThrowArgumentException()
         {
             uint lastLayerCount = 0;
             TestSubject.Initialize((uint)input.Count, null, null);
@@ -166,7 +164,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         }
 
         [Fact]
-        public void Neural_NetworkSerialisationShouldBeGood()
+        public void NeuralNetworkSerialisationShouldBeGood()
         {
             uint lastLayerCount = 0;
             TestSubject.Initialize((uint)input.Count, null, null);
@@ -186,17 +184,17 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             {
                 ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
             };
-            INeuralNetwork neural_NetworkDeserialized = JsonConvert.DeserializeObject<NeuralNetwork>(json);
+            INeuralNetwork NeuralNetworkDeserialized = JsonConvert.DeserializeObject<NeuralNetwork>(json);
 
-            IList<double> resultsOfDeserializedNetwork = neural_NetworkDeserialized.Calculate(input);
+            IList<double> resultsOfDeserializedNetwork = NeuralNetworkDeserialized.Calculate(input);
             IList<double> resultsOfTestSubject = TestSubject.Calculate(input);
 
             resultsOfDeserializedNetwork.Should().BeEquivalentTo(resultsOfTestSubject);
 
             TestSubject.BackPropagate(targets);
-            neural_NetworkDeserialized.BackPropagate(targets);
+            NeuralNetworkDeserialized.BackPropagate(targets);
 
-            resultsOfDeserializedNetwork = neural_NetworkDeserialized.Calculate(input);
+            resultsOfDeserializedNetwork = NeuralNetworkDeserialized.Calculate(input);
             resultsOfTestSubject = TestSubject.Calculate(input);
 
             resultsOfDeserializedNetwork.Should().BeEquivalentTo(resultsOfTestSubject);

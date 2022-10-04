@@ -1,6 +1,6 @@
-﻿using Useful_training.Core.Neural_network;
+﻿using Useful_training.Core.NeuralNetwork;
 
-namespace NeuralNetworkApi.ViewModel
+namespace Useful_training.Applicative.NeuralNetworkApi.ViewModel
 {
     public class neuralNetworkTrainerWorker
     {

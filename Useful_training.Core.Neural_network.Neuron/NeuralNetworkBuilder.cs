@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Exceptions;
+﻿using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network
+namespace Useful_training.Core.NeuralNetwork
 {
     public class NeuralNetworkBuilder : INeuralNetworkBuilder
     {
-        private NeuralNetwork Neural_Network;
+        private NeuralNetwork NeuralNetwork;
 
         public NeuralNetworkBuilder()
         {
             Reset();
         }
-
         public void Reset()
         {
-            Neural_Network = new NeuralNetwork();
+            NeuralNetwork = new NeuralNetwork();
         }
         public void Initialize(uint numberOfInput, double? learnRate = null, double? momentum = null)
         {
-            Neural_Network.Initialize(numberOfInput, learnRate, momentum);
+            NeuralNetwork.Initialize(numberOfInput, learnRate, momentum);
         }
-
         public void AddHiddenLayers(uint numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons)
         {
             for (int i = 0; i < numberOfHiddenLayers; i++)
-                Neural_Network.AddHiddenLayer(numberOfNeuronesBylayers, typeOfNeurons);
+                NeuralNetwork.AddHiddenLayer(numberOfNeuronesBylayers, typeOfNeurons);
         }
         public void AddHiddenLayers(List<uint> numberOfNeuronesBylayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons)
         {
@@ -36,19 +29,18 @@ namespace Useful_training.Core.Neural_network
                 throw new ArgumentException("count of numberOfNeuronesBylayers arrays need to be equal as the number of hidden layers.");
 
             for (int i = 0; i < numberOfHiddenLayers; i++)
-                Neural_Network.AddHiddenLayer(numberOfNeuronesBylayers[i], typeOfNeurons);
+                NeuralNetwork.AddHiddenLayer(numberOfNeuronesBylayers[i], typeOfNeurons);
         }
         public void AddOutputLayers(uint numberOfOutputs, NeuronType typeOfNeurons)
         {
             if (numberOfOutputs<=0)
                 throw new ArgumentException("You can't build a neural network withou any outputs.");
-            Neural_Network.AddHiddenLayer(numberOfOutputs, typeOfNeurons);
+            NeuralNetwork.AddHiddenLayer(numberOfOutputs, typeOfNeurons);
         }
-
-        public NeuralNetwork GetNeural_Network()
+        public NeuralNetwork GetNeuralNetwork()
         {
-            return Neural_Network;
+            return NeuralNetwork;
         }
 
-    }
+	}
 }

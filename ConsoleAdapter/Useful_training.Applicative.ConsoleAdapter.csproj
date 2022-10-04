@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileManager\FileManager.csproj" />
-    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj" />
+    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.FileManager.csproj" />
+    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.NeuralNetwork.csproj" />
   </ItemGroup>
 
 </Project>

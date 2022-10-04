@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Interface;
+﻿using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network
+namespace Useful_training.Core.NeuralNetwork
 {
     internal class Synapse
     {
@@ -21,7 +16,6 @@ namespace Useful_training.Core.Neural_network
             Weight = _rand.NextDouble() * 2 - 1;
 
         }
-
         internal void Reset()
         {
             Random _rand = new Random();

@@ -1,9 +1,6 @@
-﻿using FileManager.Exceptions;
-using Newtonsoft.Json;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
+﻿using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace FileManager
+namespace Useful_training.Infrastructure.FileManager
 {
 	public class NeuralNetworkFileWarehouse : FileWarehouse, INeuralNetworkWarehouse
 	{

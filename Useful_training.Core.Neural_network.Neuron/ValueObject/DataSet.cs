@@ -5,12 +5,11 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Useful_training.Core.Neural_network.ValueObject
+namespace Useful_training.Core.NeuralNetwork.ValueObject
 {
 	public class DataSet
 	{
 		public List<double> Inputs { get; set; }
-
 		public List<double> TargetOutput { get; set; }
 		
 		[JsonConstructor]

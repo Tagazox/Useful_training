@@ -7,29 +7,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2994F7CC-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Neural_network", "Neural_network", "{73FFFFB0-89EA-42E8-8984-BF57FD5B62FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neural_network", "Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj", "{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.NeuralNetwork", "Useful_training.Core.Neural_network.Neuron\Useful_training.Core.NeuralNetwork.csproj", "{623E4970-F91E-4B40-8AB7-1A38DC14AEFA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{44BE5F6F-D7EF-41D7-97B7-CF956D527BA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neural_network.Neural_NetworkTests", "Useful_training.Core.Neural_network.Neural_NetworkTests\Useful_training.Core.Neural_network.Neural_NetworkTests.csproj", "{90039625-BE54-47FB-A3F1-1F593130F93D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Core.Neuralnetwork.NeuralNetworkTests", "Useful_training.Core.Neural_network.Neural_NetworkTests\Useful_training.Core.Neuralnetwork.NeuralNetworkTests.csproj", "{90039625-BE54-47FB-A3F1-1F593130F93D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applicative", "Applicative", "{D874848D-0588-4746-A164-068BD9F2406E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAdapter", "ConsoleAdapter\ConsoleAdapter.csproj", "{119C6A84-E090-4CDF-BB61-200508912DEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Applicative.ConsoleAdapter", "ConsoleAdapter\Useful_training.Applicative.ConsoleAdapter.csproj", "{119C6A84-E090-4CDF-BB61-200508912DEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{296E8A07-834F-4CA0-BEEC-C4B5129AF131}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager", "FileManager\FileManager.csproj", "{41D71372-BB80-4293-9368-6C313B21F9D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Infrastructure.FileManager", "FileManager\Useful_training.Infrastructure.FileManager.csproj", "{41D71372-BB80-4293-9368-6C313B21F9D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagerTests", "FileManagerTests\FileManagerTests.csproj", "{CD4024E9-DD70-4487-80E4-7B5A1B6BA590}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Infrastructure.FileManagerTests", "FileManagerTests\Useful_training.Infrastructure.FileManagerTests.csproj", "{CD4024E9-DD70-4487-80E4-7B5A1B6BA590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkApi", "NeuralNetworkApi\NeuralNetworkApi.csproj", "{017DF3A5-A742-4BA4-B9C5-02B227A53A4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Applicative.NeuralNetworkApi", "NeuralNetworkApi\Useful_training.Applicative.NeuralNetworkApi.csproj", "{017DF3A5-A742-4BA4-B9C5-02B227A53A4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkApi.Tests", "NeuralNetworkApi.Tests\NeuralNetworkApi.Tests.csproj", "{9DFE50C9-BA42-437E-B63C-3CD97B132DFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Applicative.NeuralNetworkApi.Tests", "NeuralNetworkApi.Tests\Useful_training.Applicative.NeuralNetworkApi.Tests.csproj", "{9DFE50C9-BA42-437E-B63C-3CD97B132DFD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{49B813CE-75B2-41A2-ADDB-985CA11182DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{7AE6D62E-3F93-4425-98F5-67DB8797CCE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Front.FrontEnd", "FrontEnd\Useful_training.Front.FrontEnd.csproj", "{7AE6D62E-3F93-4425-98F5-67DB8797CCE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

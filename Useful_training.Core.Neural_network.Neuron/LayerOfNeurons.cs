@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Runtime.Serialization;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Exceptions;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.Neurons;
+using Useful_training.Core.NeuralNetwork.Neurons;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Exceptions;
 
-[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
-namespace Useful_training.Core.Neural_network
+[assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests")]
+namespace Useful_training.Core.NeuralNetwork
 {
-    [Serializable]
+	[Serializable]
     internal class LayerOfNeurons : ILayerOfNeurons
     {
         public IList<INeuron> Neurons { get; set; }
@@ -67,7 +62,6 @@ namespace Useful_training.Core.Neural_network
 			foreach (INeuron neuron in Neurons)
                 neuron.GetCalculationResult();
 		}
-
 		public void CalculateGradiant(List<double> targets = null)
 		{
             int targetCounter = 0;

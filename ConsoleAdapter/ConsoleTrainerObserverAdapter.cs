@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
+﻿using Useful_training.Core.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.Interfaces;
 
 namespace ConsoleAdapter
 {
-    internal class ConsoleTrainerObserverAdapter: INeuralNetworkTrainerObserver
+	internal class ConsoleTrainerObserverAdapter: INeuralNetworkTrainerObserver
     {
         NeuralNetworkTrainer trainer;
 
         public ConsoleTrainerObserverAdapter(NeuralNetworkTrainer InjectedTrainer)
         {
             trainer = InjectedTrainer;
-            trainer.Attach(this);
+            trainer.AttachObserver(this);
         }
         public void FollowNetworkTraining()
         {

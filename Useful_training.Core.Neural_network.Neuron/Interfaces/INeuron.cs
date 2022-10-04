@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Useful_training.Core.Neural_network.Interface
+[assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests.Test")]
+namespace Useful_training.Core.NeuralNetwork.Interfaces
 {
 	internal interface INeuron : IInputNeurons , ISerializable
 	{

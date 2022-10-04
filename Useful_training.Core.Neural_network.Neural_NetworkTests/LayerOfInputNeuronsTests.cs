@@ -1,26 +1,24 @@
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Exceptions;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.Neurons;
+using Useful_training.Core.NeuralNetwork.Exceptions;
+using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network.Neural_NetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
 {
     public class LayerOfInputNeuronsTests
     {
-        uint _numberOfInputs;
+        uint NumberOfInputs;
         public LayerOfInputNeuronsTests()
         {
             Random _rand = new Random();
-            _numberOfInputs = (uint)_rand.Next(1, 5);
+            NumberOfInputs = (uint)_rand.Next(1, 5);
         }
         [Fact]
-        public void LayerOfInputNeuronsShouldCreateGoodTests()
+        public void LayerOfInputNeuronsCreationShouldBeGood()
         {
-            ILayerOfInputNeurons testSubject = new LayerOfInputNeurons(_numberOfInputs);
-            testSubject.InputsNeurons.Count().Should().Be((int)_numberOfInputs);
+            ILayerOfInputNeurons testSubject = new LayerOfInputNeurons(NumberOfInputs);
+            testSubject.InputsNeurons.Count().Should().Be((int)NumberOfInputs);
         }
         [Fact]
-        public void LayerOfInputNeuronsShouldThrowCantInitializeWithZeroInputExceptionTests()
+        public void LayerOfInputNeuronsCreationShouldThrowCantInitializeWithZeroInputException()
         {
             Action CreationCase1 = () =>
             {
@@ -29,9 +27,9 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             CreationCase1.Should().Throw<CantInitializeWithZeroInputException>();
         }
         [Fact]
-        public void LayerOfInputNeuronsShouldCloneGoodTests()
+        public void LayerOfInputNeuronsCloneShouldBeGood()
         {
-            ILayerOfInputNeurons testSubject = new LayerOfInputNeurons(_numberOfInputs);
+            ILayerOfInputNeurons testSubject = new LayerOfInputNeurons(NumberOfInputs);
             ILayerOfInputNeurons cloneSubject = testSubject.Clone();
             testSubject.InputsNeurons.Count().Should().Be(cloneSubject.InputsNeurons.Count());
         }

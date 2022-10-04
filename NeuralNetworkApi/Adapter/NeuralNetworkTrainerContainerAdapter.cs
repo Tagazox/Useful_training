@@ -1,13 +1,13 @@
-﻿using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.ValueObject;
+﻿using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace NeuralNetworkApi.Adapter
+namespace Useful_training.Applicative.NeuralNetworkApi.Adapter
 {
     public class NeuralNetworkTrainerContainerAdapter : INeuralNetworkTrainerContainer
     {
         public List<DataSet> DataSets { get; set; }
 
-        public INeuralNetwork Neural_Network { get; set; }
+        public INeuralNetwork NeuralNetwork { get; set; }
 
         public void CreateDataSets()
         {

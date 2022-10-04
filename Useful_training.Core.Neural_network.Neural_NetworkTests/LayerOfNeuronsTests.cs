@@ -1,88 +1,101 @@
 using Moq;
-using System.Runtime.CompilerServices;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Exceptions;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.Neurons;
+using Useful_training.Core.NeuralNetwork.Neurons;
+using Useful_training.Core.NeuralNetwork.Exceptions;
+using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network.Neural_NetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
 {
     public class LayerOfNeuronsTests
     {
-        Mock<ILayerOfInputNeurons> layerOfInputNeurones;
-        uint _numberOfNeurons;
-        Random _rand;
         IEnumerable<NeuronType> NeuronTypeAvailable;
         ILayerOfNeurons testLayerOfNeurons;
+        Mock<ILayerOfInputNeurons> LayerOfInputNeuronesMocked;
+        uint NumberOfNeurons;
         List<double> Targets;
+        Random Rand;
         public LayerOfNeuronsTests()
         {
-            _rand = new Random();
-            uint _numberOfInputs = (uint)_rand.Next(1, 5);
-            _numberOfNeurons = (uint)_rand.Next(1, 5);
+            Rand = new Random();
+            uint _numberOfInputs = (uint)Rand.Next(1, 5);
+            NumberOfNeurons = (uint)Rand.Next(1, 5);
 
-            layerOfInputNeurones = new Mock<ILayerOfInputNeurons>();
-
-            IList<IInputNeurons> _inputsNeurones = new List<IInputNeurons>();
-            Targets = new List<double>();
-            for (int i = 0; i < _numberOfInputs; i++)
-            {
-                _inputsNeurones.Add(new InputNeuron());
-                _inputsNeurones[i].OutputResult = 1;
-            }
-            for (int i = 0; i < _numberOfNeurons; i++)
-            {
-                Targets.Add(0);
-            }
-            layerOfInputNeurones.Setup(s => s.InputsNeurons).Returns(_inputsNeurones);
+            LayerOfInputNeuronesMocked = new Mock<ILayerOfInputNeurons>();
+            LayerOfInputNeuronesMocked.Setup(s => s.InputsNeurons).Returns(MockInputNeuronsList());
+            
             NeuronTypeAvailable = Enum.GetValues(typeof(NeuronType)).Cast<NeuronType>();
             testLayerOfNeurons = new LayerOfNeurons();
         }
+        private IList<IInputNeurons> MockInputNeuronsList()
+        {
+            IList<IInputNeurons> InputsNeurons = new List<IInputNeurons>();
+            int NumberOfInputs = 5;
+            double Inputsvalue = 1;
+            for (int i = 0; i < NumberOfInputs; i++)
+            {
+                Mock<IInputNeurons> mockedInputNeuron = new Mock<IInputNeurons>();
+                mockedInputNeuron.Setup(i => i.OutputResult).Returns(Inputsvalue);
+                mockedInputNeuron.Setup(i => i.OutputSynapses).Returns(new List<Synapse>());
+                InputsNeurons.Add(mockedInputNeuron.Object);
+            }
+            return InputsNeurons;
+        }
         [Fact]
-        public void LayerOfNeuronsShouldInitializeGoodWithAllNeuroneTypeTest()
+        public void LayerOfNeuronsInitializeShouldBeGoodWithAllNeuroneType()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
+                testLayerOfNeurons.Initialize(NumberOfNeurons, type, LayerOfInputNeuronesMocked.Object);
             }
         }
         [Fact]
-        public void LayerOfNeuronsShouldThrowCantInitializeWithZeroNeuronExceptionTest()
+        public void LayerOfNeuronsInitializeShouldThrowCantInitializeWithZeroNeuronException()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
                 Action CreationCase1 = () =>
                 {
-                    testLayerOfNeurons.Initialize(0, type, layerOfInputNeurones.Object);
+                    testLayerOfNeurons.Initialize(0, type, LayerOfInputNeuronesMocked.Object);
                 };
                 CreationCase1.Should().Throw<CantInitializeWithZeroNeuronException>();
             }
         }
         [Fact]
-        public void LayerOfNeuronsShouldThrowCBadInputLayerExceptionTest()
+        public void LayerOfNeuronsInitializeShouldThrowNeuronTypeDontExsistException()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                layerOfInputNeurones.Setup(s => s.InputsNeurons).Returns(new List<InputNeuron>());
+                Action CreationCase1 = () =>
+                {
+                    testLayerOfNeurons.Initialize(NumberOfNeurons, (NeuronType)(NeuronTypeAvailable.Count() + 1), LayerOfInputNeuronesMocked.Object);
+                };
+                CreationCase1.Should().Throw<NeuronTypeDontExsistException>();
+            }
+        }
+        [Fact]
+        public void LayerOfNeuronsInitializeShouldThrowBadInputLayerException()
+        {
+            foreach (NeuronType type in NeuronTypeAvailable)
+            {
+                LayerOfInputNeuronesMocked.Setup(s => s.InputsNeurons).Returns(new List<InputNeuron>());
 
                 Action CreationCase1 = () =>
                 {
-                    testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
+                    testLayerOfNeurons.Initialize(NumberOfNeurons, type, LayerOfInputNeuronesMocked.Object);
                 };
                 Action CreationCase2 = () =>
                 {
-                    testLayerOfNeurons.Initialize(_numberOfNeurons, type, null);
+                    testLayerOfNeurons.Initialize(NumberOfNeurons, type, null);
                 };
                 CreationCase1.Should().Throw<BadInputLayerException>();
                 CreationCase2.Should().Throw<BadInputLayerException>();
             }
         }
         [Fact]
-        public void LayerOfNeuronsShouldCalculateGoodTest()
+        public void LayerOfNeuronsCalculateShouldBeGood()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
+                testLayerOfNeurons.Initialize(NumberOfNeurons, type, LayerOfInputNeuronesMocked.Object);
                 testLayerOfNeurons.Calculate();
                 foreach (double output in testLayerOfNeurons.Outputs)
                 {
@@ -91,11 +104,11 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             }
         }
         [Fact]
-        public void LayerOfNeuronsShouldCalculateGradiantGoodTest()
+        public void LayerOfNeuronsCalculateGradiantShouldBeGood()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
+                testLayerOfNeurons.Initialize(NumberOfNeurons, type, LayerOfInputNeuronesMocked.Object);
                 testLayerOfNeurons.Calculate();
                 testLayerOfNeurons.CalculateGradiant(Targets);
                 foreach (INeuron neuron in testLayerOfNeurons.Neurons)
@@ -109,7 +122,7 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
+                testLayerOfNeurons.Initialize(NumberOfNeurons, type, LayerOfInputNeuronesMocked.Object);
                 testLayerOfNeurons.Calculate();
                 Targets = new List<double>();
                 Action CalculateGradiant = () =>
@@ -120,11 +133,11 @@ namespace Useful_training.Core.Neural_network.Neural_NetworkTests
             }
         }
         [Fact]
-        public void LayerOfNeuronsShouldUpdateWeightGoodTest()
+        public void LayerOfNeuronsUpdateWeightShouldBeGood()
         {
             foreach (NeuronType type in NeuronTypeAvailable)
             {
-                testLayerOfNeurons.Initialize(_numberOfNeurons, type, layerOfInputNeurones.Object);
+                testLayerOfNeurons.Initialize(NumberOfNeurons, type, LayerOfInputNeuronesMocked.Object);
                 testLayerOfNeurons.Calculate();
                 IList<double> outputs = testLayerOfNeurons.Outputs;
                 testLayerOfNeurons.CalculateGradiant(Targets);

@@ -1,15 +1,14 @@
-﻿using FileManager.Exceptions;
-using Newtonsoft.Json;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
+﻿using Newtonsoft.Json;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Infrastructure.FileManager.Exceptions;
 
-namespace FileManager
+namespace Useful_training.Infrastructure.FileManager
 {
     public abstract class FileWarehouse : IWarehouse
     {
-        private string RootFolder;
-        private Type TypeToSave;
-        private string FileExtention = ".json";
+        private readonly string RootFolder;
+        private readonly Type TypeToSave;
+        private readonly string FileExtention = ".json";
         public FileWarehouse(string rootFolder, Type typeToSave)
         {
             RootFolder = rootFolder;
@@ -21,16 +20,16 @@ namespace FileManager
         {
             string FilePath = RetreiveFilePath(name);
             if (!typeof(T).IsAssignableTo(TypeToSave))
-                throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
+                throw new InvalidCastException($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
             if (typeof(T).IsAbstract || typeof(T).IsInterface)
-                throw new Exception($"Type of T can't be a interface or an abstract class");
+                throw new InvalidCastException($"Type of T can't be a interface or an abstract class");
             
             if (!File.Exists(FilePath))
                 throw new CantFindException($"Any {TypeToSave.Name} with this name has been found");
 
             try
             {
-                return (JsonConvert.DeserializeObject<T>(File.ReadAllText(FilePath)));
+                return JsonConvert.DeserializeObject<T>(File.ReadAllText(FilePath));
             }
             catch (Exception e)
             {
@@ -60,6 +59,9 @@ namespace FileManager
 
             string json = JsonConvert.SerializeObject(ObjectToSave, Formatting.Indented);
             string FilePath = RetreiveFilePath(name);
+
+            if (!File.Exists(FilePath))
+                throw new CantFindException($"Any {TypeToSave.Name} with this name has been found, you can override only existing item");
 
             await File.WriteAllTextAsync(FilePath, json);
         }

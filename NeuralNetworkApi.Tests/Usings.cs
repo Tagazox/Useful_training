@@ -1,6 +1,6 @@
 global using Xunit;
 
-namespace NeuralNetworkApi.Tests
+namespace Useful_training.Applicative.NeuralNetworkApi.Tests
 {
     public enum Method
     {

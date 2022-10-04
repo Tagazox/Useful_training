@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Exceptions;
-using Useful_training.Core.Neural_network.Interface;
+﻿using System.Runtime.Serialization;
+using Useful_training.Core.NeuralNetwork.Exceptions;
+using Useful_training.Core.NeuralNetwork.Interfaces;
 
-namespace Useful_training.Core.Neural_network
+namespace Useful_training.Core.NeuralNetwork.Neurons
 {
-    [Serializable]
+	[Serializable]
     internal abstract class Neuron : INeuron
     {
         public double Gradiant { get; set; }
@@ -70,7 +65,7 @@ namespace Useful_training.Core.Neural_network
         {
             if (learnRate <= 0 || learnRate > 1)
                 throw new ArgumentException("Learn rate need to be between 0 and 1");
-            if (learnRate <= 0 || learnRate > 1)
+            if (momentum <= 0 || momentum > 1)
                 throw new ArgumentException("Momentum need to be between 0 and 1");
             var prevDelta = biasDelta;
             biasDelta = learnRate * Gradiant;

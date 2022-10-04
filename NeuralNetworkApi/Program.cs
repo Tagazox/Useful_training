@@ -1,8 +1,8 @@
-using FileManager;
-using NeuralNetworkApi;
-using NeuralNetworkApi.Hubs;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
+using Useful_training.Core.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Infrastructure.FileManager;
+using Useful_training.Applicative.NeuralNetworkApi;
+using Useful_training.Applicative.NeuralNetworkApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

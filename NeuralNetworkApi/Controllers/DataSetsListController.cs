@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using NeuralNetworkApi.ViewModel;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.ValueObject;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.ValueObject;
+using Useful_training.Applicative.NeuralNetworkApi.ViewModel;
 
-namespace NeuralNetworkApi.Controllers
+namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]/")]

@@ -1,7 +1,4 @@
-﻿
-using Useful_training.Core.Neural_network.Interface;
-
-namespace Useful_training.Core.Neural_network
+﻿namespace Useful_training.Core.NeuralNetwork.Interfaces
 {
     public interface INeuralNetworkTrainer : INeuralNetworkObservable
     {

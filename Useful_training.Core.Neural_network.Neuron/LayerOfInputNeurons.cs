@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Useful_training.Core.Neural_network.Exceptions;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.Neurons;
+﻿using System.Runtime.CompilerServices;
+using Useful_training.Core.NeuralNetwork.Neurons;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Exceptions;
 
-[assembly: InternalsVisibleTo("Useful_training.Core.Neural_network.Neural_NetworkTests")]
-namespace Useful_training.Core.Neural_network
+[assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests")]
+namespace Useful_training.Core.NeuralNetwork
 {
-    internal class LayerOfInputNeurons : ILayerOfInputNeurons
+	internal class LayerOfInputNeurons : ILayerOfInputNeurons
     {
         private readonly IList<IInputNeurons> neurons;
         public IEnumerable<IInputNeurons> InputsNeurons { get => neurons; }

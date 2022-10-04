@@ -52,7 +52,7 @@ function TrainNeuralNetwork() {
 
             result.forEach(r => $("#RowTemplaterContainer").append(templateCopy));
 
-            connection.invoke("TrainNeuralNetwork", $("#Neural_network_to_train_select").val(), $("#Datasets_select").val()).catch(function (err) {
+            connection.invoke("TrainNeuralNetwork", $("#NeuralNetwork_to_train_select").val(), $("#Datasets_select").val()).catch(function (err) {
                 return console.error(err.toString());
             });
         },
@@ -70,7 +70,7 @@ function RefreshNeuralNetworkListSelect() {
         contentType: "text/plain",
         success: function (result) {
             $.each(result, function (i, item) {
-                $("#Neural_network_to_train_select").append($('<option>', {
+                $("#NeuralNetwork_to_train_select").append($('<option>', {
                     value: item,
                     text: item
                 }));

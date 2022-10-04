@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NeuralNetworkApi {
+namespace Useful_training.Applicative.NeuralNetworkApi {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace NeuralNetworkApi {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NeuralNetworkApi.InternalResources", typeof(InternalResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Useful_training.Applicative.NeuralNetworkApi.InternalResources", typeof(InternalResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

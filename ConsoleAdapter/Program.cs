@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ConsoleAdapter;
-using FileManager;
-using Useful_training.Core.Neural_network;
+using Useful_training.Core.NeuralNetwork;
 
 Console.WriteLine("Hello, World!");
 

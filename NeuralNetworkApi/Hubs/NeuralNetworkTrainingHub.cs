@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using NeuralNetworkApi.Adapter;
-using NeuralNetworkApi.ViewModel;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
-using Useful_training.Core.Neural_network.ValueObject;
+using Useful_training.Core.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.ValueObject;
+using Useful_training.Applicative.NeuralNetworkApi.Adapter;
 
-namespace NeuralNetworkApi.Hubs
+namespace Useful_training.Applicative.NeuralNetworkApi.Hubs
 {
     public class NeuralNetworkTrainingHub : Hub, INeuralNetworkTrainerObserver
     {
@@ -25,10 +24,10 @@ namespace NeuralNetworkApi.Hubs
         private void CreateWorkerAndAttacheTheClient(string NeuralNetworkName, string DataSetListName)
         {
             NeuralNetworkTrainerContainerAdapter containerAdapter = new NeuralNetworkTrainerContainerAdapter();
-            containerAdapter.Neural_Network = NeuralNetworkWarehouse.Retreive<NeuralNetwork>(NeuralNetworkName);
+            containerAdapter.NeuralNetwork = NeuralNetworkWarehouse.Retreive<NeuralNetwork>(NeuralNetworkName);
             containerAdapter.DataSets = DatasetListWarehouse.Retreive<List<DataSet>>(DataSetListName);
             NeuralNetworkTrainer neuralNetworkTrainer = new NeuralNetworkTrainer(containerAdapter);
-            neuralNetworkTrainer.Attach(this);
+            neuralNetworkTrainer.AttachObserver(this);
             try
             {
                 neuralNetworkTrainer.TrainNeuralNetwork();
@@ -38,7 +37,7 @@ namespace NeuralNetworkApi.Hubs
                 Clients.Caller.SendAsync("OnTrainError", e);
                 throw e;
             }
-            NeuralNetworkWarehouse.Override(containerAdapter.Neural_Network, NeuralNetworkName);
+            NeuralNetworkWarehouse.Override(containerAdapter.NeuralNetwork, NeuralNetworkName);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)

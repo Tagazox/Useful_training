@@ -1,41 +1,34 @@
 using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace NeuralNetworkApi.Tests
+namespace Useful_training.Applicative.NeuralNetworkApi.Tests
 {
     public class NeuralNetworkControllerTest
     {
-        HttpClient client;
-        TestServer testServer;
-        IWebHostBuilder builder;
-        string testName;
-        string RootUrl;
+		readonly HttpClient HttpClient;
+		readonly string TestName;
+		readonly string RootUrl;
 
         public NeuralNetworkControllerTest()
         {
             RootUrl = "NeuralNetwork";
-            var application = new WebApplicationFactory<Program>()
-        .WithWebHostBuilder(builder =>
-        {
-        });
-            client = application.CreateClient();
-            testName = Guid.NewGuid().ToString();
+            var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>{});
+            HttpClient = application.CreateClient();
+            TestName = Guid.NewGuid().ToString();
         }
         [Fact]
         public async Task PostNeuralNetworkShouldBeOk()
         {
-            var httpResponseMessage = await client.PostAsync($"{RootUrl}/{Method.POST}?Name={testName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=0.05&typeOfNeuron=6", null);
+            var httpResponseMessage = await HttpClient.PostAsync($"{RootUrl}/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=0.05&typeOfNeuron=6", null);
 
             httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
         [Fact]
         public async Task PostNeuralNetworkShouldThrow500()
         {
-            var httpResponseMessage = await client.PostAsync($"{RootUrl}/{Method.POST}?Name={testName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=-0.05&typeOfNeuron=6", null);
+            var httpResponseMessage = await HttpClient.PostAsync($"{RootUrl}/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=-0.05&typeOfNeuron=6", null);
 
             httpResponseMessage.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
         }
@@ -44,14 +37,14 @@ namespace NeuralNetworkApi.Tests
         {
             await PostNeuralNetworkShouldBeOk();
 
-            var httpResponseMessage = await client.GetAsync($"{RootUrl}/{Method.GET}/{testName}/0/10");
+            var httpResponseMessage = await HttpClient.GetAsync($"{RootUrl}/{Method.GET}/{TestName}/0/10");
 
 
             httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
             var values = JsonConvert.DeserializeObject<string[]>(await httpResponseMessage.Content.ReadAsStringAsync());
             values.Should().NotBeNullOrEmpty();
             values.Count().Should().BeGreaterThan(0);
-            values.Any(s => s.Contains(testName)).Should().BeTrue();
+            values.Any(s => s.Contains(TestName)).Should().BeTrue();
         }
 
     }

@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NeuralNetworkApi\NeuralNetworkApi.csproj" />
+    <ProjectReference Include="..\NeuralNetworkApi\Useful_training.Applicative.NeuralNetworkApi.csproj" />
   </ItemGroup>
 
 </Project>

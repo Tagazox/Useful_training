@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using NeuralNetworkApi.ViewModel;
-using Useful_training.Core.Neural_network;
-using Useful_training.Core.Neural_network.Interface;
+using Useful_training.Core.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Applicative.NeuralNetworkApi.ViewModel;
 
-namespace NeuralNetworkApi.Controllers
+namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]/")]
@@ -23,7 +23,7 @@ namespace NeuralNetworkApi.Controllers
             NeuralNetworkDirector neuralNetworkDirector = new NeuralNetworkDirector();
             neuralNetworkDirector.networkBuilder = BuilderOfNeuralNetwork;
             neuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput,learnRate,momentum,numberOfOutputs, numberOfHiddenLayer, numberOfNeuronByHiddenLayer, typeOfNeuron);
-            await NeuralNetworkWarehouse.Save(BuilderOfNeuralNetwork.GetNeural_Network(), $"{Name}_Input-{numberOfInput}_Output-{numberOfOutputs}");
+            await NeuralNetworkWarehouse.Save(BuilderOfNeuralNetwork.GetNeuralNetwork(), $"{Name}_Input-{numberOfInput}_Output-{numberOfOutputs}");
             return new ResponseOk("Neural network created");
         }
 

@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Useful_training.Core.Neural_network.ValueObject;
+using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace NeuralNetworkApi.Tests
+namespace Useful_training.Applicative.NeuralNetworkApi.Tests
 {
     public class DataSetsListControllerTest
     {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,12 +10,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-	  <InternalsVisibleTo Include="NeuralNetworkApi.Tests" />
+	  <InternalsVisibleTo Include="Useful_training.Applicative.NeuralNetworkApi.Tests" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileManager\FileManager.csproj" />
-    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.Neural_network.csproj" />
+    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.FileManager.csproj" />
+    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.NeuralNetwork.csproj" />
   </ItemGroup>
 
   <ItemGroup>
