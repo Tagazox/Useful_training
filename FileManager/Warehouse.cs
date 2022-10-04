@@ -24,7 +24,7 @@ namespace FileManager
                 throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
             if (typeof(T).IsAbstract || typeof(T).IsInterface)
                 throw new Exception($"Type of T can't be a interface or an abstract class");
-
+            
             if (!File.Exists(FilePath))
                 throw new CantFindException($"Any {TypeToSave.Name} with this name has been found");
 
@@ -35,20 +35,20 @@ namespace FileManager
             catch (Exception e)
             {
 
-                throw new JsonException($"Can't parse the JSON file corrupted; {e.Message}");
+                throw new JsonException($"Can't parse the JSON, file corrupted; {e.Message}");
             }
         }
 
         public async Task Save<T>(T ObjectToSave, string name)
         {
             if (!typeof(T).IsAssignableTo(TypeToSave))
-                throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
+                throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).Name}");
 
             string json = JsonConvert.SerializeObject(ObjectToSave, Formatting.Indented);
             string FilePath = RetreiveFilePath(name);
 
             if (File.Exists(FilePath))
-                throw new AlreadyExistException($"A {TypeToSave.FullName} with this name already exist");
+                throw new AlreadyExistException($"A {TypeToSave.Name} with this name already exist");
 
             await File.WriteAllTextAsync(FilePath, json);
         }
@@ -56,7 +56,7 @@ namespace FileManager
         public  async Task Override<T>(T ObjectToSave, string name)
         {
             if (!typeof(T).IsAssignableTo(TypeToSave))
-                throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.FullName} you give a type of {typeof(T).FullName}");
+                throw new Exception($"Type of T need to be assignable to a type of {TypeToSave.Name} you give a type of {typeof(T).Name}");
 
             string json = JsonConvert.SerializeObject(ObjectToSave, Formatting.Indented);
             string FilePath = RetreiveFilePath(name);

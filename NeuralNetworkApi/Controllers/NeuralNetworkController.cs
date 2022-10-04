@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NeuralNetworkApi.ViewModel;
 using Useful_training.Core.Neural_network;
 using Useful_training.Core.Neural_network.Interface;
 
@@ -17,13 +18,13 @@ namespace NeuralNetworkApi.Controllers
         }
 
         [HttpPost(Name = "PostNeuralNetwork")]
-        public async Task<ActionResult<NeuralNetwork>> Post(string Name,uint numberOfInput,uint numberOfOutputs,uint numberOfHiddenLayer, uint numberOfNeuronByHiddenLayer, double learnRate,double momentum,NeuronType typeOfNeuron)
+        public async Task<ResponseOk> Post(string Name,uint numberOfInput,uint numberOfOutputs,uint numberOfHiddenLayer, uint numberOfNeuronByHiddenLayer, double learnRate,double momentum,NeuronType typeOfNeuron)
         {
             NeuralNetworkDirector neuralNetworkDirector = new NeuralNetworkDirector();
             neuralNetworkDirector.networkBuilder = BuilderOfNeuralNetwork;
             neuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput,learnRate,momentum,numberOfOutputs, numberOfHiddenLayer, numberOfNeuronByHiddenLayer, typeOfNeuron);
             await NeuralNetworkWarehouse.Save(BuilderOfNeuralNetwork.GetNeural_Network(), $"{Name}_Input-{numberOfInput}_Output-{numberOfOutputs}");
-            return Ok();
+            return new ResponseOk("Neural network created");
         }
 
         [HttpGet("{seamslike}/{start}/{count}", Name = "SearchNeuralNetworkByName")]

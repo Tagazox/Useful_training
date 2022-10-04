@@ -47,7 +47,7 @@ namespace Useful_training.Core.Neural_network
         public Neuron(IEnumerable<IInputNeurons> InputNeurons)
         {
             if (InputNeurons == null || !InputNeurons.Any())
-                throw new CantInitializeWithZeroInputException("Neurones need to be initialize with at leat one input");
+                throw new CantInitializeWithZeroInputException("Neuron need to be initialize with at leat one input");
             InputSynapses = new List<Synapse>();
             OutputSynapses = new List<Synapse>();
             biasDelta = 0;

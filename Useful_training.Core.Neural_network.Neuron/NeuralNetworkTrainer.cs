@@ -26,9 +26,9 @@ namespace Useful_training.Core.Neural_network
             Observers = new List<INeuralNetworkTrainerObserver>();
 
             if (neural_Network == null)
-                throw new NullReferenceException("Neural_Network hasn't be find in the container");
-            if (dataSets == null)
-                throw new NullReferenceException("Data set hasn't be find in the container");
+                throw new NullReferenceException("Any Neural network hasn't be find in the container");
+            if (dataSets == null || !dataSets.Any())
+                throw new NullReferenceException("Any data set hasn't be find in the container");
         }
 
         public void TrainNeuralNetwork()
@@ -46,13 +46,11 @@ namespace Useful_training.Core.Neural_network
                 else
                 {
                     Notify(new NeuralNetworkObservableData(dataSetForThisIteration, resultsOfTheNeuralNetworkCalculation));
+                    if (CalculateError(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation) < 0.001)
+                        trainFinish = VerifyIfTrainingIsFinish();
                     if (!trainFinish)
                         neural_Network.BackPropagate(dataSetForThisIteration.TargetOutput);
                 }
-
-
-                if (CalculateError(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation) < 0.001)
-                    trainFinish = VerifyIfTrainingIsFinish();
             }
         }
 

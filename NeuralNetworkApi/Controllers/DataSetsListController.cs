@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using NeuralNetworkApi.ViewModel;
 using Useful_training.Core.Neural_network;
 using Useful_training.Core.Neural_network.Interface;
 using Useful_training.Core.Neural_network.ValueObject;
@@ -15,8 +16,8 @@ namespace NeuralNetworkApi.Controllers
             DataSetsListWarehouse = dataSetsListWarehouse;
         }
 
-        [HttpPost("{Name}", Name = "PostDataSets")]
-        public async Task<ActionResult<List<DataSet>>> Post(string Name, [FromBody] List<DataSet> dataSets)
+        [HttpPost("{Name}", Name = "PostDataSetsList")]
+        public async Task<ResponseOk> Post(string Name, [FromBody] List<DataSet> dataSets)
         {
             if (!dataSets.TrueForAll(x => x.Inputs.Count == dataSets.First().Inputs.Count))
                 throw new ArgumentException("Input need to always have the same count of data");
@@ -24,8 +25,9 @@ namespace NeuralNetworkApi.Controllers
                 throw new ArgumentException("Outputs need to always have the same count of data");
             if(dataSets.Select(d => d.Inputs).Distinct().Count() != dataSets.Count)
                 throw new ArgumentException("You cannot have duplicate input");
+
             await DataSetsListWarehouse.Save(dataSets, Name);
-            return Ok();
+            return new ResponseOk("Dataset list created");
         }
 
         [HttpGet("{Name}",Name = "GetDataSetListByName")]
