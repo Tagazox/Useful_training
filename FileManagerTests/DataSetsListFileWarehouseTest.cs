@@ -8,15 +8,15 @@ using Useful_training.Core.Neural_network.ValueObject;
 
 namespace FileManagerTests
 {
-    public class DataSetWarehouseTests
+    public class DataSetsListFileWarehouseTest
     {
         IDataSetsListWarehouse TestSubject;
         Mock<INeuralNetworkTrainerContainer> INeuralNetworkTrainerContainer;
         
-        public DataSetWarehouseTests()
+        public DataSetsListFileWarehouseTest()
         {
             INeuralNetworkTrainerContainer = new Mock<INeuralNetworkTrainerContainer>();
-            TestSubject = new DataSetsListWarehouse();
+			TestSubject = new FileManager.DataSetsListFileWarehouse("testPath\\");
             CreateDataSet();
         }
         private void CreateDataSet()

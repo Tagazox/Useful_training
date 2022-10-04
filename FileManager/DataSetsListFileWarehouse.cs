@@ -6,9 +6,9 @@ using Useful_training.Core.Neural_network.ValueObject;
 
 namespace FileManager
 {
-	public class DataSetsListWarehouse : Warehouse, IDataSetsListWarehouse
+	public class DataSetsListFileWarehouse : FileWarehouse, IDataSetsListWarehouse
 	{
-		public DataSetsListWarehouse() : base("SavedDataSet\\", typeof(List<DataSet>))
+		public DataSetsListFileWarehouse(string rootFolderPath) : base(rootFolderPath, typeof(List<DataSet>))
 		{
 		}
 	}

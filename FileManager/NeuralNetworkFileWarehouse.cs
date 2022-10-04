@@ -5,9 +5,9 @@ using Useful_training.Core.Neural_network.Interface;
 
 namespace FileManager
 {
-	public class NeuralNetworkWarehouse : Warehouse, INeuralNetworkWarehouse
+	public class NeuralNetworkFileWarehouse : FileWarehouse, INeuralNetworkWarehouse
 	{
-		public NeuralNetworkWarehouse() : base("SavedNeuralNetwork\\", typeof(INeuralNetwork))
+		public NeuralNetworkFileWarehouse(string rootFolderPath) : base(rootFolderPath, typeof(INeuralNetwork))
 		{
 		}
     }

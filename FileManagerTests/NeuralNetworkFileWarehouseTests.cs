@@ -7,15 +7,15 @@ using FileManager.Exceptions;
 
 namespace FileManagerTests
 {
-    public class NeuralNetworkWarehouseTests
+    public class NeuralNetworkFileWarehouseTests
     {
-        NeuralNetworkWarehouse TestSubject;
+        NeuralNetworkFileWarehouse TestSubject;
         Mock<INeuralNetworkTrainerContainer> neural_NetworkContainer;
         List<double> input;
-        public NeuralNetworkWarehouseTests()
+        public NeuralNetworkFileWarehouseTests()
         {
             neural_NetworkContainer = new Mock<INeuralNetworkTrainerContainer>();
-            TestSubject = new NeuralNetworkWarehouse();
+            TestSubject = new NeuralNetworkFileWarehouse("testPath\\");
             CreateNewNeuralNetwork();
         }
         private void CreateNewNeuralNetwork()

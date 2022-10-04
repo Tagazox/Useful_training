@@ -1,4 +1,5 @@
 using FileManager;
+using NeuralNetworkApi;
 using NeuralNetworkApi.Hubs;
 using Useful_training.Core.Neural_network;
 using Useful_training.Core.Neural_network.Interface;
@@ -23,8 +24,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<INeuralNetworkWarehouse>(NeuralNetworkWarehouseProvider => new NeuralNetworkWarehouse());
-builder.Services.AddSingleton<IDataSetsListWarehouse>(DataSetsListWarehouseProvider => new DataSetsListWarehouse());
+builder.Services.AddSingleton<INeuralNetworkWarehouse>(NeuralNetworkWarehouseProvider => new NeuralNetworkFileWarehouse(InternalResources.NeuralNetworkWarehouseRootPath));
+builder.Services.AddSingleton<IDataSetsListWarehouse>(DataSetsListWarehouseProvider => new DataSetsListFileWarehouse(InternalResources.DatasetListWarehouseRootPath));
 builder.Services.AddSingleton<INeuralNetworkBuilder>(NeuralNetworkBuilderProvider => new NeuralNetworkBuilder());
 
 var app = builder.Build();

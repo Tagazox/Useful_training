@@ -5,12 +5,12 @@ using Useful_training.Core.Neural_network.Interface;
 
 namespace FileManager
 {
-    public abstract class Warehouse : IWarehouse
+    public abstract class FileWarehouse : IWarehouse
     {
         private string RootFolder;
         private Type TypeToSave;
         private string FileExtention = ".json";
-        public Warehouse(string rootFolder, Type typeToSave)
+        public FileWarehouse(string rootFolder, Type typeToSave)
         {
             RootFolder = rootFolder;
             TypeToSave = typeToSave;
