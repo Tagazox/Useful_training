@@ -2,7 +2,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 {
 	public class DataSetsListFileWarehouseTests
     {
-		private readonly IDataSetsListWarehouse TestSubject;
+		private IDataSetsListWarehouse TestSubject;
         private Mock<INeuralNetworkTrainerContainer> NeuralNetworkTrainerContainerMocked;
         private string NameOfTheDataSet;
 

@@ -3,7 +3,7 @@ using Useful_training.Core.NeuralNetwork.ValueObject;
 
 namespace Useful_training.Infrastructure.FileManager
 {
-	public class DataSetsListFileWarehouse : FileWarehouse, IDataSetsListWarehouse
+	public sealed class DataSetsListFileWarehouse : FileWarehouse, IDataSetsListWarehouse
 	{
 		public DataSetsListFileWarehouse(string rootFolderPath) : base(rootFolderPath, typeof(IList<DataSet>))
 		{

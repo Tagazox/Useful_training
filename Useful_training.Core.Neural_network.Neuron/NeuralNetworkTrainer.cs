@@ -26,7 +26,6 @@ namespace Useful_training.Core.NeuralNetwork
 
 
         }
-
         public void TrainNeuralNetwork()
         {
             bool trainFinish = false;
@@ -68,9 +67,7 @@ namespace Useful_training.Core.NeuralNetwork
                 }
                 for (int i = 0; i < results.Count; i++)
                     if (Math.Round(Math.Abs(results[i] - set.TargetOutput[i]), EpochRoundedTo) > 0.001)
-                    {
                         return false;
-                    }
             }
             return true;
         }

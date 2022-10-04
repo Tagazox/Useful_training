@@ -20,7 +20,6 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Hubs
             CreateWorkerAndAttacheTheClient(NeuralNetworkName, DataSetListName);
             Clients.Caller.SendAsync("Train_finished", NeuralNetworkName);
         }
-
         private void CreateWorkerAndAttacheTheClient(string NeuralNetworkName, string DataSetListName)
         {
             NeuralNetworkTrainerContainerAdapter containerAdapter = new NeuralNetworkTrainerContainerAdapter();
@@ -39,12 +38,6 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Hubs
             }
             NeuralNetworkWarehouse.Override(containerAdapter.NeuralNetwork, NeuralNetworkName);
         }
-
-        public override async Task OnDisconnectedAsync(Exception? exception)
-        {
-
-        }
-
         public void Update(INeuralNetworkObservableData subject)
         {
             Clients.Caller.SendAsync("TrainIterateOnce", subject);

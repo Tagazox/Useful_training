@@ -2,7 +2,7 @@
 
 namespace Useful_training.Infrastructure.FileManager
 {
-	public class NeuralNetworkFileWarehouse : FileWarehouse, INeuralNetworkWarehouse
+	public sealed class NeuralNetworkFileWarehouse : FileWarehouse, INeuralNetworkWarehouse
 	{
 		public NeuralNetworkFileWarehouse(string rootFolderPath) : base(rootFolderPath, typeof(INeuralNetwork))
 		{

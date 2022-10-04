@@ -2,10 +2,10 @@ namespace Useful_training.Infrastructure.FileManagerTests
 {
 	public class NeuralNetworkFileWarehouseTests
 	{
-		NeuralNetworkFileWarehouse TestSubject;
-		Mock<INeuralNetworkTrainerContainer> NeuralNetworkTrainerContainerMocked;
-		List<double> input;
-		string NameOfTheNeuralNetwork;
+		private NeuralNetworkFileWarehouse TestSubject;
+		private Mock<INeuralNetworkTrainerContainer> NeuralNetworkTrainerContainerMocked;
+		private List<double> Inputs;
+		private string NameOfTheNeuralNetwork;
 		public NeuralNetworkFileWarehouseTests()
 		{
 			NeuralNetworkTrainerContainerMocked = new Mock<INeuralNetworkTrainerContainer>();
@@ -15,7 +15,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 		}
 		private void CreateNewNeuralNetwork()
 		{
-			input = new List<double> { 1, 0 };
+			Inputs = new List<double> { 1, 0 };
 			uint numberOfInput = 2;
 			uint numberOfOutput = 2;
 			uint numberOfInputNeurons = numberOfInput;
@@ -43,7 +43,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 		{
 			SaveShouldBeGood();
 			INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(NameOfTheNeuralNetwork);
-			neuralNetRecovred.Calculate(input).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(input));
+			neuralNetRecovred.Calculate(Inputs).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(Inputs));
 		}
 		[Fact]
 		public void OverrideShouldBeGood()
@@ -58,7 +58,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 			INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(NameOfTheNeuralNetwork);
 
 			oldSavedNeuralNetwork.Should().NotBeSameAs(neuralNetRecovred);
-			neuralNetRecovred.Calculate(input).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(input));
+			neuralNetRecovred.Calculate(Inputs).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(Inputs));
 		}
 		[Fact]
 		public void SearchNeuralNetworkAvailableShouldBeGood()

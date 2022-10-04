@@ -11,18 +11,18 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
     {
         private readonly INeuralNetworkWarehouse NeuralNetworkWarehouse;
         private readonly INeuralNetworkBuilder BuilderOfNeuralNetwork;
-        public NeuralNetworkController(INeuralNetworkWarehouse neuralNetworkWarehouse,INeuralNetworkBuilder builderOfNeuralNetwork)
+        public NeuralNetworkController(INeuralNetworkWarehouse neuralNetworkWarehouse, INeuralNetworkBuilder builderOfNeuralNetwork)
         {
             NeuralNetworkWarehouse = neuralNetworkWarehouse;
             BuilderOfNeuralNetwork = builderOfNeuralNetwork;
         }
 
         [HttpPost(Name = "PostNeuralNetwork")]
-        public async Task<ResponseOk> Post(string Name,uint numberOfInput,uint numberOfOutputs,uint numberOfHiddenLayer, uint numberOfNeuronByHiddenLayer, double learnRate,double momentum,NeuronType typeOfNeuron)
+        public async Task<ResponseOk> Post(string Name, uint numberOfInput, uint numberOfOutputs, uint numberOfHiddenLayer, uint numberOfNeuronByHiddenLayer, double learnRate, double momentum, NeuronType typeOfNeuron)
         {
             NeuralNetworkDirector neuralNetworkDirector = new NeuralNetworkDirector();
             neuralNetworkDirector.networkBuilder = BuilderOfNeuralNetwork;
-            neuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput,learnRate,momentum,numberOfOutputs, numberOfHiddenLayer, numberOfNeuronByHiddenLayer, typeOfNeuron);
+            neuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput, learnRate, momentum, numberOfOutputs, numberOfHiddenLayer, numberOfNeuronByHiddenLayer, typeOfNeuron);
             await NeuralNetworkWarehouse.Save(BuilderOfNeuralNetwork.GetNeuralNetwork(), $"{Name}_Input-{numberOfInput}_Output-{numberOfOutputs}");
             return new ResponseOk("Neural network created");
         }
