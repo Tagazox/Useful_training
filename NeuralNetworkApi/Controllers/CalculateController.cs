@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Useful_training.Core.NeuralNetwork;
-using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Applicative.Application.UseCases.Calculation.Get.Interfaces;
+using Useful_training.Applicative.Application.UseCases.Calculation.Get.ViewModels;
 
 namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
 {
@@ -8,16 +8,11 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
     [Route("[controller]/[action]/")]
     public class CalculateController : ControllerBase
     {
-        private readonly INeuralNetworkWarehouse NeuralNetworkWarehouse;
-        public CalculateController(INeuralNetworkWarehouse neuralNetworkWarehouse)
-        {
-            NeuralNetworkWarehouse = neuralNetworkWarehouse;
-        }
 
-        [HttpGet("{Name}/{Input}", Name = "GetCalculationResult")]
-        public IEnumerable<double> Get(string Name, [FromQuery] List<double> Inputs)
+        [HttpGet("{name}/{inputs}", Name = "GetCalculationResult")]
+        public GetNeuralNetworkCalculationViewModel Get([FromServices] IGetNeuralNetworkCalculationUseCase getNeuralNetworkCalculationUseCase,string name, [FromQuery] List<double> inputs)
         {
-            return NeuralNetworkWarehouse.Retreive<NeuralNetwork>(Name).Calculate(Inputs);
+            return getNeuralNetworkCalculationUseCase.Execute(name,inputs);
         }
 
     }

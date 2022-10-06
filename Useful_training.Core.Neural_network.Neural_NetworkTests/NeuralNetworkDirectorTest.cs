@@ -1,8 +1,10 @@
 using Moq;
 using Useful_training.Core.NeuralNetwork.Exceptions;
-using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Factory;
+using Useful_training.Core.NeuralNetwork.Factory.Interfaces;
+using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
 
-namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
 {
     public class NeuralNetworkDirectorTest
     {
@@ -16,7 +18,7 @@ namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
         [Fact]
         public void BuilderBuildMinimalNeuralNetworkShouldBeGood()
         {
-            testDirector.networkBuilder = networkBuilderMock.Object;
+            testDirector.NetworkBuilder = networkBuilderMock.Object;
             Action BuildMinimalNeuralNetwork = () =>
             {
                 testDirector.BuildMinimalNeuralNetwork(2, 2, NeuronType.Sigmoid);
@@ -26,7 +28,7 @@ namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
         [Fact]
         public void BuilderBuildComplexeNeuralNetworkShouldBeGoodCase1()
         {
-            testDirector.networkBuilder = networkBuilderMock.Object;
+            testDirector.NetworkBuilder = networkBuilderMock.Object;
             Action BuildComplexeNeuralNetwork = () =>
             {
                 testDirector.BuildComplexeNeuralNetwork(2, .5, .5, 2, 2, 2, NeuronType.Sigmoid);
@@ -37,7 +39,7 @@ namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
         public void BuilderBuildComplexeNeuralNetworkShouldBeGoodCase2()
         {
             Random rand = new Random();
-            testDirector.networkBuilder = networkBuilderMock.Object;
+            testDirector.NetworkBuilder = networkBuilderMock.Object;
             List<uint> numbersOfNeuronesByHiddenLayer = new List<uint>();
             uint numberOfHiddenLayer = 5;
             for (int i = 0; i < numberOfHiddenLayer; i++)

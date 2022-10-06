@@ -4,9 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>Useful_training.Core.NeuralNetwork</RootNamespace>
   </PropertyGroup>
 	<ItemGroup>
-		<InternalsVisibleTo Include="Useful_training.Core.NeuralNetwork.NeuralNetworkTests" />
+		<InternalsVisibleTo Include="Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests" />
 	</ItemGroup>
 
 </Project>

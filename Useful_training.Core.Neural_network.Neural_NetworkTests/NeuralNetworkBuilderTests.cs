@@ -1,88 +1,89 @@
-using Useful_training.Core.NeuralNetwork.Exceptions;
+using Useful_training.Core.NeuralNetwork.Factory;
+using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
 
-namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
 {
     public class NeuralNetworkBuilderTest
     {
-        NeuralNetworkBuilder TestBuilder;
-        Random Random;
+        private readonly NeuralNetworkBuilder _testBuilder;
+        private readonly Random _random;
         public NeuralNetworkBuilderTest()
         {
-            TestBuilder = new NeuralNetworkBuilder();
-            Random = new Random();
+            _testBuilder = new NeuralNetworkBuilder();
+            _random = new Random();
 
         }
         [Fact]
         public void BuilderInitializeShouldBeGood()
         {
-            TestBuilder.Initialize((uint)Random.Next(1, 10),Random.NextDouble(), Random.NextDouble());
+            _testBuilder.Initialize((uint)_random.Next(1, 10),_random.NextDouble(), _random.NextDouble());
         }
         [Fact]
         public void BuilderInitializeShouldThrowArgumentException()
         {
-            Action InitializeBadLearnRate = () =>
+            Action initializeBadLearnRate = () =>
             {
-                TestBuilder.Initialize(2,-.5);
+                _testBuilder.Initialize(2,-.5);
             };
-            Action InitializeBadMomentum = () =>
+            Action initializeBadMomentum = () =>
             {
-                TestBuilder.Initialize(2, .5,-.5);
+                _testBuilder.Initialize(2, .5,-.5);
             };
-            InitializeBadLearnRate.Should().Throw<ArgumentException>();
-            InitializeBadMomentum.Should().Throw<ArgumentException>();
+            initializeBadLearnRate.Should().Throw<ArgumentException>();
+            initializeBadMomentum.Should().Throw<ArgumentException>();
         }
         [Fact]
         public void BuilderAddHiddenLayerShouldBeGoodCase1()
         {
-            TestBuilder.Initialize(2);
-            uint numberOfHiddenLayer = (uint)Random.Next(1, 10);
-            TestBuilder.AddHiddenLayers(1, numberOfHiddenLayer, NeuronType.Sigmoid);
-            TestBuilder.GetNeuralNetwork().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
+            _testBuilder.Initialize(2);
+            uint numberOfHiddenLayer = (uint)_random.Next(1, 10);
+            _testBuilder.AddHiddenLayers(1, numberOfHiddenLayer, NeuronType.Sigmoid);
+            _testBuilder.GetNeuralNetwork().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
         }
         [Fact]
         public void BuilderAddHiddenLayerShouldBeGoodCase2()
         {
-            TestBuilder.Initialize(2);
-            uint numberOfHiddenLayer = (uint)Random.Next(1, 10);
-            List<uint> numberOfNeuronesBylayers = new List<uint>();
+            _testBuilder.Initialize(2);
+            uint numberOfHiddenLayer = (uint)_random.Next(1, 10);
+            List<uint> numberOfNeuronesByLayers = new List<uint>();
             for (int i = 0; i < numberOfHiddenLayer; i++)
             {
-                numberOfNeuronesBylayers.Add((uint)Random.Next(1, 10));
+                numberOfNeuronesByLayers.Add((uint)_random.Next(1, 10));
             }
-            TestBuilder.AddHiddenLayers(numberOfNeuronesBylayers, numberOfHiddenLayer, NeuronType.Sigmoid);
-            TestBuilder.GetNeuralNetwork().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
+            _testBuilder.AddHiddenLayers(numberOfNeuronesByLayers, numberOfHiddenLayer, NeuronType.Sigmoid);
+            _testBuilder.GetNeuralNetwork().LayersOfNeurons.Should().HaveCount((int)numberOfHiddenLayer);
         }
         [Fact]
         public void BuilderAddHiddenLayerShouldThrowArgumentException()
         {
-            uint numberOfHiddenLayer = (uint)Random.Next(1, 10);
+            uint numberOfHiddenLayer = (uint)_random.Next(1, 10);
             List<uint> numberOfNeuronesBylayers = new List<uint>();
             for (int i = 0; i < numberOfHiddenLayer - 1; i++)
             {
-                numberOfNeuronesBylayers.Add((uint)Random.Next(1, 10));
+                numberOfNeuronesBylayers.Add((uint)_random.Next(1, 10));
             }
-            Action AddHiddenLayer = () =>
+            Action addHiddenLayer = () =>
             {
-                TestBuilder.AddHiddenLayers(numberOfNeuronesBylayers, numberOfHiddenLayer, NeuronType.Sigmoid);
+                _testBuilder.AddHiddenLayers(numberOfNeuronesBylayers, numberOfHiddenLayer, NeuronType.Sigmoid);
             };
-            AddHiddenLayer.Should().Throw<ArgumentException>();
+            addHiddenLayer.Should().Throw<ArgumentException>();
         }
         [Fact]
         public void BuilderAddOutputLayerShouldBeGood()
         {
-            TestBuilder.Initialize(2);
-            uint numberOfoutputs = (uint)Random.Next(1, 10);
-            TestBuilder.AddOutputLayers(numberOfoutputs, NeuronType.Sigmoid);
-            TestBuilder.GetNeuralNetwork().LayersOfNeurons.Should().HaveCount(1);
+            _testBuilder.Initialize(2);
+            uint numberOfoutputs = (uint)_random.Next(1, 10);
+            _testBuilder.AddOutputLayers(numberOfoutputs, NeuronType.Sigmoid);
+            _testBuilder.GetNeuralNetwork().LayersOfNeurons.Should().HaveCount(1);
         }
         [Fact]
         public void BuilderAddOutputLayerShouldThrowArgumentException()
         {
-            Action AddOutputLayers = () =>
+            Action addOutputLayers = () =>
             {
-                TestBuilder.AddOutputLayers(0, NeuronType.Sigmoid);
+                _testBuilder.AddOutputLayers(0, NeuronType.Sigmoid);
             };
-            AddOutputLayers.Should().Throw<ArgumentException>();
+            addOutputLayers.Should().Throw<ArgumentException>();
         }
     }
 }

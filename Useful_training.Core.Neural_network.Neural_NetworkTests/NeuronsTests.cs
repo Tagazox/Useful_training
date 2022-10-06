@@ -1,9 +1,10 @@
-﻿using Useful_training.Core.NeuralNetwork.Neurons;
+﻿using Moq;
 using Useful_training.Core.NeuralNetwork.Exceptions;
-using Useful_training.Core.NeuralNetwork.Interfaces;
-using Moq;
+using Useful_training.Core.NeuralNetwork.Neurons;
+using Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
+using Useful_training.Core.NeuralNetwork.Neurons.Type;
 
-namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
 {
 	public class NeuronsTests
 	{

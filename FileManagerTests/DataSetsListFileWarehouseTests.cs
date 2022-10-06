@@ -1,3 +1,8 @@
+using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
+using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
+using Useful_training.Infrastructure.FileManager.Exception;
+using Useful_training.Infrastructure.FileManager.Warehouse;
+
 namespace Useful_training.Infrastructure.FileManagerTests
 {
 	public class DataSetsListFileWarehouseTests
@@ -25,7 +30,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 
                 output = (input1 == 1 && input2 == 1) ? 1 : 0;
                 List<double> inputs = new List<double>() { input1, input2 };
-                List<double> Outputs = new List<double>() { output };
+                List<double>? Outputs = new List<double>() { output };
                 dataSets.Add(new DataSet(inputs, Outputs));
             }
             NeuralNetworkTrainerContainerMocked.Setup(c => c.DataSets).Returns(dataSets);
@@ -44,7 +49,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
         public void RetreiveShouldBeGood()
         {
             SaveShouldBeGood();
-            List<DataSet> DataSetsRecovred = TestSubject.Retreive<List<DataSet>>(NameOfTheDataSet);
+            List<DataSet> DataSetsRecovred = TestSubject.Retrieve<List<DataSet>>(NameOfTheDataSet);
             DataSetsRecovred.Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.DataSets);
         }
         [Fact]
@@ -57,7 +62,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
             CreateDataSet();
             TestSubject.Override(NeuralNetworkTrainerContainerMocked.Object.DataSets, NameOfTheDataSet).Wait();
 
-            List<DataSet> DataSetRecovred = TestSubject.Retreive<List<DataSet>>(NameOfTheDataSet);
+            List<DataSet> DataSetRecovred = TestSubject.Retrieve<List<DataSet>>(NameOfTheDataSet);
 
             oldDataSet.Should().NotBeSameAs(DataSetRecovred);
         }
@@ -94,7 +99,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
             string nameOfTheNonExistentDataSet = Guid.NewGuid().ToString();
             Action Save = () =>
             {
-                List<DataSet> DataSetsRecovred = TestSubject.Retreive<List<DataSet>>(nameOfTheNonExistentDataSet);
+                List<DataSet> DataSetsRecovred = TestSubject.Retrieve<List<DataSet>>(nameOfTheNonExistentDataSet);
             };
             Save.Should().Throw<CantFindException>();
         }
@@ -114,7 +119,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
             string nameOfTheDataSet = Guid.NewGuid().ToString();
             Action Save = () =>
             {
-                IList<DataSet> DataSetsRecovred = TestSubject.Retreive<IList<DataSet>>(nameOfTheDataSet);
+                IList<DataSet> DataSetsRecovred = TestSubject.Retrieve<IList<DataSet>>(nameOfTheDataSet);
             };
             Save.Should().Throw<InvalidCastException>();
         }

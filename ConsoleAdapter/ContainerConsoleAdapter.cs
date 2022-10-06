@@ -1,7 +1,10 @@
 ﻿using System.Globalization;
 using ConsoleAdapter.Exceptions;
 using Useful_training.Core.NeuralNetwork;
-using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Factory;
+using Useful_training.Core.NeuralNetwork.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
+using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 
 namespace ConsoleAdapter
@@ -163,7 +166,7 @@ namespace ConsoleAdapter
 					typeOfNeurons = NeuronType.Relu;
 					break;
 				case 4:
-					typeOfNeurons = NeuronType.Selu;
+					typeOfNeurons = NeuronType.SeLu;
 					break;
 				case 5:
 					typeOfNeurons = NeuronType.Sigmoid;
@@ -179,7 +182,7 @@ namespace ConsoleAdapter
 					throw new WrongInputException("Ce type de neurone n'existe pas");
 			}
 			_NeuralNetworkBuilder = new NeuralNetworkBuilder();
-			_NeuralNetworkDirector.networkBuilder = _NeuralNetworkBuilder;
+			_NeuralNetworkDirector.NetworkBuilder = _NeuralNetworkBuilder;
 			_NeuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput, learnRate, momentum,numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
 			NeuralNetwork = _NeuralNetworkBuilder.GetNeuralNetwork();
 			Console.WriteLine("Réseau de neurones crée avec succès !");

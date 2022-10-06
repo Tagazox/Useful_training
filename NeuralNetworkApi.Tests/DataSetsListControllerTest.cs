@@ -43,9 +43,9 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Tests
         {
             await PostDataSetListShouldBeOk();
 
-            var httpResponseMessage = await client.GetAsync($"{RootUrl}/{Method.GET}/{testName}/0/10");
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"{RootUrl}/{Method.GET}/{testName}/0/10");
 
-            var values = JsonConvert.DeserializeObject<string[]>(await httpResponseMessage.Content.ReadAsStringAsync());
+            string[]? values = JsonConvert.DeserializeObject<string[]>(await httpResponseMessage.Content.ReadAsStringAsync());
             httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
             values.Should().NotBeNullOrEmpty();
             values.Count().Should().BeGreaterThan(0);

@@ -1,3 +1,11 @@
+using Useful_training.Core.NeuralNetwork.Factory;
+using Useful_training.Core.NeuralNetwork.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
+using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
+using Useful_training.Infrastructure.FileManager.Exception;
+using Useful_training.Infrastructure.FileManager.Warehouse;
+
 namespace Useful_training.Infrastructure.FileManagerTests
 {
 	public class NeuralNetworkFileWarehouseTests
@@ -42,7 +50,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 		public void RetreiveShouldBeGood()
 		{
 			SaveShouldBeGood();
-			INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(NameOfTheNeuralNetwork);
+			INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<NeuralNetwork>(NameOfTheNeuralNetwork);
 			neuralNetRecovred.Calculate(Inputs).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(Inputs));
 		}
 		[Fact]
@@ -55,7 +63,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 			CreateNewNeuralNetwork();
 			TestSubject.Override(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, NameOfTheNeuralNetwork).Wait();
 
-			INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(NameOfTheNeuralNetwork);
+			INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<NeuralNetwork>(NameOfTheNeuralNetwork);
 
 			oldSavedNeuralNetwork.Should().NotBeSameAs(neuralNetRecovred);
 			neuralNetRecovred.Calculate(Inputs).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(Inputs));
@@ -93,7 +101,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 			string nameOfTheNonExistantNeuralNetwork = Guid.NewGuid().ToString();
 			Action Save = () =>
 			{
-				INeuralNetwork neuralNetRecovred = TestSubject.Retreive<NeuralNetwork>(nameOfTheNonExistantNeuralNetwork);
+				INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<NeuralNetwork>(nameOfTheNonExistantNeuralNetwork);
 			};
 			Save.Should().Throw<CantFindException>();
 		}
@@ -112,7 +120,7 @@ namespace Useful_training.Infrastructure.FileManagerTests
 		{
 			Action Save = () =>
 			{
-				INeuralNetwork neuralNetRecovred = TestSubject.Retreive<INeuralNetwork>(NameOfTheNeuralNetwork);
+				INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<INeuralNetwork>(NameOfTheNeuralNetwork);
 			};
 			Save.Should().Throw<InvalidCastException>();
 		}

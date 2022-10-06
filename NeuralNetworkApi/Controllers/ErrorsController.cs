@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Useful_training.Infrastructure.FileManager.Exceptions;
 using Useful_training.Applicative.NeuralNetworkApi.ViewModel;
+using Useful_training.Infrastructure.FileManager.Exception;
 
 namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
 {

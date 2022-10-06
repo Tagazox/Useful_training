@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Useful_training.Core.NeuralNetwork;
-using Useful_training.Core.NeuralNetwork.Interfaces;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 using Useful_training.Applicative.NeuralNetworkApi.Adapter;
+using Useful_training.Core.NeuralNetwork.NeuralNetwork;
+using Useful_training.Core.NeuralNetwork.Observer.Interfaces;
+using Useful_training.Core.NeuralNetwork.Trainers;
+using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.NeuralNetworkApi.Hubs
 {
@@ -23,8 +26,8 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Hubs
         private void CreateWorkerAndAttacheTheClient(string NeuralNetworkName, string DataSetListName)
         {
             NeuralNetworkTrainerContainerAdapter containerAdapter = new NeuralNetworkTrainerContainerAdapter();
-            containerAdapter.NeuralNetwork = NeuralNetworkWarehouse.Retreive<NeuralNetwork>(NeuralNetworkName);
-            containerAdapter.DataSets = DatasetListWarehouse.Retreive<List<DataSet>>(DataSetListName);
+            containerAdapter.NeuralNetwork = NeuralNetworkWarehouse.Retrieve<NeuralNetwork>(NeuralNetworkName);
+            containerAdapter.DataSets = DatasetListWarehouse.Retrieve<List<DataSet>>(DataSetListName);
             NeuralNetworkTrainer neuralNetworkTrainer = new NeuralNetworkTrainer(containerAdapter);
             neuralNetworkTrainer.AttachObserver(this);
             try

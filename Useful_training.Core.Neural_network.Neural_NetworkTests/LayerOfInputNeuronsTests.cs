@@ -1,7 +1,8 @@
 using Useful_training.Core.NeuralNetwork.Exceptions;
-using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.LayersOfNeurones;
+using Useful_training.Core.NeuralNetwork.LayersOfNeurones.Interfaces;
 
-namespace Useful_training.Core.NeuralNetwork.NeuralNetworkTests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
 {
     public class LayerOfInputNeuronsTests
     {

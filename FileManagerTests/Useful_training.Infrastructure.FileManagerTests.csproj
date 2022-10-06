@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.FileManager.csproj" />
+    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.Warehouse.csproj" />
   </ItemGroup>
 
 </Project>

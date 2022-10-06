@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Observer.Interfaces;
 
 namespace Useful_training.Core.NeuralNetwork.ValueObject
 {
@@ -11,7 +11,7 @@ namespace Useful_training.Core.NeuralNetwork.ValueObject
 	{
 		public DataSet DataSet { get; }
 		public IList<double> Results { get; }
-		public double[] DeltasErrors { get
+		public IEnumerable<double> DeltasErrors { get
 			{
 				double[] deltaErrors = new double[Results.Count];
 				if (Results.Count != DataSet.TargetOutput.Count)

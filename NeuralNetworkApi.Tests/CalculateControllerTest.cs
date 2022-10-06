@@ -24,7 +24,7 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Tests
         }
         private async Task<string> GetOneDummyNeuralNetwork()
 		{
-            var httpResponseMessage = await HttpClient.GetAsync($"NeuralNetwork/{Method.GET}/ /0/10");
+            var httpResponseMessage = await HttpClient.GetAsync($"NeuralNetwork/{Method.GET}//0/10");
             var values = JsonConvert.DeserializeObject<string[]>(await httpResponseMessage.Content.ReadAsStringAsync());
             return values.First();
         }

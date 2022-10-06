@@ -1,5 +1,6 @@
 ﻿using Useful_training.Core.NeuralNetwork;
-using Useful_training.Core.NeuralNetwork.Interfaces;
+using Useful_training.Core.NeuralNetwork.Observer.Interfaces;
+using Useful_training.Core.NeuralNetwork.Trainers;
 
 namespace ConsoleAdapter
 {
