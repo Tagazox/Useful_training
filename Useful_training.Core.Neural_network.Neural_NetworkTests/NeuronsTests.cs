@@ -44,7 +44,7 @@ namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
 			foreach (INeuron neuron in NeuronsToTest)
 			{
 				neuron.GetCalculationResult();
-				neuron.OutputResult.Should().NotBe(0);
+				neuron.OutputResult.Should().BeInRange(-100,100);
 			}
 		}
 		[Fact]

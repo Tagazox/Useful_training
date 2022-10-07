@@ -14,9 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.Warehouse.csproj" />
     <ProjectReference Include="..\Useful_training.Applicative.Application\Useful_training.Applicative.Application.csproj" />
-    <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.NeuralNetwork.csproj" />
   </ItemGroup>
 
   <ItemGroup>

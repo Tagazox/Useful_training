@@ -1,50 +1,64 @@
-using Microsoft.AspNetCore;
-using Newtonsoft.Json;
+using System.Net;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Useful_training.Applicative.Application.UseCases.Calculation.Get.ViewModels;
+using Useful_training.Applicative.Application.UseCases.NeuralNetworks.Create.ViewModels;
 
 namespace Useful_training.Applicative.NeuralNetworkApi.Tests
 {
     public class CalculateControllerTest
     {
-		readonly HttpClient HttpClient;
-		readonly string TestName;
-		readonly string RootUrl;
+        private readonly HttpClient HttpClient;
+        private readonly string TestName;
+        private readonly string RootUrl;
 
         public CalculateControllerTest()
         {
             RootUrl = "Calculate";
-            var application = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>{});
-            HttpClient = application.CreateClient();
             TestName = Guid.NewGuid().ToString();
+
+            WebApplicationFactory<Program> application =
+                new WebApplicationFactory<Program>().WithWebHostBuilder(_ => { });
+            
+            HttpClient = application.CreateClient();
         }
-        private void CreateNeuralNetwork()
-		{
-            HttpClient.PostAsync($"NeuralNetwork/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=0.05&typeOfNeuron=6", null);
-        }
-        private async Task<string> GetOneDummyNeuralNetwork()
-		{
-            var httpResponseMessage = await HttpClient.GetAsync($"NeuralNetwork/{Method.GET}//0/10");
-            var values = JsonConvert.DeserializeObject<string[]>(await httpResponseMessage.Content.ReadAsStringAsync());
-            return values.First();
+
+        private Task<NeuralNetworkCreatedViewModel?> CreateNeuralNetwork()
+        {
+            string url =
+                $"NeuralNetwork/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=0.05&typeOfNeuron=6";
+
+            return HttpRequestHandler.SendRequestsToTheApiAndParseResponse<NeuralNetworkCreatedViewModel>(HttpClient,
+                url,
+                Method.POST);
         }
 
         [Fact]
         public async Task CalculateGetShouldBeOk()
         {
-            CreateNeuralNetwork();
-            string neuralNetworkName =await GetOneDummyNeuralNetwork();
-            var httpResponseMessage = await HttpClient.GetAsync($"{RootUrl}/{Method.GET}/{neuralNetworkName}/%20?Inputs=1&Inputs=0");
+            NeuralNetworkCreatedViewModel? neuralNetworkCreated = await CreateNeuralNetwork();
+            string url =
+                $"{RootUrl}/{Method.GET}/{neuralNetworkCreated?.FinalNameOfTheNeuralNetwork}/%20?Inputs=1&Inputs=0";
 
-            httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            GetNeuralNetworkCalculationViewModel? viewModel = await
+                HttpRequestHandler.SendRequestsToTheApiAndParseResponse<GetNeuralNetworkCalculationViewModel>(
+                    HttpClient, url,
+                    Method.GET);
+
+            viewModel?.InputsOfTheCalculation.Should().HaveCount(2);
+            viewModel?.ResultsOfTheCalculation.Should().HaveCount(1);
         }
+
         [Fact]
         public async Task CalculateGetShouldThrow404()
         {
-            string NonExistantTestName = Guid.NewGuid().ToString();
-            var httpResponseMessage = await HttpClient.GetAsync($"{RootUrl}/{Method.GET}/{NonExistantTestName}/%20?Inputs=1&Inputs=0");
+            string nonExtantTestName = Guid.NewGuid().ToString();
+            string url = $"{RootUrl}/{Method.GET}/{nonExtantTestName}/%20?Inputs=1&Inputs=0";
 
-            httpResponseMessage.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+            HttpResponseMessage httpResponseMessage =
+                await HttpRequestHandler.SendRequestsToTheApi(HttpClient, url, Method.GET);
+
+            httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

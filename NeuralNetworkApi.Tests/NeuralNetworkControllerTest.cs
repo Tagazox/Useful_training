@@ -25,23 +25,23 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Tests
         [Fact]
         public async Task PostNeuralNetworkShouldBeOk()
         {
-            HttpResponseMessage httpResponseMessage = await HttpClient.PostAsync(
-                $"{RootUrl}/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=0.05&typeOfNeuron=6",
-                null);
+            string url = $"{RootUrl}/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=0.05&typeOfNeuron=6"; 
+           
+            NeuralNetworkCreatedViewModel? viewModel = await 
+                HttpRequestHandler.SendRequestsToTheApiAndParseResponse<NeuralNetworkCreatedViewModel>(HttpClient, url,
+                    Method.POST);
             
-            NeuralNetworkCreatedViewModel? deserializedResponse =
-                JsonConvert.DeserializeObject<NeuralNetworkCreatedViewModel>(await httpResponseMessage.Content.ReadAsStringAsync());
-            deserializedResponse.Should().NotBeNull();
-
-            deserializedResponse?.FinalNameOfTheNeuralNetwork.Should().Contain(TestName);
+            viewModel?.FinalNameOfTheNeuralNetwork.Should().Contain(TestName);
         }
 
         [Fact]
         public async Task PostNeuralNetworkShouldThrow500()
         {
-            HttpResponseMessage httpResponseMessage = await HttpClient.PostAsync(
-                $"{RootUrl}/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=-0.05&typeOfNeuron=6",
-                null);
+            string urlWithBadMomentum = $"{RootUrl}/{Method.POST}?Name={TestName}&numberOfInput=2&numberOfOutputs=1&numberOfHiddenLayer=3&numberOfNeuronByHiddenLayer=3&learnRate=0.05&momentum=-0.05&typeOfNeuron=6"; 
+
+            HttpResponseMessage? httpResponseMessage = await 
+                HttpRequestHandler.SendRequestsToTheApi(HttpClient, urlWithBadMomentum,
+                    Method.POST);
 
             httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
@@ -49,20 +49,18 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Tests
         [Fact]
         public async Task SearchShouldBeOk()
         {
+            string url = $"{RootUrl}/{Method.GET}/{TestName}/0/10";
             await PostNeuralNetworkShouldBeOk();
-            HttpResponseMessage httpResponseMessage =
-                await HttpClient.GetAsync($"{RootUrl}/{Method.GET}/{TestName}/0/10");
-
-            httpResponseMessage.IsSuccessStatusCode.Should().BeTrue();
-            NeuralNetworksFoundViewModel? deserializedValues =
-                JsonConvert.DeserializeObject<NeuralNetworksFoundViewModel>(await httpResponseMessage.Content
-                    .ReadAsStringAsync());
-            deserializedValues.Should().NotBeNull();
-            if (deserializedValues != null)
+            NeuralNetworksFoundViewModel? viewModel = await 
+                HttpRequestHandler.SendRequestsToTheApiAndParseResponse<NeuralNetworksFoundViewModel>(HttpClient, url,
+                    Method.GET);
+            
+            viewModel.Should().NotBeNull();
+            if (viewModel != null)
             {
-                deserializedValues.NamesList.Should().NotBeNullOrEmpty();
-                deserializedValues.NamesList.Count().Should().BeGreaterThan(0);
-                deserializedValues.NamesList.Any(s => s.Contains(TestName)).Should().BeTrue();
+                viewModel.NamesList.Should().NotBeNullOrEmpty();
+                viewModel.NamesList.Count().Should().BeGreaterThan(0);
+                viewModel.NamesList.Any(s => s.Contains(TestName)).Should().BeTrue();
             }
         }
     }

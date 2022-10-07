@@ -1,49 +1,20 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Useful_training.Core.NeuralNetwork;
-using Useful_training.Core.NeuralNetwork.ValueObject;
-using Useful_training.Applicative.NeuralNetworkApi.Adapter;
-using Useful_training.Core.NeuralNetwork.NeuralNetwork;
-using Useful_training.Core.NeuralNetwork.Observer.Interfaces;
-using Useful_training.Core.NeuralNetwork.Trainers;
-using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Useful_training.Applicative.Application.UseCases.Training.Interfaces;
 
 namespace Useful_training.Applicative.NeuralNetworkApi.Hubs
 {
-    public class NeuralNetworkTrainingHub : Hub, INeuralNetworkTrainerObserver
+    public class NeuralNetworkTrainingHub : Hub
     {
-        private readonly INeuralNetworkWarehouse NeuralNetworkWarehouse;
-        private readonly IDataSetsListWarehouse DatasetListWarehouse;
-        public NeuralNetworkTrainingHub(INeuralNetworkWarehouse neuralNetworkWarehouse, IDataSetsListWarehouse datasetListWarehouse)
+        private readonly ITrainNeuralNetworkUseCase TrainNeuralNetworkUseCase;
+
+        public NeuralNetworkTrainingHub([FromServices] ITrainNeuralNetworkUseCase trainNeuralNetworkUseCase)
         {
-            NeuralNetworkWarehouse = neuralNetworkWarehouse;
-            DatasetListWarehouse = datasetListWarehouse;
+            TrainNeuralNetworkUseCase = trainNeuralNetworkUseCase;
         }
-        public void TrainNeuralNetwork(string NeuralNetworkName, string DataSetListName)
+        public void TrainNeuralNetwork(string neuralNetworkName, string dataSetListName)
         {
-            CreateWorkerAndAttacheTheClient(NeuralNetworkName, DataSetListName);
-            Clients.Caller.SendAsync("Train_finished", NeuralNetworkName);
-        }
-        private void CreateWorkerAndAttacheTheClient(string NeuralNetworkName, string DataSetListName)
-        {
-            NeuralNetworkTrainerContainerAdapter containerAdapter = new NeuralNetworkTrainerContainerAdapter();
-            containerAdapter.NeuralNetwork = NeuralNetworkWarehouse.Retrieve<NeuralNetwork>(NeuralNetworkName);
-            containerAdapter.DataSets = DatasetListWarehouse.Retrieve<List<DataSet>>(DataSetListName);
-            NeuralNetworkTrainer neuralNetworkTrainer = new NeuralNetworkTrainer(containerAdapter);
-            neuralNetworkTrainer.AttachObserver(this);
-            try
-            {
-                neuralNetworkTrainer.TrainNeuralNetwork();
-            }
-            catch (Exception e)
-            {
-                Clients.Caller.SendAsync("OnTrainError", e);
-                throw e;
-            }
-            NeuralNetworkWarehouse.Override(containerAdapter.NeuralNetwork, NeuralNetworkName);
-        }
-        public void Update(INeuralNetworkObservableData subject)
-        {
-            Clients.Caller.SendAsync("TrainIterateOnce", subject);
+            TrainNeuralNetworkUseCase.Execute(neuralNetworkName,dataSetListName,Clients.Caller);
         }
     }
 }

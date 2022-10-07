@@ -41,17 +41,16 @@ function TrainNeuralNetwork() {
         success: function (result) {
             $("#RowTemplaterContainer").html("");
             $("#meanError").width("100%");
-            for (var i = 0; i < result.length; i++) {
-                var templateCopy = $("#templateMeanError").clone();
-                var inputsAsString = result[i].inputs.map(i => i).join();
+            for (let i = 0; i < result.count; i++) {
+                const templateCopy = $("#templateMeanError").clone();
+                const inputsAsString = result.dataSets[i].inputs.map(i => i).join();
 
                 $(templateCopy.html().replace("%dataname%", inputsAsString))
                     .attr("id", "Result" +  inputsAsString.replace(",",""))
                     .appendTo("#RowTemplaterContainer");
             }
-
-            result.forEach(r => $("#RowTemplaterContainer").append(templateCopy));
-
+                       
+            
             connection.invoke("TrainNeuralNetwork", $("#NeuralNetwork_to_train_select").val(), $("#Datasets_select").val()).catch(function (err) {
                 return console.error(err.toString());
             });
@@ -65,11 +64,11 @@ function TrainNeuralNetwork() {
 
 function RefreshNeuralNetworkListSelect() {
     $.ajax({
-        url: RootApiPath + "/NeuralNetwork/get/%20/0/10000",
+        url: RootApiPath + "/NeuralNetwork/get/ /0/10000",
         type: "GET",
         contentType: "text/plain",
         success: function (result) {
-            $.each(result, function (i, item) {
+            $.each(result.namesList, function (i, item) {
                 $("#NeuralNetwork_to_train_select").append($('<option>', {
                     value: item,
                     text: item
@@ -84,11 +83,11 @@ function RefreshNeuralNetworkListSelect() {
 
 function RefreshDatasetsListSelect() {
     $.ajax({
-        url: RootApiPath + "/DataSetsList/get/%20/0/10000",
+        url: RootApiPath + "/DataSetsList/get/ /0/10000",
         type: "GET",
         contentType: "text/plain",
         success: function (result) {
-            $.each(result, function (i, item) {
+            $.each(result.nameOfTheFoundDataSets, function (i, item) {
                 $("#Datasets_select").append($('<option>', {
                     value: item,
                     text: item

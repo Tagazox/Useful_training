@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create;
+using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.Interfaces;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.ViewModels;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Get;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Get.Interfaces;
@@ -15,13 +16,13 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
     public class DataSetsListController : ControllerBase
     {
         [HttpPost("{name}", Name = "PostDataSetsList")]
-        public Task<DataSetListCreatedViewModel> Post([FromServices] CreateDataSetsListUseCase createDataSetUseCase, string name, [FromBody] List<DataSet> dataSets)
+        public Task<DataSetListCreatedViewModel> Post([FromServices] ICreateDataSetsListUseCase createDataSetUseCase, string name, [FromBody] List<DataSet> dataSets)
         {
             return createDataSetUseCase.ExecuteAsync(name,dataSets);
         }
 
         [HttpGet("{name}",Name = "GetDataSetListByName")]
-        public DataSetsListViewModel Get([FromServices] GetDataSetsListByNameUseCase getDataSetsListByName,string name)
+        public DataSetsListViewModel Get([FromServices] IGetDataSetsListByNameUseCase getDataSetsListByName,string name)
         {
             return getDataSetsListByName.Execute(name);
         }

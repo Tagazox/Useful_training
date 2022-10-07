@@ -1,10 +1,11 @@
-﻿using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.ViewModels;
+﻿using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.Interfaces;
+using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.ViewModels;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.Application.UseCases.DataSetsLists.Create;
 
-public class CreateDataSetsListUseCase
+public class CreateDataSetsListUseCase : ICreateDataSetsListUseCase
 {
     private readonly IDataSetsListWarehouse DataSetsListWarehouse;
 
@@ -26,4 +27,5 @@ public class CreateDataSetsListUseCase
         await DataSetsListWarehouse.Save(dataSets, name);
         return new DataSetListCreatedViewModel(name);
     }
+
 }

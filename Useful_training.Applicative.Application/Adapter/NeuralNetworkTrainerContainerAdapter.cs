@@ -2,7 +2,7 @@
 using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace Useful_training.Applicative.NeuralNetworkApi.Adapter
+namespace Useful_training.Applicative.Application.Adapter
 {
     public class NeuralNetworkTrainerContainerAdapter : INeuralNetworkTrainerContainer
     {
