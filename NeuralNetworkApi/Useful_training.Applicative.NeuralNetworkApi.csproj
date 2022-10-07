@@ -32,4 +32,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Saves\DataSet" />
+    <Folder Include="Saves\NeuralNetwork" />
+  </ItemGroup>
+
 </Project>
