@@ -7,7 +7,7 @@
     <RootNamespace>Useful_training.Core.NeuralNetwork</RootNamespace>
   </PropertyGroup>
 	<ItemGroup>
-		<InternalsVisibleTo Include="Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests" />
+		<InternalsVisibleTo Include="Useful_training.Core.NeuralNetwork.Tests" />
 	</ItemGroup>
 
 </Project>
