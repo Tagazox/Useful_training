@@ -6,4 +6,5 @@ namespace Useful_training.Applicative.Application.UseCases.Training.Interfaces;
 public interface ITrainNeuralNetworkUseCase : INeuralNetworkTrainerObserver
 {
     void Execute(string neuralNetworkName, string dataSetsListName, IClientProxy httpClient);
+    void Cancel();
 }

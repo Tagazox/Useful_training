@@ -1,4 +1,4 @@
-﻿var RootApiPath = "https://localhost:7223"
+﻿var RootApiPath = "https://localhost:44373"
 var connection = new signalR.HubConnectionBuilder().withUrl(RootApiPath + "/NeuralNetworkTraining").build();
 
 var chart;
@@ -25,13 +25,18 @@ function signalRSetup() {
         return console.error(err.toString());
     });
     connection.on("TrainIterateOnce", function (Data) {
-        var inputsAsString = "Result" + Data.dataSet.inputs.map(i => i).join().replace(",", "");
+        const inputsAsString = "Result" + Data.dataSet.inputs.map(i => i).join().replaceAll(",","").replaceAll(".","");
         $("#" + inputsAsString).find(".meanError").width(CalculatePercent(Data.deltasErrors) + "%");
     });
     connection.on("Train_finished", function () {
         alert("Your neural network has been train you can now use it !");
     });
 }
+
+function UpdateScale(){
+    $(".meanError").width()
+}
+
 function TrainNeuralNetwork() {
     var label;
     start = Date.now();
@@ -45,12 +50,11 @@ function TrainNeuralNetwork() {
                 const templateCopy = $("#templateMeanError").clone();
                 const inputsAsString = result.dataSets[i].inputs.map(i => i).join();
 
-                $(templateCopy.html().replace("%dataname%", inputsAsString))
-                    .attr("id", "Result" +  inputsAsString.replace(",",""))
+                $(templateCopy.html())
+                    .attr("id", "Result" +  inputsAsString.replaceAll(",","").replaceAll(".",""))
                     .appendTo("#RowTemplaterContainer");
             }
                        
-            
             connection.invoke("TrainNeuralNetwork", $("#NeuralNetwork_to_train_select").val(), $("#Datasets_select").val()).catch(function (err) {
                 return console.error(err.toString());
             });
@@ -101,17 +105,19 @@ function RefreshDatasetsListSelect() {
 }
 
 function CalculatePercent(array) {
-    var mean, total, count;
+    let mean, total, count;
     total = 0;
     count = 0;
+    
     jQuery.each(array, function (index, value) {
         total += value;
         count++;
     });
-
     mean = total / count;
 
     if (mean < 0) { mean *= -1 }
+    if(mean>1)
+        mean = 1;
     return mean * 100;
 }
 

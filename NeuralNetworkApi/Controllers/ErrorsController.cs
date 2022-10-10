@@ -3,22 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using Useful_training.Applicative.NeuralNetworkApi.ViewModel;
 using Useful_training.Infrastructure.FileManager.Exception;
 
-namespace Useful_training.Applicative.NeuralNetworkApi.Controllers
+namespace Useful_training.Applicative.NeuralNetworkApi.Controllers;
+
+[ApiExplorerSettings(IgnoreApi = true)]
+public class ErrorsController : ControllerBase
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class ErrorsController : ControllerBase
+    [Route("error")]
+    public ErrorResponse Error()
     {
-        [Route("error")]
-        public ErrorResponse Error()
-        {
-            var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            var exception = context.Error; 
-            var code = 500; 
-            if (exception is CantFindException) code = 404; 
+        IExceptionHandlerFeature? context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+        Exception? exception = context?.Error; 
+        int code = 500; 
+        if (exception is CantFindException) code = 404; 
 
-            Response.StatusCode = code;
+        Response.StatusCode = code;
 
-            return new ErrorResponse(exception);
-        }
+        return new ErrorResponse(exception);
     }
 }

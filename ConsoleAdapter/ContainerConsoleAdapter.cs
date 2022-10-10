@@ -1,21 +1,21 @@
 ﻿using System.Globalization;
-using ConsoleAdapter.Exceptions;
-using Useful_training.Core.NeuralNetwork;
+using Useful_training.Applicative.ConsoleAdapter.Exception;
 using Useful_training.Core.NeuralNetwork.Factory;
 using Useful_training.Core.NeuralNetwork.NeuralNetwork.Interfaces;
 using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
 using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace ConsoleAdapter
+namespace Useful_training.Applicative.ConsoleAdapter
 {
 	internal class ContainerConsoleAdapter : INeuralNetworkTrainerContainer
 	{
-		public INeuralNetwork NeuralNetwork { get; set; }
-		public List<DataSet> DataSets { get; set; }
-		private uint numberOfInput, numberOutput;
+		public INeuralNetwork NeuralNetwork { get; private set; }
+		public List<DataSet> DataSets { get; private set; }
+		private uint _numberOfInput, _numberOutput;
 		public ContainerConsoleAdapter()
 		{
+			
 		}
 		public void CreateDataSets()
 		{
@@ -42,10 +42,10 @@ namespace ConsoleAdapter
 					inputsHasBeenParsed = true;
 					Console.WriteLine("-----------------------------------");
 					Console.WriteLine($"Data set {i}");
-					Console.WriteLine($"Entrée (Attente de {numberOfInput} entrée(s) séparés par un espace):");
+					Console.WriteLine($"Entrée (Attente de {_numberOfInput} entrée(s) séparés par un espace):");
 					string? inputs = Console.ReadLine();
 					string[] inputsArray = inputs.Split(' ');
-					if (inputsArray.Length == numberOfInput)
+					if (inputsArray.Length == _numberOfInput)
 					{
 						inputsParsed = new double[inputsArray.Length];
 						for (int j = 0; j < inputsArray.Length; j++)
@@ -70,10 +70,10 @@ namespace ConsoleAdapter
 					outputsHasBeenParsed = true;
 					Console.WriteLine("-----------------------------------");
 					Console.WriteLine($"Data set {i}");
-					Console.WriteLine($"Sorties (Attente de {numberOutput} sorties(s) séparés par un espace):");
+					Console.WriteLine($"Sorties (Attente de {_numberOutput} sorties(s) séparés par un espace):");
 					string? outputs = Console.ReadLine();
 					string[] outputsArray = outputs.Split(' ');
-					if (outputsArray.Length == numberOutput)
+					if (outputsArray.Length == _numberOutput)
 					{
 						outputsParsed = new double[outputsArray.Length];
 						for (int j = 0; j < outputsArray.Length; j++)
@@ -112,7 +112,7 @@ namespace ConsoleAdapter
 
 			Console.WriteLine("Combien d'entrées doivent être géré par ce réseau de neurones ?");
 			string? sNumberOfInput = Console.ReadLine();
-			if (!uint.TryParse(sNumberOfInput, out numberOfInput))
+			if (!uint.TryParse(sNumberOfInput, out _numberOfInput))
 				throw new WrongInputException("Nombre d'entrées impossible à parser");
 
 			Console.WriteLine("Combien quel est le learn rate ?");
@@ -129,7 +129,7 @@ namespace ConsoleAdapter
 
 			Console.WriteLine("Combien de sorties doivent être géré par ce réseau de neurones ?");
 			string? sNumberOfOutput = Console.ReadLine();
-			if (!uint.TryParse(sNumberOfOutput, out numberOutput))
+			if (!uint.TryParse(sNumberOfOutput, out _numberOutput))
 				throw new WrongInputException("Nombre de sorties impossible à parser");
 
 			Console.WriteLine("Combien de couche cachés sont dans ce réseau de neurones ?");
@@ -151,39 +151,22 @@ namespace ConsoleAdapter
 			Console.WriteLine("     6. Swish");
 			Console.WriteLine("     7. Tanh");
 			string? sNeuronType = Console.ReadLine();
-			int parsedNeuronType;
-			if (!int.TryParse(sNeuronType, out parsedNeuronType))
+			if (!int.TryParse(sNeuronType, out int parsedNeuronType))
 				throw new WrongInputException("Type de neurones impossible à parser");
-			switch (parsedNeuronType)
+			typeOfNeurons = parsedNeuronType switch
 			{
-				case 1:
-					typeOfNeurons = NeuronType.Elu;
-					break;
-				case 2:
-					typeOfNeurons = NeuronType.LeakyRelu;
-					break;
-				case 3:
-					typeOfNeurons = NeuronType.Relu;
-					break;
-				case 4:
-					typeOfNeurons = NeuronType.SeLu;
-					break;
-				case 5:
-					typeOfNeurons = NeuronType.Sigmoid;
-					break;
-				case 6:
-					typeOfNeurons = NeuronType.Swish;
-					break;
-				case 7:
-					typeOfNeurons = NeuronType.Tanh;
-					break;
-
-				default:
-					throw new WrongInputException("Ce type de neurone n'existe pas");
-			}
+				1 => NeuronType.Elu,
+				2 => NeuronType.LeakyRelu,
+				3 => NeuronType.Relu,
+				4 => NeuronType.SeLu,
+				5 => NeuronType.Sigmoid,
+				6 => NeuronType.Swish,
+				7 => NeuronType.Tanh,
+				_ => throw new WrongInputException("Ce type de neurone n'existe pas")
+			};
 			_NeuralNetworkBuilder = new NeuralNetworkBuilder();
 			_NeuralNetworkDirector.NetworkBuilder = _NeuralNetworkBuilder;
-			_NeuralNetworkDirector.BuildComplexeNeuralNetwork(numberOfInput, learnRate, momentum,numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
+			_NeuralNetworkDirector.BuildComplexeNeuralNetwork(_numberOfInput, learnRate, momentum,_numberOutput, numberOfHiddenLayers, numberOfNeuronesByHiddenLayer, typeOfNeurons);
 			NeuralNetwork = _NeuralNetworkBuilder.GetNeuralNetwork();
 			Console.WriteLine("Réseau de neurones crée avec succès !");
 			Thread.Sleep(2000);

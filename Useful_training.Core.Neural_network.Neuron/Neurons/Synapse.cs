@@ -1,26 +1,26 @@
 ﻿using Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
 
-namespace Useful_training.Core.NeuralNetwork.Neurons
-{
-    internal class Synapse
-    {
-        public IInputNeurons InputNeuron { get; set; }
-        public INeuron OutputNeuron { get; set; }
-        public double Weight { get; set; }
-        public double WeightDelta { get; set; }
-        public Synapse(IInputNeurons inputNeuron, INeuron outputNeuron)
-        {
-            Random _rand = new Random();
-            InputNeuron = inputNeuron;
-            OutputNeuron = outputNeuron;
-            Weight = _rand.NextDouble() * 2 - 1;
+namespace Useful_training.Core.NeuralNetwork.Neurons;
 
-        }
-        internal void Reset()
-        {
-            Random _rand = new Random();
-            Weight = _rand.NextDouble() * 2 - 1;
-            WeightDelta = 0;
-        }
+internal class Synapse
+{
+    private static readonly Random Rand = new Random();
+    public IInputNeurons InputNeuron { get; }
+    public INeuron OutputNeuron { get; }
+    public double Weight { get; set; }
+    public double WeightDelta { get; set; }
+    public Synapse(IInputNeurons inputNeuron, INeuron outputNeuron)
+    {
+        Random rand = new Random();
+        InputNeuron = inputNeuron;
+        OutputNeuron = outputNeuron;
+        Weight = rand.NextDouble() * 2 - 1;
+        WeightDelta =rand.NextDouble() * 2 - 1;
+
+    }
+    internal void Reset()
+    {
+        Weight = Rand.NextDouble() * 2 - 1;
+        WeightDelta =Rand.NextDouble() * 2 - 1;
     }
 }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleAdapter.Exceptions
+﻿namespace Useful_training.Applicative.ConsoleAdapter.Exception
 {
-    public class WrongInputException : Exception
+    public class WrongInputException : System.Exception
     {
             public WrongInputException(string message) : base(message)
             {

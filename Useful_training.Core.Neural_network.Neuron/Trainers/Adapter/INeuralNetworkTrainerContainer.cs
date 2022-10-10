@@ -7,6 +7,5 @@ public interface INeuralNetworkTrainerContainer
 {
     List<DataSet> DataSets { get; }
     INeuralNetwork NeuralNetwork{ get; }
-    public void CreateNeuralNetwork();
-    public void CreateDataSets();
+
 }

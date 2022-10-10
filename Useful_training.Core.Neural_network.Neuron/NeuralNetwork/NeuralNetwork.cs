@@ -42,11 +42,14 @@ public class NeuralNetwork : INeuralNetwork
         if (_inputsLayer == null)
             throw new NeedToBeCreatedByTheBuilderException("You need to have initialized the neural network first");
         if (numberOfNeuron == 0)
-            throw new CantInitializeWithZeroNeuronException("Number of neuron need to be greater than 0, you can't create a layer with 0 neurons");
+            throw new CantInitializeWithZeroNeuronException(
+                "Number of neuron need to be greater than 0, you can't create a layer with 0 neurons");
 
         LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
         layerOfNeurons.Initialize(numberOfNeuron, typeOfNeurons,
-            LayersOfNeurons.Count == 0 ? _inputsLayer : LayersOfNeurons.Last());
+            (LayersOfNeurons.Count == 0) ? 
+                _inputsLayer : 
+                LayersOfNeurons.Last());
         LayersOfNeurons.Add(layerOfNeurons);
     }
 
@@ -70,32 +73,28 @@ public class NeuralNetwork : INeuralNetwork
 
     void INeuralNetwork.BackPropagate(List<double>? targets)
     {
-        LayersOfNeurons = LayersOfNeurons.Reverse().ToList();
-
-        ILayerOfNeurons outputLayer = LayersOfNeurons.First();
-        List<ILayerOfNeurons> hiddenLayers = LayersOfNeurons.Skip(1).ToList();
-
+        ILayerOfNeurons outputLayer = LayersOfNeurons.Last();
         if (targets == null || outputLayer.Neurons.Count != targets.Count)
             throw new ArgumentException(
                 "Targets need to have the same count as the outputs layer number of neurones");
-
         outputLayer.CalculateGradiant(targets);
-        foreach (ILayerOfNeurons layers in hiddenLayers)
+        for (int i = LayersOfNeurons.Count - 2; i <= 0; i--)
         {
-            layers.CalculateGradiant();
-            layers.UpdateWeights(LearnRate, Momentum);
+            LayersOfNeurons[i].CalculateGradiant();
+            LayersOfNeurons[i].UpdateWeights(LearnRate, Momentum);
         }
 
         outputLayer.UpdateWeights(LearnRate, Momentum);
-
-        LayersOfNeurons = LayersOfNeurons.Reverse().ToList();
     }
+
     public void Reset()
     {
         foreach (ILayerOfNeurons layer in LayersOfNeurons)
             layer.Reset();
     }
+
     #region serialization
+
     protected NeuralNetwork(SerializationInfo info, StreamingContext context)
     {
         Momentum = info.GetDouble("Momentum");
@@ -106,25 +105,31 @@ public class NeuralNetwork : INeuralNetwork
         if (layerOfNeuronsData == null)
             throw new SerializationException("You can't deserialize without layer of neurons");
 
-        foreach (var layer in layerOfNeuronsData)
+        foreach (dynamic? layer in layerOfNeuronsData)
         {
             IList<NeuronSerializedData> layerOfNeuronData =
                 layer.NeuronList.ToObject(typeof(List<NeuronSerializedData>));
             if (layerOfNeuronData == null || !layerOfNeuronData.Any())
                 throw new SerializationException("You can't deserialize without neurons data's");
             AddHiddenLayer((uint)layerOfNeuronData.Count,
-                (NeuronType)layerOfNeuronData.First().Type.GetValueOrDefault());
+                (NeuronType)layerOfNeuronData.First().Type);
 
 
             for (int i = 0; i < LayersOfNeurons.Last().Neurons.Count; i++)
             {
-                LayersOfNeurons.Last().Neurons[i].Weight = layerOfNeuronData[i].Weight ?? throw new  SerializationException("You can't deserialize without neurons weight data's");
-                LayersOfNeurons.Last().Neurons[i].WeightDelta = layerOfNeuronData[i].WeightDelta ?? throw new  SerializationException("You can't deserialize without neurons weight delta data's");
-                LayersOfNeurons.Last().Neurons[i].Bias = layerOfNeuronData[i].Bias.GetValueOrDefault();
-                LayersOfNeurons.Last().Neurons[i].BiasDelta = layerOfNeuronData[i].BiasDelta.GetValueOrDefault();
+                LayersOfNeurons.Last().Neurons[i].Weight = layerOfNeuronData[i].Weight ??
+                                                           throw new SerializationException(
+                                                               "You can't deserialize without neurons weight data's");
+                LayersOfNeurons.Last().Neurons[i].WeightDelta = layerOfNeuronData[i].WeightDelta ??
+                                                                throw new SerializationException(
+                                                                    "You can't deserialize without neurons weight delta data's");
+                LayersOfNeurons.Last().Neurons[i].Bias = layerOfNeuronData[i].Bias;
+                LayersOfNeurons.Last().Neurons[i].BiasDelta = layerOfNeuronData[i].BiasDelta;
+                LayersOfNeurons.Last().Neurons[i].Gradiant = layerOfNeuronData[i].Gradiant;
             }
         }
     }
+
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("NumberOfInput", (uint)_inputsLayer!.InputsNeurons.Count());
@@ -132,16 +137,17 @@ public class NeuralNetwork : INeuralNetwork
         info.AddValue("LearnRate", LearnRate);
         info.AddValue("LayersOfNeurons", LayersOfNeurons.ToArray());
     }
+
+    [Serializable]
     private class NeuronSerializedData
     {
-#pragma warning disable CS0649
-
-        public List<double>? Weight;
-        public List<double>? WeightDelta;
-        public double? Bias;
-        public double? BiasDelta;
-        public int? Type;
+        public List<double>? Weight { get; set; }
+        public List<double>? WeightDelta { get; set; }
+        public double Bias { get; set; }
+        public double BiasDelta { get; set; }
+        public double Gradiant { get; set; }
+        public int Type { get; set; }
     }
-#pragma warning restore CS0649
+
     #endregion
 }

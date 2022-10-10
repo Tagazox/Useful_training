@@ -4,88 +4,106 @@ using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Core.NeuralNetwork.Trainers.Interfaces;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace Useful_training.Core.NeuralNetwork.Trainers
+namespace Useful_training.Core.NeuralNetwork.Trainers;
+
+public class NeuralNetworkTrainer : INeuralNetworkTrainer
 {
-	public class NeuralNetworkTrainer : INeuralNetworkTrainer
+    private readonly INeuralNetwork _neuralNetwork;
+    private readonly List<DataSet> _dataSetsList;
+    private readonly int _epochRoundedTo;
+    private readonly IList<INeuralNetworkTrainerObserver> _observers;
+    private bool trainAbort;
+
+    public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer, int epochRoundedTo = 3)
     {
-        private readonly INeuralNetwork NeuralNetwork;
-        private readonly List<DataSet> DataSetsList;
-        private readonly int EpochRoundedTo;
-        private readonly IList<INeuralNetworkTrainerObserver> Observers;
-        public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer, int epochRoundedTo = 3)
+        trainAbort = false;
+        _epochRoundedTo = epochRoundedTo;
+        _neuralNetwork = neuralNetworkContainer.NeuralNetwork;
+        _dataSetsList = neuralNetworkContainer.DataSets;
+
+        if (_neuralNetwork == null)
+            throw new NullReferenceException("Any Neural network hasn't be found in the container");
+        if (_dataSetsList == null || !_dataSetsList.Any())
+            throw new NullReferenceException("Any data set hasn't be found in the container");
+
+        _observers = new List<INeuralNetworkTrainerObserver>();
+    }
+
+    public void TrainNeuralNetwork()
+    {
+        bool trainFinish = false;
+        Random random = new Random();
+        IList<double> resultsOfTheNeuralNetworkCalculation;
+        while (!trainFinish && !trainAbort)
         {
-            EpochRoundedTo = epochRoundedTo;
-            neuralNetworkContainer.CreateNeuralNetwork();
-            NeuralNetwork = neuralNetworkContainer.NeuralNetwork;
-            neuralNetworkContainer.CreateDataSets();
-            DataSetsList = neuralNetworkContainer.DataSets;
-
-            if (NeuralNetwork == null)
-                throw new NullReferenceException("Any Neural network hasn't be found in the container");
-            if (DataSetsList == null || !DataSetsList.Any())
-                throw new NullReferenceException("Any data set hasn't be found in the container");
-
-            Observers = new List<INeuralNetworkTrainerObserver>();
-
-
-        }
-        public void TrainNeuralNetwork()
-        {
-            bool trainFinish = false;
-            Random random = new Random();
-
-            while (!trainFinish)
+            DataSet dataSetForThisIteration = _dataSetsList[random.Next(_dataSetsList.Count)];
             {
-                DataSet dataSetForThisIteration = DataSetsList[random.Next(DataSetsList.Count)];
-
-                IList<double> resultsOfTheNeuralNetworkCalculation = NeuralNetwork.Calculate(dataSetForThisIteration.Inputs);
-                if (resultsOfTheNeuralNetworkCalculation.Any(d => double.IsNaN(d)))
-                    NeuralNetwork.Reset();
-                else
                 {
-                    NotifyObserver(new NeuralNetworkObservableData(dataSetForThisIteration, resultsOfTheNeuralNetworkCalculation));
-                    if (CalculateError(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation) < 0.001)
-                        trainFinish = VerifyIfTrainingIsFinish();
-                    if (!trainFinish)
-                        NeuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutput);
+                    resultsOfTheNeuralNetworkCalculation =
+                        _neuralNetwork.Calculate(dataSetForThisIteration.Inputs);
+                    if (resultsOfTheNeuralNetworkCalculation.Any(double.IsNaN))
+                        _neuralNetwork.Reset();
+                    else
+                    {
+                        NotifyObserver(new NeuralNetworkObservableData(dataSetForThisIteration,
+                            resultsOfTheNeuralNetworkCalculation));
+                        if (CalculateError(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation) <
+                            0.001)
+                            trainFinish = VerifyIfTrainingIsFinish();
+                        else
+                            _neuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutput);
+
+                        if (trainFinish)
+                            break;
+                    }
                 }
             }
         }
-        private double CalculateError(List<double>? targets, IList<double> results)
+    }
+
+    public void Destroy()
+    {
+        trainAbort = true;
+    }
+
+    private double CalculateError(IReadOnlyList<double> targets, IEnumerable<double> results)
+    {
+        double deltaError = results.Select((r, i) => Math.Abs(r - targets[i])).Sum();
+        return Math.Round(deltaError, _epochRoundedTo);
+    }
+
+    private bool VerifyIfTrainingIsFinish()
+    {
+        foreach (DataSet set in _dataSetsList.Take(20))
         {
-            double deltaError = 0;
-            for (int i = 0; i < results.Count; i++)
-                deltaError += Math.Abs(results[i] - targets[i]);
-            return Math.Round(deltaError, EpochRoundedTo);
-        }
-        private bool VerifyIfTrainingIsFinish()
-        {
-            foreach (DataSet set in DataSetsList.Take(20))
+            IList<double> results = _neuralNetwork.Calculate(set.Inputs);
+            if (results.Any(double.IsNaN))
             {
-                IList<double> results = NeuralNetwork.Calculate(set.Inputs);
-                if (results.Any(d => double.IsNaN(d)))
-                {
-                    NeuralNetwork.Reset();
-                    return false;
-                }
-                for (int i = 0; i < results.Count; i++)
-                    if (Math.Round(Math.Abs(results[i] - set.TargetOutput[i]), EpochRoundedTo) > 0.001)
-                        return false;
+                _neuralNetwork.Reset();
+                return false;
             }
-            return true;
+
+            if (Math.Round(CalculateError(set.TargetOutput, results), _epochRoundedTo) > 0.001)
+                return false;
         }
-        public void AttachObserver(INeuralNetworkTrainerObserver observer)
-        {
-            Observers.Add(observer);
-        }
-        public void DetachObserver(INeuralNetworkTrainerObserver observer)
-        {
-            Observers.Add(observer);
-        }
-        public void NotifyObserver(INeuralNetworkObservableData data)
-        {
-            foreach (INeuralNetworkTrainerObserver observer in Observers)
-                observer.Update(data);
-        }
+
+        return true;
+    }
+
+    public void AttachObserver(INeuralNetworkTrainerObserver observer)
+    {
+        _observers.Add(observer);
+    }
+
+    public void DetachObserver(INeuralNetworkTrainerObserver observer)
+    {
+        _observers.Add(observer);
+    }
+
+    private void NotifyObserver(INeuralNetworkObservableData data)
+    {
+        if (DateTime.Now.Ticks % 5000 != 0) return;
+        foreach (INeuralNetworkTrainerObserver observer in _observers)
+            observer.Update(data);
     }
 }

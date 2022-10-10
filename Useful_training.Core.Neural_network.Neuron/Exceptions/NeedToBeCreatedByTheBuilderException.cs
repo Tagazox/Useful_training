@@ -1,9 +1,8 @@
-﻿namespace Useful_training.Core.NeuralNetwork.Exceptions
+﻿namespace Useful_training.Core.NeuralNetwork.Exceptions;
+
+public class NeedToBeCreatedByTheBuilderException : Exception
 {
-    public class NeedToBeCreatedByTheBuilderException : Exception
+    public NeedToBeCreatedByTheBuilderException(string message) : base(message)
     {
-            public NeedToBeCreatedByTheBuilderException(string message) : base(message)
-            {
-            }
     }
 }

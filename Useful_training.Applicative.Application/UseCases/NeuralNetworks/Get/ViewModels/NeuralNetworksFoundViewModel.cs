@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Useful_training.Applicative.Application.UseCases.NeuralNetworks.Get.ViewModels;
+﻿namespace Useful_training.Applicative.Application.UseCases.NeuralNetworks.Get.ViewModels;
 
 public class NeuralNetworksFoundViewModel
 {

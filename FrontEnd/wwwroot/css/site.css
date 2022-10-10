@@ -27,7 +27,7 @@ body {
         text-shadow: 0 0 2px rgb(6 236 123 / 60%);
     }
 .meanError {
-    height: 10px;
+    height: 1px;
     box-shadow: 0 0 2px rgb(6 236 123 / 60%);
     background: #06ec7b !important;
 }

@@ -1,9 +1,8 @@
-﻿namespace Useful_training.Core.NeuralNetwork.Exceptions
+﻿namespace Useful_training.Core.NeuralNetwork.Exceptions;
+
+public class WrongInputForCalculationException : Exception
 {
-    public class WrongInputForCalculationException : Exception
+    public WrongInputForCalculationException(string message) : base(message)
     {
-            public WrongInputForCalculationException(string message) : base(message)
-            {
-            }
     }
 }

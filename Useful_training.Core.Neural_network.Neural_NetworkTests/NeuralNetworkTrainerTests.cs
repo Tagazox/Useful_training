@@ -7,93 +7,81 @@ using Useful_training.Core.NeuralNetwork.Trainers;
 using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Core.NeuralNetwork.ValueObject;
 
-namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests;
+
+public class NeuralNetworkTrainerTests
 {
-    public class NeuralNetworkTrainerTests
+    private readonly Mock<INeuralNetworkTrainerContainer> _neuralNetworkContainer;
+    private readonly List<DataSet> _dataSets;
+    private readonly uint _numberOfInput;
+    private readonly uint _numberOfOutput;
+
+    public NeuralNetworkTrainerTests()
     {
-        private readonly Mock<INeuralNetworkTrainerContainer> _neuralNetworkContainer;
-        private readonly List<DataSet> _dataSets;
-        private readonly uint _numberOfInput;
-        private readonly uint _numberOfOutput;
-        private NeuralNetworkTrainer _neuralNetworkTrainer;
+        Random rand = new Random();
+        _numberOfInput = 2;
+        _numberOfOutput = 1;
+        const int numberOfDataset = 100;
+        _neuralNetworkContainer = new Mock<INeuralNetworkTrainerContainer>();
 
-        public NeuralNetworkTrainerTests()
+        _dataSets = new List<DataSet>();
+        for (int i = 0; i < numberOfDataset; i++)
         {
-            Random rand = new Random();
-            _numberOfInput = 2;
-            _numberOfOutput = 1;
-            int numberOfDataset = 100;
-            _neuralNetworkContainer = new Mock<INeuralNetworkTrainerContainer>();
+            int input1 = rand.NextDouble() * 2 - 1 > 0 ? 1 : 0;
+            int input2 = rand.NextDouble() * 2 - 1 > 0 ? 1 : 0;
 
-            _dataSets = new List<DataSet>();
-            for (int i = 0; i < numberOfDataset; i++)
-            {
-                double input1, input2, output;
-                input1 = (rand.NextDouble() * 2 - 1) > 0 ? 1 : 0;
-                input2 = (rand.NextDouble() * 2 - 1) > 0 ? 1 : 0;
-
-                output = (input1 == 1 && input2 == 1) ? 1 : 0;
-                List<double> inputs = new List<double>() { input1, input2 };
-                List<double>? Outputs = new List<double>() { output };
-                _dataSets.Add(new DataSet(inputs, Outputs));
-            }
+            int output = input1 == 1 && input2 == 1 ? 1 : 0;
+            List<double> inputs = new List<double> { input1, input2 };
+            List<double> outputs = new List<double> { output };
+            _dataSets.Add(new DataSet(inputs, outputs));
         }
-        private void CreateNewNeuralNetwork()
+    }
+    private void CreateNewNeuralNetwork()
+    {
+        const uint numberOfNeuronesByHiddenLayer = 5;
+        const uint numberOfHiddenLayers = 3;
+        NeuralNetworkBuilder mockedNeuralNetworkBuilder = new NeuralNetworkBuilder();
+        mockedNeuralNetworkBuilder.Initialize(_numberOfInput, .005, .025);
+        mockedNeuralNetworkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayer, numberOfHiddenLayers, NeuronType.Tanh);
+        mockedNeuralNetworkBuilder.AddOutputLayers(_numberOfOutput, NeuronType.Tanh);
+        _neuralNetworkContainer.Setup(c => c.NeuralNetwork).Returns(mockedNeuralNetworkBuilder.GetNeuralNetwork());
+    }
+    [Fact]
+    public void NeuralNetworkTrainerShouldCancelGood()
+    {
+        _neuralNetworkContainer.Setup(c => c.DataSets).Returns(_dataSets);
+        CreateNewNeuralNetwork();
+        NeuralNetworkTrainer _neuralNetworkTrainer = new NeuralNetworkTrainer(_neuralNetworkContainer.Object,1);
+        Task.Run( () => {
+            Thread.Sleep(5000);
+            _neuralNetworkTrainer.Destroy();
+        } );
+        _neuralNetworkTrainer.TrainNeuralNetwork();
+
+    }
+    [Fact]
+    public void CreateNeuralNetworkTrainerShouldThrowArgumentExceptionCase1()
+    {
+        CreateNewNeuralNetwork();
+        Action trainNeuralNetwork = () =>
         {
-            uint numberOfInputNeurons = _numberOfInput;
-            uint numberOfNeuronesByHiddenLayer = 5;
-            uint numberOfHiddenLayers = 3;
-            NeuralNetworkBuilder mockedNeuralNetworkBuilder = new NeuralNetworkBuilder();
-            mockedNeuralNetworkBuilder.Initialize(numberOfInputNeurons, .005, .025);
-            mockedNeuralNetworkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayer, numberOfHiddenLayers, NeuronType.Tanh);
-            mockedNeuralNetworkBuilder.AddOutputLayers(_numberOfOutput, NeuronType.Tanh);
-            _neuralNetworkContainer.Setup(c => c.NeuralNetwork).Returns(mockedNeuralNetworkBuilder.GetNeuralNetwork());
-        }
-        [Fact]
-        public void NeuralNetworkTrainerShouldTrainNeuralNetworkGood()
+            NeuralNetworkTrainer unused = new NeuralNetworkTrainer(_neuralNetworkContainer.Object);
+        };
+
+        trainNeuralNetwork.Should().Throw<NullReferenceException>();
+    }
+    [Fact]
+    public void CreateNeuralNetworkTrainerShouldThrowArgumentExceptionCase2()
+    {
+        INeuralNetwork trainedNeuralNetwork = null!;
+        _neuralNetworkContainer.Setup(c => c.NeuralNetwork).Returns(trainedNeuralNetwork);
+        _neuralNetworkContainer.Setup(c => c.DataSets).Returns(_dataSets);
+
+        Action trainNeuralNetwork = () =>
         {
-            Debug.WriteLine("Warning: this test is currently disabled");
-            /*
-            _neuralNetworkContainer.Setup(c => c.DataSets).Returns(_dataSets);
-            CreateNewNeuralNetwork();
-            _neuralNetworkTrainer = new NeuralNetworkTrainer(_neuralNetworkContainer.Object,1);
-            _neuralNetworkTrainer.TrainNeuralNetwork();
+            NeuralNetworkTrainer unused = new NeuralNetworkTrainer(_neuralNetworkContainer.Object);
+        };
 
-            INeuralNetwork trainedNeuralNetwork = _neuralNetworkContainer.Object.NeuralNetwork;
-
-            foreach (DataSet set in _dataSets.Take(10))
-            {
-                IList<double> resultOutputs = trainedNeuralNetwork.Calculate(set.Inputs);
-                for (int i = 0; i < set.TargetOutput.Count; i++)
-                {
-                    resultOutputs[i].Should().BeApproximately(set.TargetOutput[i], 0.1);
-                }
-            }*/
-        }
-        [Fact]
-        public void CreateNeuralNetworkTrainerShouldThrowArgumentExceptionCase1()
-        {
-            CreateNewNeuralNetwork();
-            Action TrainNeuralNetwork = () =>
-            {
-                _neuralNetworkTrainer = new NeuralNetworkTrainer(_neuralNetworkContainer.Object);
-            };
-
-            TrainNeuralNetwork.Should().Throw<NullReferenceException>();
-        }
-        [Fact]
-        public void CreateNeuralNetworkTrainerShouldThrowArgumentExceptionCase2()
-        {
-            INeuralNetwork TrainedNeuralNetwork = null;
-            _neuralNetworkContainer.Setup(c => c.NeuralNetwork).Returns(TrainedNeuralNetwork);
-            _neuralNetworkContainer.Setup(c => c.DataSets).Returns(_dataSets);
-
-            Action TrainNeuralNetwork = () =>
-            {
-                _neuralNetworkTrainer = new NeuralNetworkTrainer(_neuralNetworkContainer.Object);
-            };
-
-            TrainNeuralNetwork.Should().Throw<NullReferenceException>();
-        }
+        trainNeuralNetwork.Should().Throw<NullReferenceException>();
     }
 }

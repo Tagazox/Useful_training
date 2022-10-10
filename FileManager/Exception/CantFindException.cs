@@ -1,9 +1,8 @@
-﻿namespace Useful_training.Infrastructure.FileManager.Exception
+﻿namespace Useful_training.Infrastructure.FileManager.Exception;
+
+public class CantFindException : System.Exception
 {
-    public class CantFindException : System.Exception
+    public CantFindException(string message) : base(message)
     {
-            public CantFindException(string message) : base(message)
-            {
-            }
     }
 }

@@ -1,9 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-using ConsoleAdapter;
-using Useful_training.Core.NeuralNetwork;
+﻿using Useful_training.Applicative.ConsoleAdapter;
 using Useful_training.Core.NeuralNetwork.Trainers;
-
-Console.WriteLine("Hello, World!");
 
 ContainerConsoleAdapter containerConsoleAdapter = new ContainerConsoleAdapter();
 

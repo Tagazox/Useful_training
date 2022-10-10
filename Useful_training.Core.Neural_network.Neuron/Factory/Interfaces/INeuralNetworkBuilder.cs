@@ -12,5 +12,6 @@ public interface INeuralNetworkBuilder
     public void AddHiddenLayers(uint numberOfNeuronesByLayers, uint numberOfHiddenLayers, NeuronType typeOfNeurons);
     public void AddOutputLayers(uint numberOfOutputs, NeuronType typeOfNeurons);
     public NeuralNetwork.NeuralNetwork GetNeuralNetwork();
+    // ReSharper disable once UnusedMember.Global
     public void Reset();
 }

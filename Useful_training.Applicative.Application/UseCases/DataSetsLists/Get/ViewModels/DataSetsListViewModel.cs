@@ -1,4 +1,6 @@
 ﻿using Useful_training.Core.NeuralNetwork.ValueObject;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Useful_training.Applicative.Application.UseCases.DataSetsLists.Get.ViewModels;
 

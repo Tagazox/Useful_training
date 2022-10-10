@@ -4,143 +4,142 @@ using Useful_training.Core.NeuralNetwork.Neurons;
 using Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
 using Useful_training.Core.NeuralNetwork.Neurons.Type;
 
-namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests
+namespace Useful_training.Core.NeuralNetwork.NeuralNetwork.Tests;
+
+public class NeuronsTests
 {
-	public class NeuronsTests
+	private uint _numberOfInputs;
+	private double _inputsValue;
+	private readonly IList<INeuron> _neuronsToTest;
+	public NeuronsTests()
 	{
-		uint NumberOfInputs;
-		double Inputsvalue;
-		IList<INeuron> NeuronsToTest;
-		public NeuronsTests()
-		{
-			IList<IInputNeurons> InputsNeurons = MockInputNeuronsList();
+		IList<IInputNeurons> inputsNeurons = MockInputNeuronsList();
 
-			NeuronsToTest = new List<INeuron>();
-			NeuronsToTest.Add(new EluNeuron(InputsNeurons));
-			NeuronsToTest.Add(new LeakyReLuNeuron(InputsNeurons));
-			NeuronsToTest.Add(new ReLuNeuron(InputsNeurons));
-			NeuronsToTest.Add(new SeLuNeuron(InputsNeurons));
-			NeuronsToTest.Add(new SigmoidNeuron(InputsNeurons));
-			NeuronsToTest.Add(new SwishNeuron(InputsNeurons));
-			NeuronsToTest.Add(new TanhNeuron(InputsNeurons));
-		}
-		private IList<IInputNeurons> MockInputNeuronsList()
+		_neuronsToTest = new List<INeuron>();
+		_neuronsToTest.Add(new EluNeuron(inputsNeurons));
+		_neuronsToTest.Add(new LeakyReLuNeuron(inputsNeurons));
+		_neuronsToTest.Add(new ReLuNeuron(inputsNeurons));
+		_neuronsToTest.Add(new SeLuNeuron(inputsNeurons));
+		_neuronsToTest.Add(new SigmoidNeuron(inputsNeurons));
+		_neuronsToTest.Add(new SwishNeuron(inputsNeurons));
+		_neuronsToTest.Add(new TanhNeuron(inputsNeurons));
+	}
+	private IList<IInputNeurons> MockInputNeuronsList()
+	{
+		IList<IInputNeurons> inputsNeurons = new List<IInputNeurons>();
+		_numberOfInputs = 5;
+		_inputsValue = 1;
+		for (int i = 0; i < _numberOfInputs; i++)
 		{
-			IList<IInputNeurons> InputsNeurons = new List<IInputNeurons>();
-			NumberOfInputs = 5;
-			Inputsvalue = 1;
-			for (int i = 0; i < NumberOfInputs; i++)
-			{
-				Mock<IInputNeurons> mockedInputNeuron = new Mock<IInputNeurons>();
-				mockedInputNeuron.Setup(i => i.OutputResult).Returns(Inputsvalue);
-				mockedInputNeuron.Setup(i => i.OutputSynapses).Returns(new List<Synapse>());
-				InputsNeurons.Add(mockedInputNeuron.Object);
-			}
-			return InputsNeurons;
+			Mock<IInputNeurons> mockedInputNeuron = new Mock<IInputNeurons>();
+			mockedInputNeuron.Setup(inputNeurons => inputNeurons.OutputResult).Returns(_inputsValue);
+			mockedInputNeuron.Setup(inputNeurons => inputNeurons.OutputSynapses).Returns(new List<Synapse>());
+			inputsNeurons.Add(mockedInputNeuron.Object);
 		}
-		[Fact]
-		public void NeuroneGetCalculationResultShouldBeOk()
+		return inputsNeurons;
+	}
+	[Fact]
+	public void NeuroneGetCalculationResultShouldBeOk()
+	{
+		foreach (INeuron neuron in _neuronsToTest)
 		{
-			foreach (INeuron neuron in NeuronsToTest)
-			{
-				neuron.GetCalculationResult();
-				neuron.OutputResult.Should().BeInRange(-100,100);
-			}
+			neuron.GetCalculationResult();
+			neuron.OutputResult.Should().BeInRange(-100,100);
 		}
-		[Fact]
-		public void NeuroneCalculateGradiantShouldBeOk()
+	}
+	[Fact]
+	public void NeuroneCalculateGradiantShouldBeOk()
+	{
+		foreach (INeuron neuron in _neuronsToTest)
 		{
-			foreach (INeuron neuron in NeuronsToTest)
-			{
-				neuron.GetCalculationResult();
-				neuron.CalculateGradient(Inputsvalue);
-				neuron.Gradiant.Should().NotBe(0);
-			}
+			neuron.GetCalculationResult();
+			neuron.CalculateGradient(_inputsValue);
+			neuron.Gradiant.Should().NotBe(0);
 		}
-		[Fact]
-		public void NeuroneCloneShouldBeOk()
+	}
+	[Fact]
+	public void NeuroneCloneShouldBeOk()
+	{
+		foreach (INeuron neuron in _neuronsToTest)
 		{
-			foreach (INeuron neuron in NeuronsToTest)
-			{
-				neuron.GetCalculationResult();
-				INeuron neuronCloned = neuron.Clone();
-				neuronCloned.GetCalculationResult();
-				neuron.OutputResult.Should().Be(neuronCloned.OutputResult);
-			}
+			neuron.GetCalculationResult();
+			INeuron neuronCloned = neuron.Clone();
+			neuronCloned.GetCalculationResult();
+			neuron.OutputResult.Should().Be(neuronCloned.OutputResult);
 		}
-		[Fact]
-		public void NeuroneUpdateWeightShouldBeOk()
+	}
+	[Fact]
+	public void NeuroneUpdateWeightShouldBeOk()
+	{
+		foreach (INeuron neuron in _neuronsToTest)
 		{
-			foreach (INeuron neuron in NeuronsToTest)
-			{
-				neuron.GetCalculationResult();
-				double calculationResult = neuron.OutputResult;
-				neuron.CalculateGradient(Inputsvalue);
-				neuron.UpdateWeights(1, 0.5);
-				neuron.GetCalculationResult();
-				neuron.OutputResult.Should().NotBe(calculationResult);
-			}
+			neuron.GetCalculationResult();
+			double calculationResult = neuron.OutputResult;
+			neuron.CalculateGradient(_inputsValue);
+			neuron.UpdateWeights(1, 0.5);
+			neuron.GetCalculationResult();
+			neuron.OutputResult.Should().NotBe(calculationResult);
 		}
-		[Fact]
-		public void NeuroneUpdateWeightShouldThrowCantArgumentException()
+	}
+	[Fact]
+	public void NeuroneUpdateWeightShouldThrowCantArgumentException()
+	{
+		foreach (INeuron neuron in _neuronsToTest)
 		{
-			foreach (INeuron neuron in NeuronsToTest)
+			neuron.GetCalculationResult();
+			neuron.CalculateGradient(_inputsValue);
+			Action updateWeightsCase1 = () =>
 			{
-				neuron.GetCalculationResult();
-				double calculationResult = neuron.OutputResult;
-				neuron.CalculateGradient(Inputsvalue);
-				Action UpdateWeightsCase1 = () =>
-				{
-					neuron.UpdateWeights(-1, 0.5);
-				};
-				Action UpdateWeightsCase2 = () =>
-				{
-					neuron.UpdateWeights(1, -0.5);
-				};
-				UpdateWeightsCase1.Should().Throw<ArgumentException>();
-				UpdateWeightsCase2.Should().Throw<ArgumentException>();
+				neuron.UpdateWeights(-1, 0.5);
+			};
+			Action updateWeightsCase2 = () =>
+			{
+				neuron.UpdateWeights(1, -0.5);
+			};
+			updateWeightsCase1.Should().Throw<ArgumentException>();
+			updateWeightsCase2.Should().Throw<ArgumentException>();
 
-			}
 		}
-		[Fact]
-		public void NeuroneCreationShouldThrowCantInitializeWithZeroInputException()
+	}
+	[Fact]
+	public void NeuroneCreationShouldThrowCantInitializeWithZeroInputException()
+	{
+		// ReSharper disable once CollectionNeverUpdated.Local
+		IList<IInputNeurons> badInputsNeurons = new List<IInputNeurons>();
+		Action creationCase1 = () =>
 		{
-			IList<IInputNeurons> InputsNeurons = new List<IInputNeurons>();
-			Action CreationCase1 = () =>
-			{
-				INeuron neuron = new EluNeuron(InputsNeurons);
-			};
-			Action CreationCase2 = () =>
-			{
-				INeuron neuron = new LeakyReLuNeuron(InputsNeurons);
-			};
-			Action CreationCase3 = () =>
-			{
-				INeuron neuron = new ReLuNeuron(InputsNeurons);
-			};
-			Action CreationCase4 = () =>
-			{
-				INeuron neuron = new SeLuNeuron(InputsNeurons);
-			};
-			Action CreationCase5 = () =>
-			{
-				INeuron neuron = new SigmoidNeuron(InputsNeurons);
-			};
-			Action CreationCase6 = () =>
-			{
-				INeuron neuron = new SwishNeuron(InputsNeurons);
-			};
-			Action CreationCase7 = () =>
-			{
-				INeuron neuron = new TanhNeuron(InputsNeurons);
-			};
-			CreationCase1.Should().Throw<CantInitializeWithZeroInputException>();
-			CreationCase2.Should().Throw<CantInitializeWithZeroInputException>();
-			CreationCase3.Should().Throw<CantInitializeWithZeroInputException>();
-			CreationCase4.Should().Throw<CantInitializeWithZeroInputException>();
-			CreationCase5.Should().Throw<CantInitializeWithZeroInputException>();
-			CreationCase6.Should().Throw<CantInitializeWithZeroInputException>();
-			CreationCase7.Should().Throw<CantInitializeWithZeroInputException>();
-		}
+			INeuron unused = new EluNeuron(badInputsNeurons);
+		};
+		Action creationCase2 = () =>
+		{
+			INeuron unused = new LeakyReLuNeuron(badInputsNeurons);
+		};
+		Action creationCase3 = () =>
+		{
+			INeuron unused = new ReLuNeuron(badInputsNeurons);
+		};
+		Action creationCase4 = () =>
+		{
+			INeuron unused = new SeLuNeuron(badInputsNeurons);
+		};
+		Action creationCase5 = () =>
+		{
+			INeuron unused = new SigmoidNeuron(badInputsNeurons);
+		};
+		Action creationCase6 = () =>
+		{
+			INeuron unused = new SwishNeuron(badInputsNeurons);
+		};
+		Action creationCase7 = () =>
+		{
+			INeuron unused = new TanhNeuron(badInputsNeurons);
+		};
+		creationCase1.Should().Throw<CantInitializeWithZeroInputException>();
+		creationCase2.Should().Throw<CantInitializeWithZeroInputException>();
+		creationCase3.Should().Throw<CantInitializeWithZeroInputException>();
+		creationCase4.Should().Throw<CantInitializeWithZeroInputException>();
+		creationCase5.Should().Throw<CantInitializeWithZeroInputException>();
+		creationCase6.Should().Throw<CantInitializeWithZeroInputException>();
+		creationCase7.Should().Throw<CantInitializeWithZeroInputException>();
 	}
 }

@@ -1,4 +1,6 @@
 ﻿using Useful_training.Core.NeuralNetwork.ValueObject;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
 namespace Useful_training.Core.NeuralNetwork.Observer.Interfaces;
 

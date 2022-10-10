@@ -1,9 +1,8 @@
-﻿namespace Useful_training.Core.NeuralNetwork.Exceptions
+﻿namespace Useful_training.Core.NeuralNetwork.Exceptions;
+
+public class BadInputLayerException : Exception
 {
-    public class BadInputLayerException : Exception
+    public BadInputLayerException(string message) : base(message)
     {
-            public BadInputLayerException(string message) : base(message)
-            {
-            }
     }
 }

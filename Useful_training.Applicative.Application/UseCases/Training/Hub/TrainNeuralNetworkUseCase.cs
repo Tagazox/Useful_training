@@ -6,50 +6,58 @@ using Useful_training.Core.NeuralNetwork.Observer.Interfaces;
 using Useful_training.Core.NeuralNetwork.Trainers;
 using Useful_training.Core.NeuralNetwork.Trainers.Interfaces;
 using Useful_training.Core.NeuralNetwork.ValueObject;
-using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
+using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.Application.UseCases.Training.Hub;
 
 public class TrainNeuralNetworkUseCase : ITrainNeuralNetworkUseCase
 {
-    private readonly INeuralNetworkWarehouse NeuralNetworkWarehouse;
-    private readonly IDataSetsListWarehouse DatasetListWarehouse;
+    private readonly INeuralNetworkWarehouse _neuralNetworkWarehouse;
+    private readonly IDataSetsListWarehouse _datasetListWarehouse;
+    private INeuralNetworkTrainer _neuralNetworkTrainer;
+    private IClientProxy? _httpClient;
 
-    private IClientProxy? HttpClient;
-    
-    public TrainNeuralNetworkUseCase(INeuralNetworkWarehouse neuralNetworkWarehouse, IDataSetsListWarehouse datasetListWarehouse)
+    public TrainNeuralNetworkUseCase(INeuralNetworkWarehouse neuralNetworkWarehouse,
+        IDataSetsListWarehouse datasetListWarehouse)
     {
-        NeuralNetworkWarehouse = neuralNetworkWarehouse;
-        DatasetListWarehouse = datasetListWarehouse;
+        _neuralNetworkWarehouse = neuralNetworkWarehouse;
+        _datasetListWarehouse = datasetListWarehouse;
     }
 
     public void Execute(string neuralNetworkName, string dataSetsListName, IClientProxy httpClient)
     {
-        HttpClient = httpClient;
-        NeuralNetworkTrainerContainerAdapter containerAdapter = new NeuralNetworkTrainerContainerAdapter();
+        _httpClient = httpClient;
+        NeuralNetworkTrainerContainerAdapter containerAdapter = new NeuralNetworkTrainerContainerAdapter
+        (
+            _datasetListWarehouse.Retrieve<List<DataSet>>(dataSetsListName),
+            _neuralNetworkWarehouse.Retrieve<NeuralNetwork>(neuralNetworkName)
+        );
 
-        containerAdapter.NeuralNetwork = NeuralNetworkWarehouse.Retrieve<NeuralNetwork>(neuralNetworkName);
-        containerAdapter.DataSets =DatasetListWarehouse.Retrieve<List<DataSet>>(dataSetsListName);
-        
-        NeuralNetworkTrainer neuralNetworkTrainer = new NeuralNetworkTrainer(containerAdapter);
-        neuralNetworkTrainer.AttachObserver(this);
-        
+        _neuralNetworkTrainer = new NeuralNetworkTrainer(containerAdapter);
+        _neuralNetworkTrainer.AttachObserver(this);
+
         try
         {
-            neuralNetworkTrainer.TrainNeuralNetwork();
+            _neuralNetworkTrainer.TrainNeuralNetwork();
         }
         catch (Exception e)
         {
-            HttpClient.SendAsync("OnTrainError", e);
+            _httpClient.SendAsync("OnTrainError", e);
             throw;
-        } 
-        
-        NeuralNetworkWarehouse.Override(containerAdapter.NeuralNetwork, neuralNetworkName);
+        }
+
+        _neuralNetworkTrainer.DetachObserver(this);
+        _neuralNetworkWarehouse.Override(containerAdapter.NeuralNetwork, neuralNetworkName);
+        _httpClient?.SendAsync("Train_finished");
+    }
+
+    public void Cancel()
+    {
+        _neuralNetworkTrainer.Destroy();
     }
 
     public void Update(INeuralNetworkObservableData subject)
     {
-        HttpClient?.SendAsync("TrainIterateOnce", subject);
+        _httpClient?.SendAsync("TrainIterateOnce", subject);
     }
-
 }

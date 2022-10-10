@@ -6,123 +6,132 @@ using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Infrastructure.FileManager.Exception;
 using Useful_training.Infrastructure.FileManager.Warehouse;
 
-namespace Useful_training.Infrastructure.FileManagerTests
+namespace Useful_training.Infrastructure.FileManagerTests;
+
+public class NeuralNetworkFileWarehouseTests
 {
-	public class NeuralNetworkFileWarehouseTests
-	{
-		private NeuralNetworkFileWarehouse TestSubject;
-		private Mock<INeuralNetworkTrainerContainer> NeuralNetworkTrainerContainerMocked;
-		private List<double> Inputs;
-		private string NameOfTheNeuralNetwork;
-		public NeuralNetworkFileWarehouseTests()
-		{
-			NeuralNetworkTrainerContainerMocked = new Mock<INeuralNetworkTrainerContainer>();
-			TestSubject = new NeuralNetworkFileWarehouse("testPath\\");
-			NameOfTheNeuralNetwork = Guid.NewGuid().ToString();
-			CreateNewNeuralNetwork();
-		}
-		private void CreateNewNeuralNetwork()
-		{
-			Inputs = new List<double> { 1, 0 };
-			uint numberOfInput = 2;
-			uint numberOfOutput = 2;
-			uint numberOfInputNeurons = numberOfInput;
-			uint numberOfNeuronesByHiddenLayerOutput = 5;
-			uint numberOfHiddenLayers = 3;
-			NeuralNetworkBuilder MockedNeuralNetworkBuilder = new NeuralNetworkBuilder();
-			MockedNeuralNetworkBuilder.Initialize(numberOfInputNeurons, .005, 0.025);
-			MockedNeuralNetworkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayerOutput, numberOfHiddenLayers, NeuronType.Tanh);
-			MockedNeuralNetworkBuilder.AddOutputLayers(numberOfOutput, NeuronType.Tanh);
-			NeuralNetworkTrainerContainerMocked.Setup(c => c.NeuralNetwork).Returns(MockedNeuralNetworkBuilder.GetNeuralNetwork());
-		}
+    private readonly NeuralNetworkFileWarehouse _testSubject;
+    private readonly Mock<INeuralNetworkTrainerContainer> _neuralNetworkTrainerContainerMocked;
+    private readonly List<double> _inputs;
+    private readonly string _nameOfTheNeuralNetwork;
 
-		[Fact]
-		public void SaveShouldBeGood()
-		{
-			Action Save = () =>
-			{
-				TestSubject.Save(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, NameOfTheNeuralNetwork).Wait();
-			};
-			Save.Should().NotThrow();
-		}
+    public NeuralNetworkFileWarehouseTests()
+    {
+        _neuralNetworkTrainerContainerMocked = new Mock<INeuralNetworkTrainerContainer>();
+        _testSubject = new NeuralNetworkFileWarehouse("testPath\\");
+        _nameOfTheNeuralNetwork = Guid.NewGuid().ToString();
+        _inputs = new List<double> { 1, 0 };
 
-		[Fact]
-		public void RetreiveShouldBeGood()
-		{
-			SaveShouldBeGood();
-			INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<NeuralNetwork>(NameOfTheNeuralNetwork);
-			neuralNetRecovred.Calculate(Inputs).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(Inputs));
-		}
-		[Fact]
-		public void OverrideShouldBeGood()
-		{
-			SaveShouldBeGood();
+        CreateNewNeuralNetwork();
+    }
 
-			INeuralNetwork oldSavedNeuralNetwork = NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork;
+    private void CreateNewNeuralNetwork()
+    {
+        const uint numberOfInput = 2;
+        const uint numberOfOutput = 2;
+        const uint numberOfNeuronesByHiddenLayerOutput = 5;
+        const uint numberOfHiddenLayers = 3;
+        NeuralNetworkBuilder mockedNeuralNetworkBuilder = new NeuralNetworkBuilder();
+        mockedNeuralNetworkBuilder.Initialize(numberOfInput, .005, 0.025);
+        mockedNeuralNetworkBuilder.AddHiddenLayers(numberOfNeuronesByHiddenLayerOutput, numberOfHiddenLayers,
+            NeuronType.Tanh);
+        mockedNeuralNetworkBuilder.AddOutputLayers(numberOfOutput, NeuronType.Tanh);
+        _neuralNetworkTrainerContainerMocked.Setup(c => c.NeuralNetwork)
+            .Returns(mockedNeuralNetworkBuilder.GetNeuralNetwork());
+    }
 
-			CreateNewNeuralNetwork();
-			TestSubject.Override(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, NameOfTheNeuralNetwork).Wait();
+    [Fact]
+    public void SaveShouldBeGood()
+    {
+        Action save = () =>
+        {
+            _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork, _nameOfTheNeuralNetwork)
+                .Wait();
+        };
+        save.Should().NotThrow();
+    }
 
-			INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<NeuralNetwork>(NameOfTheNeuralNetwork);
+    [Fact]
+    public void RetrieveShouldBeGood()
+    {
+        SaveShouldBeGood();
+        INeuralNetwork neuralNetRecovered = _testSubject.Retrieve<NeuralNetwork>(_nameOfTheNeuralNetwork);
+        neuralNetRecovered.Calculate(_inputs).Should()
+            .BeEquivalentTo(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(_inputs));
+    }
 
-			oldSavedNeuralNetwork.Should().NotBeSameAs(neuralNetRecovred);
-			neuralNetRecovred.Calculate(Inputs).Should().BeEquivalentTo(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(Inputs));
-		}
-		[Fact]
-		public void SearchNeuralNetworkAvailableShouldBeGood()
-		{
-			string modifiedDataSetName = NameOfTheNeuralNetwork;
-			string BaseName = modifiedDataSetName;
-			string searchTerm = "abc";
+    [Fact]
+    public void OverrideShouldBeGood()
+    {
+        SaveShouldBeGood();
 
-			for (int i = 0; i < 10; i++)
-			{
-				modifiedDataSetName += searchTerm;
-				TestSubject.Save(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, modifiedDataSetName).Wait();
-			}
-			for (int i = 0; i < 10; i++)
-				TestSubject.SearchAvailable(BaseName, 0, i).Count().Should().Be(i);
-		}
+        INeuralNetwork oldSavedNeuralNetwork = _neuralNetworkTrainerContainerMocked.Object.NeuralNetwork;
 
-		[Fact]
-		public void SaveShouldThrowAlreadyExistException()
-		{
-			TestSubject.Save(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, NameOfTheNeuralNetwork).Wait();
+        CreateNewNeuralNetwork();
+        _testSubject.Override(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork, _nameOfTheNeuralNetwork)
+            .Wait();
 
-			Action Save = () =>
-			{
-				TestSubject.Save(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, NameOfTheNeuralNetwork).Wait();
-			};
-			Save.Should().Throw<AlreadyExistException>();
-		}
-		[Fact]
-		public void RetreiveShouldThrowCantFindNeuralNetworkException()
-		{
-			string nameOfTheNonExistantNeuralNetwork = Guid.NewGuid().ToString();
-			Action Save = () =>
-			{
-				INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<NeuralNetwork>(nameOfTheNonExistantNeuralNetwork);
-			};
-			Save.Should().Throw<CantFindException>();
-		}
-		[Fact]
-		public void OverrideShouldThrowCantFindException()
-		{
-			string nameOfTheNonExistantNeuralNetwork = Guid.NewGuid().ToString();
-			Action Override = () =>
-			{
-				TestSubject.Override(NeuralNetworkTrainerContainerMocked.Object.NeuralNetwork, nameOfTheNonExistantNeuralNetwork).Wait();
-			};
-			Override.Should().Throw<CantFindException>();
-		}
-		[Fact]
-		public void RetreiveShouldThrowInvalidCastException()
-		{
-			Action Save = () =>
-			{
-				INeuralNetwork neuralNetRecovred = TestSubject.Retrieve<INeuralNetwork>(NameOfTheNeuralNetwork);
-			};
-			Save.Should().Throw<InvalidCastException>();
-		}
-	}
+        INeuralNetwork neuralNetRecovered = _testSubject.Retrieve<NeuralNetwork>(_nameOfTheNeuralNetwork);
+
+        oldSavedNeuralNetwork.Should().NotBeSameAs(neuralNetRecovered);
+        neuralNetRecovered.Calculate(_inputs).Should()
+            .BeEquivalentTo(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork.Calculate(_inputs));
+    }
+
+    [Fact]
+    public void SearchNeuralNetworkAvailableShouldBeGood()
+    {
+        string modifiedDataSetName = _nameOfTheNeuralNetwork;
+        string baseName = modifiedDataSetName;
+        const string searchTerm = "abc";
+
+        for (int i = 0; i < 10; i++)
+        {
+            modifiedDataSetName += searchTerm;
+            _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork, modifiedDataSetName).Wait();
+        }
+
+        for (int i = 0; i < 10; i++)
+            _testSubject.SearchAvailable(baseName, 0, i).Count().Should().Be(i);
+    }
+
+    [Fact]
+    public void SaveShouldThrowAlreadyExistException()
+    {
+        _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork, _nameOfTheNeuralNetwork).Wait();
+
+        Action save = () =>
+        {
+            _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork, _nameOfTheNeuralNetwork)
+                .Wait();
+        };
+        save.Should().Throw<AlreadyExistException>();
+    }
+
+    [Fact]
+    public void RetrieveShouldThrowCantFindNeuralNetworkException()
+    {
+        string nameOfTheNonExistentNeuralNetwork = Guid.NewGuid().ToString();
+        Action save = () => { _testSubject.Retrieve<NeuralNetwork>(nameOfTheNonExistentNeuralNetwork); };
+        save.Should().Throw<CantFindException>();
+    }
+
+    [Fact]
+    public void OverrideShouldThrowCantFindException()
+    {
+        string nameOfTheNonExtantNeuralNetwork = Guid.NewGuid().ToString();
+        Action @override = () =>
+        {
+            _testSubject.Override(_neuralNetworkTrainerContainerMocked.Object.NeuralNetwork,
+                nameOfTheNonExtantNeuralNetwork).Wait();
+        };
+        @override.Should().Throw<CantFindException>();
+    }
+
+    [Fact]
+    public void RetrieveShouldThrowInvalidCastException()
+    {
+        Action save = () => { _testSubject.Retrieve<INeuralNetwork>(_nameOfTheNeuralNetwork); };
+        save.Should().Throw<InvalidCastException>();
+    }
 }

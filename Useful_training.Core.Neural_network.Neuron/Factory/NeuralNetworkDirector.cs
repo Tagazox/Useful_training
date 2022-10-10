@@ -19,7 +19,7 @@ public class NeuralNetworkDirector
         _networkBuilder.AddOutputLayers(numberOfOutputs, typeOfNeurons);
     }
 
-    public void BuildComplexeNeuralNetwork(uint numberOfInput, double learnRate, double momentum, uint numberOfOutputs,
+    public void BuildComplexNeuralNetwork(uint numberOfInput, double learnRate, double momentum, uint numberOfOutputs,
         uint numberOfHiddenLayers, uint numberOfNeuronesByHiddenLayer, NeuronType typeOfNeurons)
     {
         if (_networkBuilder == null)
@@ -29,7 +29,7 @@ public class NeuralNetworkDirector
         _networkBuilder.AddOutputLayers(numberOfOutputs, typeOfNeurons);
     }
 
-    public void BuildComplexeNeuralNetwork(uint numberOfInput, double learnRate, double momentum, uint numberOfOutputs,
+    public void BuildComplexNeuralNetwork(uint numberOfInput, double learnRate, double momentum, uint numberOfOutputs,
         uint numberOfHiddenLayers, List<uint> numbersOfNeuronesByHiddenLayer, NeuronType typeOfNeurons)
     {
         if (_networkBuilder == null)

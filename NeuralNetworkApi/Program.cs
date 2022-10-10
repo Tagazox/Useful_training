@@ -1,6 +1,6 @@
 using Useful_training.Applicative.Application.Adapter;
-using Useful_training.Applicative.NeuralNetworkApi;
 using Useful_training.Applicative.NeuralNetworkApi.Hubs;
+using Useful_training.Presentation.NeuralNetworkApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("https://localhost:7096")
+            policy.WithOrigins("https://localhost:44331")
                 .AllowAnyHeader()
                 .WithMethods("GET", "POST")
                 .AllowCredentials();

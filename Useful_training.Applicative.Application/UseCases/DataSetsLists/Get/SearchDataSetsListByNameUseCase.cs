@@ -1,21 +1,21 @@
 ﻿using Useful_training.Applicative.Application.UseCases.DataSetsLists.Get.Interfaces;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Get.ViewModels;
-using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
+using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.Application.UseCases.DataSetsLists.Get;
 
 public class SearchDataSetsListByNameUseCase : ISearchDataSetsListByNameUseCase
 {
-    private readonly IDataSetsListWarehouse DataSetsListWarehouse;
+    private readonly IDataSetsListWarehouse _dataSetsListWarehouse;
 
     public SearchDataSetsListByNameUseCase(IDataSetsListWarehouse dataSetsListWarehouse)
     {
-        DataSetsListWarehouse = dataSetsListWarehouse;
+        _dataSetsListWarehouse = dataSetsListWarehouse;
     }
 
     public DataSetsAvailableViewModel Execute(string? like,int start=0,int count=10)
     {
-        return new DataSetsAvailableViewModel(DataSetsListWarehouse.SearchAvailable(like ?? "", start, count)
-            .Select(p => Path.GetFileNameWithoutExtension(p) ?? ""));
+        return new DataSetsAvailableViewModel(_dataSetsListWarehouse.SearchAvailable(like ?? "", start, count)
+            .Select(Path.GetFileNameWithoutExtension)!);
     }
 }

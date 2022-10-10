@@ -7,5 +7,5 @@ public class DataSetListCreatedViewModel
         DataSetsListName = dataSetsListName;
     }
 
-    public string DataSetsListName { get; set; }
+    public string DataSetsListName { get; }
 }

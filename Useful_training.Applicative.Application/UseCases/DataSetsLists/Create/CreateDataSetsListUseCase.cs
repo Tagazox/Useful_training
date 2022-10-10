@@ -1,17 +1,17 @@
 ﻿using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.Interfaces;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.ViewModels;
 using Useful_training.Core.NeuralNetwork.ValueObject;
-using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
+using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.Application.UseCases.DataSetsLists.Create;
 
 public class CreateDataSetsListUseCase : ICreateDataSetsListUseCase
 {
-    private readonly IDataSetsListWarehouse DataSetsListWarehouse;
+    private readonly IDataSetsListWarehouse _dataSetsListWarehouse;
 
     public CreateDataSetsListUseCase(IDataSetsListWarehouse dataSetsListWarehouse)
     {
-        DataSetsListWarehouse = dataSetsListWarehouse;
+        _dataSetsListWarehouse = dataSetsListWarehouse;
     }
 
     public async Task<DataSetListCreatedViewModel> ExecuteAsync(string name, List<DataSet> dataSets)
@@ -24,7 +24,7 @@ public class CreateDataSetsListUseCase : ICreateDataSetsListUseCase
             throw new ArgumentException("Outputs need to always have the same count of data");
         if(dataSets.Select(d => d.Inputs).Distinct().Count() != dataSets.Count)
             throw new ArgumentException("You cannot have duplicate input");
-        await DataSetsListWarehouse.Save(dataSets, name);
+        await _dataSetsListWarehouse.Save(dataSets, name);
         return new DataSetListCreatedViewModel(name);
     }
 

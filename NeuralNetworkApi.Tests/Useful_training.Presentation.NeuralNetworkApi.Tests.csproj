@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Useful_training.Applicative.NeuralNetworkApi.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NeuralNetworkApi\Useful_training.Applicative.NeuralNetworkApi.csproj" />
+    <ProjectReference Include="..\NeuralNetworkApi\Useful_training.Presentation.NeuralNetworkApi.csproj" />
   </ItemGroup>
 
 </Project>
