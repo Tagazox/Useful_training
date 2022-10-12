@@ -7,17 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.Warehouse.csproj" />
+<!--    Ici tu ne devrais avoir aucune reference sur ton infra-->
+<!--    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.Warehouse.csproj" />-->
     <ProjectReference Include="..\Useful_training.Core.Neural_network.Neuron\Useful_training.Core.NeuralNetwork.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+<!--    Idem, SignalR c'est de l'infra. Mais je veux bien admettre que c'est galere à abstraire donc je pense qu'on peut faire une exception... -->
     <Reference Include="Microsoft.AspNetCore.SignalR.Core">
       <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.9\Microsoft.AspNetCore.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.9\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
+<!--    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">-->
+<!--      <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.9\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>-->
+<!--    </Reference>-->
   </ItemGroup>
 
   <ItemGroup>

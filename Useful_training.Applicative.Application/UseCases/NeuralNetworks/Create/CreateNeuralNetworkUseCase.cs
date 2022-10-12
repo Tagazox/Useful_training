@@ -1,9 +1,9 @@
-﻿using Useful_training.Applicative.Application.UseCases.NeuralNetworks.Create.Interfaces;
+﻿using Useful_training.Applicative.Application.Ports;
+using Useful_training.Applicative.Application.UseCases.NeuralNetworks.Create.Interfaces;
 using Useful_training.Core.NeuralNetwork.Factory;
 using Useful_training.Core.NeuralNetwork.Factory.Interfaces;
 using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
 using Useful_training.Applicative.Application.UseCases.NeuralNetworks.Create.ViewModels;
-using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.Application.UseCases.NeuralNetworks.Create;
 

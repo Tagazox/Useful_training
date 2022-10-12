@@ -1,6 +1,6 @@
 ﻿using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
 
-namespace Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
+namespace Useful_training.Applicative.Application.Ports;
 
 public interface IDataSetsListWarehouse : IWarehouse
 {

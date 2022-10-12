@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.Warehouse.csproj" />
     <ProjectReference Include="..\Useful_training.Applicative.Application\Useful_training.Applicative.Application.csproj" />
   </ItemGroup>
 

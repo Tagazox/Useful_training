@@ -1,4 +1,5 @@
 using Useful_training.Applicative.Application.Adapter;
+using Useful_training.Applicative.NeuralNetworkApi;
 using Useful_training.Applicative.NeuralNetworkApi.Hubs;
 using Useful_training.Presentation.NeuralNetworkApi;
 
