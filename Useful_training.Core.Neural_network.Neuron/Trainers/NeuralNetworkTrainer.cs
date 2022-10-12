@@ -8,15 +8,16 @@ namespace Useful_training.Core.NeuralNetwork.Trainers;
 
 public class NeuralNetworkTrainer : INeuralNetworkTrainer
 {
+    private const double ErrorThreshold = 0.001;
     private readonly INeuralNetwork _neuralNetwork;
     private readonly List<DataSet> _dataSetsList;
     private readonly int _epochRoundedTo;
     private readonly IList<INeuralNetworkTrainerObserver> _observers;
-    private bool trainAbort;
+    private bool _trainAbortIsRequested;
 
     public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer, int epochRoundedTo = 3)
     {
-        trainAbort = false;
+        _trainAbortIsRequested = false;
         _epochRoundedTo = epochRoundedTo;
         _neuralNetwork = neuralNetworkContainer.NeuralNetwork;
         _dataSetsList = neuralNetworkContainer.DataSets;
@@ -31,64 +32,56 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
 
     public void TrainNeuralNetwork()
     {
-        bool trainFinish = false;
-        Random random = new Random();
-        IList<double> resultsOfTheNeuralNetworkCalculation;
-        while (!trainFinish && !trainAbort)
+        var random = new Random();
+        while (TrainingIsNotFinished && TrainAbortIsNotRequested)
         {
-            DataSet dataSetForThisIteration = _dataSetsList[random.Next(_dataSetsList.Count)];
+            var dataSetForThisIteration = _dataSetsList[random.Next(_dataSetsList.Count)];
+            var resultsOfTheNeuralNetworkCalculation = _neuralNetwork.Calculate(dataSetForThisIteration.Inputs);
+            
+            // ici tu utilises à plusieurs reprise result.Any(double.IsNaN)). Je pense que tu gagnerais à wrapper ton output dans une classe et mettre ca dans une methode. 
+            // ca permetterait en plus d'expliciter ce que tu cherches à verifier à travers le nom de la methode, car typiquement je ne sais pas ce que ca signifie si un output a une valeur Nan.
+            if (resultsOfTheNeuralNetworkCalculation.Any(double.IsNaN))
             {
-                {
-                    resultsOfTheNeuralNetworkCalculation =
-                        _neuralNetwork.Calculate(dataSetForThisIteration.Inputs);
-                    if (resultsOfTheNeuralNetworkCalculation.Any(double.IsNaN))
-                        _neuralNetwork.Reset();
-                    else
-                    {
-                        NotifyObserver(new NeuralNetworkObservableData(dataSetForThisIteration,
-                            resultsOfTheNeuralNetworkCalculation));
-                        if (CalculateError(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation) <
-                            0.001)
-                            trainFinish = VerifyIfTrainingIsFinish();
-                        else
-                            _neuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutput);
-
-                        if (trainFinish)
-                            break;
-                    }
-                }
+                _neuralNetwork.Reset();
+                continue;
             }
+
+            NotifyObserver(new NeuralNetworkObservableData(dataSetForThisIteration, resultsOfTheNeuralNetworkCalculation));
+            
+            if (ErrorIsTooHigh(dataSetForThisIteration.TargetOutput, resultsOfTheNeuralNetworkCalculation))
+                _neuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutput);
         }
     }
 
     public void Destroy()
     {
-        trainAbort = true;
+        _trainAbortIsRequested = true;
     }
+
+    public bool ErrorIsAcceptable(IReadOnlyList<double> targets, IEnumerable<double> results)
+        => CalculateError(targets, results) < ErrorThreshold;
+
+    public bool ErrorIsTooHigh(IReadOnlyList<double> targets, IEnumerable<double> results) => !ErrorIsAcceptable(targets, results);
 
     private double CalculateError(IReadOnlyList<double> targets, IEnumerable<double> results)
     {
-        double deltaError = results.Select((r, i) => Math.Abs(r - targets[i])).Sum();
+        var deltaError = results.Select((r, i) => Math.Abs(r - targets[i])).Sum();
         return Math.Round(deltaError, _epochRoundedTo);
     }
 
-    private bool VerifyIfTrainingIsFinish()
-    {
-        foreach (DataSet set in _dataSetsList.Take(20))
-        {
-            IList<double> results = _neuralNetwork.Calculate(set.Inputs);
-            if (results.Any(double.IsNaN))
+    // dans ce genre de méthode, on évite d'avoir des effets de bord, il faudrait donc déplacer l'appel à _neuralNetwork.Reset() qui était fait ici.
+    private bool TrainingIsFinished => 
+        _dataSetsList
+            .Take(20)
+            .All(set => 
             {
-                _neuralNetwork.Reset();
-                return false;
-            }
+                var results = _neuralNetwork.Calculate(set.Inputs);
+                return !results.Any(double.IsNaN) && ErrorIsAcceptable(set.TargetOutput, results);
+            });
 
-            if (Math.Round(CalculateError(set.TargetOutput, results), _epochRoundedTo) > 0.001)
-                return false;
-        }
+    private bool TrainingIsNotFinished => !TrainingIsFinished;
 
-        return true;
-    }
+    private bool TrainAbortIsNotRequested => !_trainAbortIsRequested;
 
     public void AttachObserver(INeuralNetworkTrainerObserver observer)
     {
@@ -103,7 +96,7 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
     private void NotifyObserver(INeuralNetworkObservableData data)
     {
         if (DateTime.Now.Ticks % 5000 != 0) return;
-        foreach (INeuralNetworkTrainerObserver observer in _observers)
+        foreach (var observer in _observers)
             observer.Update(data);
     }
 }
