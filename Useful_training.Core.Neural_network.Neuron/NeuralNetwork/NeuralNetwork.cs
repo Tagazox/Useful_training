@@ -15,12 +15,17 @@ namespace Useful_training.Core.NeuralNetwork.NeuralNetwork;
 public class NeuralNetwork : INeuralNetwork
 {
     private ILayerOfInputNeurons? _inputsLayer;
+    private IList<double>? CalculationResults { get; set; }
     internal IList<ILayerOfNeurons> LayersOfNeurons { get; set; }
     private double LearnRate { get; set; }
     private double Momentum { get; set; }
-
+    public bool IsUnstable => CalculationResults?.Contains(double.NaN) ?? false;
+    public IList<double> LastCalculationResults => CalculationResults ??
+                                                   throw new InvalidOperationException(
+                                                       "You need to calculate using the neural network to get calculation results");
     public NeuralNetwork()
     {
+        CalculationResults = null;
         LayersOfNeurons = new List<ILayerOfNeurons>();
     }
 
@@ -47,9 +52,7 @@ public class NeuralNetwork : INeuralNetwork
 
         LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
         layerOfNeurons.Initialize(numberOfNeuron, typeOfNeurons,
-            (LayersOfNeurons.Count == 0) ? 
-                _inputsLayer : 
-                LayersOfNeurons.Last());
+            (LayersOfNeurons.Count == 0) ? _inputsLayer : LayersOfNeurons.Last());
         LayersOfNeurons.Add(layerOfNeurons);
     }
 
@@ -68,8 +71,9 @@ public class NeuralNetwork : INeuralNetwork
         foreach (ILayerOfNeurons layerOfNeurons in LayersOfNeurons)
             layerOfNeurons.Calculate();
 
-        return LayersOfNeurons.Last().Outputs;
+        return CalculationResults = LayersOfNeurons.Last().Outputs;
     }
+
 
     void INeuralNetwork.BackPropagate(List<double>? targets)
     {
