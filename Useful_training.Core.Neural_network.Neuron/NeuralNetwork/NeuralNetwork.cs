@@ -18,6 +18,7 @@ public class NeuralNetwork : INeuralNetwork
     private double LearnRate { get; set; }
     private double Momentum { get; set; }
     public bool IsUnstable => LastCalculationResults.Contains(double.NaN);
+
     public IList<double> LastCalculationResults => LayersOfNeurons.LastOrDefault()?.Outputs ?? throw new NeedToBeCreatedByTheBuilderException("You need to initialize the neural network first");
 
     public NeuralNetwork()
@@ -43,8 +44,7 @@ public class NeuralNetwork : INeuralNetwork
         if (_inputsLayer == null)
             throw new NeedToBeCreatedByTheBuilderException("You need to initialize the neural network first");
         if (numberOfNeuron == 0)
-            throw new CantInitializeWithZeroNeuronException(
-                "Number of neuron need to be greater than 0, you can't create a layer with 0 neurons");
+            throw new CantInitializeWithZeroNeuronException("Number of neuron need to be greater than 0, you can't create a layer with 0 neurons");
 
         ILayerOfInputNeurons layerOfInputNeuronsForThisLayer = (LayersOfNeurons.Count == 0) ? _inputsLayer : LayersOfNeurons.Last();
 
@@ -71,22 +71,20 @@ public class NeuralNetwork : INeuralNetwork
         if (_inputsLayer == null)
             throw new InvalidCastException("You need to create the neural network first");
         if (inputs == null || inputs.Count == 0 || _inputsLayer.InputsNeurons.Count != inputs.Count)
-            throw new WrongInputForCalculationException(
-                "Inputs for the calculation need to be equal as the input number specified at the creation of the neural network");
+            throw new WrongInputForCalculationException("Inputs for the calculation need to be equal as the input number specified at the creation of the neural network");
 
         for (int i = 0; i < inputs.Count; i++)
             _inputsLayer.InputsNeurons[i].OutputResult = inputs[i];
     }
 
-
-    void INeuralNetwork.BackPropagate(List<double>? targets)
+    void INeuralNetwork.BackPropagate(List<double> targets)
     {
         ILayerOfNeurons outputLayer = LayersOfNeurons.Last();
+
         if (targets == null || outputLayer.Neurons.Count != targets.Count)
-            throw new ArgumentException(
-                "Targets need to have the same count as the outputs layer number of neurones");
+            throw new ArgumentException("Targets need to have the same count as the outputs layer number of neurones");
         outputLayer.CalculateGradiant(targets);
-        for (int i = LayersOfNeurons.Count - 2; i <= 0; i--)
+        for (int i = LayersOfNeurons.Count - 2; i >= 0; i--)
         {
             LayersOfNeurons[i].CalculateGradiant();
             LayersOfNeurons[i].UpdateWeights(LearnRate, Momentum);

@@ -8,7 +8,7 @@ public interface INeuralNetwork : ISerializable
 {
     public bool IsUnstable { get; }
     public IList<double> LastCalculationResults { get; }
-    internal void BackPropagate(List<double>? targets);
+    internal void BackPropagate(List<double> targets);
     public IList<double> Calculate(IList<double> inputs);
     public void Reset();
 }

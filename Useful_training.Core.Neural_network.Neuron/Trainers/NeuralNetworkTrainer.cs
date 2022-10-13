@@ -71,7 +71,7 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
 
     private double CalculateNeuralNetworkError(IReadOnlyList<double> targets)
     {
-        double deltaError = -_neuralNetwork.LastCalculationResults.Select((r, i) => Math.Abs(r - targets[i])).Sum();
+        double deltaError = _neuralNetwork.LastCalculationResults.Select((r, i) => Math.Abs(r - targets[i])).Sum();
         return Math.Round(deltaError, _epochRoundedTo);
     }
 

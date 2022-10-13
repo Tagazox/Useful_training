@@ -51,12 +51,12 @@ public class NeuralNetworkTrainerTests
     {
         _neuralNetworkContainer.Setup(c => c.DataSets).Returns(_dataSets);
         CreateNewNeuralNetwork();
-        NeuralNetworkTrainer _neuralNetworkTrainer = new NeuralNetworkTrainer(_neuralNetworkContainer.Object,1);
+        NeuralNetworkTrainer neuralNetworkTrainer = new NeuralNetworkTrainer(_neuralNetworkContainer.Object);
         Task.Run( () => {
             Thread.Sleep(5000);
-            _neuralNetworkTrainer.Destroy();
+            neuralNetworkTrainer.Destroy();
         } );
-        _neuralNetworkTrainer.TrainNeuralNetwork();
+        neuralNetworkTrainer.TrainNeuralNetwork();
 
     }
     [Fact]
