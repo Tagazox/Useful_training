@@ -13,11 +13,11 @@ public class NeuralNetworkObservableData : ValueObject, INeuralNetworkObservable
         get
         {
             double[] deltaErrors = new double[Results.Count];
-            if (Results.Count != DataSet.TargetOutput.Count)
-                throw new ArgumentException(
+            if (Results.Count != DataSet.TargetOutputs.Count)
+                throw new NotSupportedException(
                     "Results is not equal to the data set targets, can't calculate the deltas.");
             for (int i = 0; i < Results.Count; i++)
-                deltaErrors[i] = DataSet.TargetOutput[i] - Results[i];
+                deltaErrors[i] = DataSet.TargetOutputs[i] - Results[i];
             return deltaErrors;
         }
     }

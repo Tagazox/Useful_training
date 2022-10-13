@@ -15,6 +15,6 @@ public class DataSetsListViewModel
     public string Name { get; }
     public int Count => DataSets.Count;
     public int InputsLength => DataSets.FirstOrDefault()?.Inputs.Count ?? 0;
-    public int TargetedOutputsLength => DataSets.FirstOrDefault()?.TargetOutput.Count ?? 0;
+    public int TargetedOutputsLength => DataSets.FirstOrDefault()?.TargetOutputs.Count ?? 0;
     public List<DataSet> DataSets { get; }
 }

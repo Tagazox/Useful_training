@@ -82,26 +82,6 @@ public class NeuronsTests
 		}
 	}
 	[Fact]
-	public void NeuroneUpdateWeightShouldThrowCantArgumentException()
-	{
-		foreach (INeuron neuron in _neuronsToTest)
-		{
-			neuron.GetCalculationResult();
-			neuron.CalculateGradient(_inputsValue);
-			Action updateWeightsCase1 = () =>
-			{
-				neuron.UpdateWeights(-1, 0.5);
-			};
-			Action updateWeightsCase2 = () =>
-			{
-				neuron.UpdateWeights(1, -0.5);
-			};
-			updateWeightsCase1.Should().Throw<ArgumentException>();
-			updateWeightsCase2.Should().Throw<ArgumentException>();
-
-		}
-	}
-	[Fact]
 	public void NeuroneCreationShouldThrowCantInitializeWithZeroInputException()
 	{
 		// ReSharper disable once CollectionNeverUpdated.Local

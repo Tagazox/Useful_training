@@ -28,10 +28,10 @@ public class DataSetsListControllerTest
         string url = $"{_rootUrl}/{Method.Post}/{_testName}";
         const string bodyContentWhoContainDataSetsListToPost =
             "[" +
-            "{\"inputs\": [0,0],\"targetOutput\": [0]}," +
-            "{\"inputs\": [1,0],\"targetOutput\": [0]}," +
-            "{\"inputs\": [0,1],\"targetOutput\": [0]}," +
-            "{\"inputs\": [1,1],\"targetOutput\": [1]}" +
+            "{\"inputs\": [0,0],\"targetOutputs\": [0]}," +
+            "{\"inputs\": [1,0],\"targetOutputs\": [0]}," +
+            "{\"inputs\": [0,1],\"targetOutputs\": [0]}," +
+            "{\"inputs\": [1,1],\"targetOutputs\": [1]}" +
             "]";
 
         DataSetListCreatedViewModel? viewModel =
@@ -43,15 +43,15 @@ public class DataSetsListControllerTest
     }
 
     [Fact]
-    public async Task PostDataSetListShouldThrow500()
+    public async Task PostDataSetListShouldThrow500Case1()
     {
         string url = $"{_rootUrl}/{Method.Post}/{_testName}";
         const string bodyContentWhoContainBadDataSetsListToPost = 
             "[" +
-            "{\"inputs\": [0,0,0],\"targetOutput\": [0]}," +
-            "{\"inputs\": [1,0],\"targetOutput\": [0]}," +
-            "{\"inputs\": [0,1],\"targetOutput\": [0]}," +
-            "{\"inputs\": [1,1],\"targetOutput\": [1]}" +
+            "{\"inputs\": [0,0,0],\"targetOutputs\": [0]}," +
+            "{\"inputs\": [1,0],\"targetOutputs\": [0]}," +
+            "{\"inputs\": [0,1],\"targetOutputs\": [0]}," +
+            "{\"inputs\": [1,1],\"targetOutputs\": [1]}" +
             "]";
 
         HttpResponseMessage httpResponseMessage =
@@ -61,6 +61,21 @@ public class DataSetsListControllerTest
         httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
     }
 
+    [Fact]
+    public async Task PostDataSetListShouldThrow500Case2()
+    {
+        string url = $"{_rootUrl}/{Method.Post}/{_testName}";
+        const string bodyContentWhoContainBadDataSetsListToPost = 
+            "[" +
+            "{\"inputs\": [],\"targetOutputs\": [0]}" +
+            "]";
+
+        HttpResponseMessage httpResponseMessage =
+            await HttpRequestHandler.SendRequestsToTheApi(_httpClient, url, Method.Put,
+                bodyContentWhoContainBadDataSetsListToPost);
+
+        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+    }
     [Fact]
     public async Task SearchShouldBeOk()
     {
@@ -82,7 +97,7 @@ public class DataSetsListControllerTest
     [Fact]
     public async Task GetShouldBeOk()
     {
-        await PostDataSetListShouldBeOk();
+        PostDataSetListShouldBeOk().Wait();
         string url = $"{_rootUrl}/{Method.Get}/{_testName}";
 
         DataSetsListViewModel? viewModel = await

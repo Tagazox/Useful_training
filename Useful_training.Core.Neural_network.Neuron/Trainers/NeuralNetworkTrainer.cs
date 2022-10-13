@@ -9,14 +9,14 @@ namespace Useful_training.Core.NeuralNetwork.Trainers;
 public class NeuralNetworkTrainer : INeuralNetworkTrainer
 {
     private const double ErrorThreshold = 0.001;
-    private readonly INeuralNetwork NeuralNetwork;
-    private readonly List<DataSet> DataSetsList;
-    private readonly int EpochRoundedTo;
+    private readonly INeuralNetwork _neuralNetwork;
+    private readonly List<DataSet> _dataSetsList;
+    private readonly int _epochRoundedTo;
     private readonly IList<INeuralNetworkTrainerObserver> _observers;
-    private bool TrainingAbortIsRequested;
-    private bool TrainingIsFinished;
-    private bool TrainingAbortIsNotRequested => !TrainingAbortIsRequested;
-    private bool TrainingIsNotFinished => !TrainingIsFinished;
+    private bool _trainingAbortIsRequested;
+    private bool _trainingIsFinished;
+    private bool TrainingAbortIsNotRequested => !_trainingAbortIsRequested;
+    private bool TrainingIsNotFinished => !_trainingIsFinished;
 
     private bool ErrorIsAcceptable(IReadOnlyList<double> targets) => CalculateNeuralNetworkError(targets) < ErrorThreshold;
 
@@ -24,15 +24,15 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
 
     public NeuralNetworkTrainer(INeuralNetworkTrainerContainer neuralNetworkContainer, int epochRoundedTo = 3)
     {
-        TrainingAbortIsRequested = false;
-        TrainingIsFinished = false;
-        EpochRoundedTo = epochRoundedTo;
-        NeuralNetwork = neuralNetworkContainer.NeuralNetwork;
-        DataSetsList = neuralNetworkContainer.DataSets;
+        _trainingAbortIsRequested = false;
+        _trainingIsFinished = false;
+        _epochRoundedTo = epochRoundedTo;
+        _neuralNetwork = neuralNetworkContainer.NeuralNetwork;
+        _dataSetsList = neuralNetworkContainer.DataSets;
 
-        if (NeuralNetwork == null)
+        if (_neuralNetwork == null)
             throw new NullReferenceException("Any Neural network has been found in the container");
-        if (DataSetsList == null || !DataSetsList.Any())
+        if (_dataSetsList == null || !_dataSetsList.Any())
             throw new NullReferenceException("Any data set has been found in the container");
 
         _observers = new List<INeuralNetworkTrainerObserver>();
@@ -44,44 +44,44 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
 
         while (TrainingIsNotFinished && TrainingAbortIsNotRequested)
         {
-            DataSet dataSetForThisIteration = DataSetsList[random.Next(DataSetsList.Count)];
+            DataSet dataSetForThisIteration = _dataSetsList[random.Next(_dataSetsList.Count)];
 
             IList<double> resultsOfTheNeuralNetworkCalculation =
-                NeuralNetwork.Calculate(dataSetForThisIteration.Inputs);
+                _neuralNetwork.Calculate(dataSetForThisIteration.Inputs);
 
-            if (NeuralNetwork.IsUnstable)
-                NeuralNetwork.Reset();
+            if (_neuralNetwork.IsUnstable)
+                _neuralNetwork.Reset();
             else
             {
                 NotifyObserver(new NeuralNetworkObservableData(dataSetForThisIteration,
                     resultsOfTheNeuralNetworkCalculation));
 
-                if (ErrorIsAcceptable(dataSetForThisIteration.TargetOutput))
-                    TrainingIsFinished = CheckIfTheNeuralNetworkHasBeenEnoughTrained();
+                if (ErrorIsAcceptable(dataSetForThisIteration.TargetOutputs))
+                    _trainingIsFinished = CheckIfTheNeuralNetworkHasBeenEnoughTrained();
                 else
-                    NeuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutput);
+                    _neuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutputs);
             }
         }
     }
 
     public void Destroy()
     {
-        TrainingAbortIsRequested = true;
+        _trainingAbortIsRequested = true;
     }
 
     private double CalculateNeuralNetworkError(IReadOnlyList<double> targets)
     {
-        double deltaError = -NeuralNetwork.LastCalculationResults.Select((r, i) => Math.Abs(r - targets[i])).Sum();
-        return Math.Round(deltaError, EpochRoundedTo);
+        double deltaError = -_neuralNetwork.LastCalculationResults.Select((r, i) => Math.Abs(r - targets[i])).Sum();
+        return Math.Round(deltaError, _epochRoundedTo);
     }
 
     private bool CheckIfTheNeuralNetworkHasBeenEnoughTrained(int numberOfSamplesToTest = 20)
     {
-        foreach (DataSet dataSet in DataSetsList.Take(numberOfSamplesToTest))
+        foreach (DataSet dataSet in _dataSetsList.Take(numberOfSamplesToTest))
         {
-            NeuralNetwork.Calculate(dataSet.Inputs);
+            _neuralNetwork.Calculate(dataSet.Inputs);
 
-            if (ErrorIsTooHigh(dataSet.TargetOutput))
+            if (ErrorIsTooHigh(dataSet.TargetOutputs))
                 return false;
         }
         return true;
@@ -102,5 +102,12 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
         if (DateTime.Now.Ticks % 5000 != 0) return;
         foreach (INeuralNetworkTrainerObserver observer in _observers)
             observer.Update(data);
+    }
+
+    private int _counter = 0;
+    private const int CounterIterationReset  = 5000;
+    private bool IsItTimeToUpdateObserver()
+    {
+        return _counter++ % CounterIterationReset == 0;
     }
 }

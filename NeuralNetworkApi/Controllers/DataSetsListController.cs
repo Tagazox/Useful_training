@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.Interfaces;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Create.ViewModels;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Get.Interfaces;
 using Useful_training.Applicative.Application.UseCases.DataSetsLists.Get.ViewModels;
-using Useful_training.Core.NeuralNetwork.ValueObject;
+using Useful_training.Applicative.Application.Adapter;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Useful_training.Applicative.NeuralNetworkApi.Controllers;
 
@@ -12,7 +12,7 @@ namespace Useful_training.Applicative.NeuralNetworkApi.Controllers;
 public class DataSetsListController : ControllerBase
 {
     [HttpPost("{name}", Name = "PostDataSetsList")]
-    public Task<DataSetListCreatedViewModel> Post([FromServices] ICreateDataSetsListUseCase createDataSetUseCase, string name, [FromBody] List<DataSet> dataSets)
+    public Task<DataSetListCreatedViewModel> Post([FromServices] ICreateDataSetsListUseCase createDataSetUseCase, string name, [FromBody] List<DataSetsListAdapter> dataSets)
     {
         return createDataSetUseCase.ExecuteAsync(name,dataSets);
     }

@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Globalization;
 using Newtonsoft.Json;
 using Useful_training.Applicative.Application.Ports;
 using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
@@ -49,10 +49,10 @@ public class DataSetsListFileWarehouseTests
 
         _neuralNetworkTrainerContainerMocked.Setup(c => c.DataSets).Returns(dataSets);
         List<DataSet> dataSetsToSave =
-            dataSets.DistinctBy(d => string.Concat(d.Inputs.Select(i => i.ToString()))).ToList();
+            dataSets.DistinctBy(d => string.Concat(d.Inputs.Select(i => i.ToString(CultureInfo.InvariantCulture)))).ToList();
         foreach (DataSet dataSet in dataSets)
         {
-            dataSet.TargetOutput[0] /= dataSets.Max(d => d.TargetOutput[0]);
+            dataSet.TargetOutputs[0] /= dataSets.Max(d => d.TargetOutputs[0]);
         }
         string toCopy = JsonConvert.SerializeObject(dataSetsToSave);
         Console.WriteLine(toCopy);
