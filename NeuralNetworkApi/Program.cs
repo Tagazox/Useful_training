@@ -1,6 +1,7 @@
-using Useful_training.Applicative.Application.Adapter;
+using Useful_training.Applicative.NeuralNetworkApi;
+using Useful_training.Applicative.NeuralNetworkApi.DependencyInjection;
 using Useful_training.Applicative.NeuralNetworkApi.Hubs;
-using Useful_training.Presentation.NeuralNetworkApi;
+using Useful_training.Applicative.NeuralNetworkApi.Ressources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddNeuralNetworkApplication(InternalResources.NeuralNetworkWarehouseRootPath,InternalResources.DatasetListWarehouseRootPath);
+builder.Services.AddNeuralNetworkServices(InternalResources.NeuralNetworkWarehouseRootPath,InternalResources.DatasetListWarehouseRootPath);
 
 
 WebApplication app = builder.Build();

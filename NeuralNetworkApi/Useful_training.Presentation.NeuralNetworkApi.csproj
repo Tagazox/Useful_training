@@ -16,27 +16,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileManager\Useful_training.Infrastructure.Warehouse.csproj" />
     <ProjectReference Include="..\Useful_training.Applicative.Application\Useful_training.Applicative.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="InternalResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>InternalResources.resx</DependentUpon>
-    </Compile>
+    <Folder Include="Saves\DataSet" />
+    <Folder Include="Saves\NeuralNetwork" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="InternalResources.resx">
+    <EmbeddedResource Update="Ressources\InternalResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InternalResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Saves\DataSet" />
-    <Folder Include="Saves\NeuralNetwork" />
+    <Compile Update="Ressources\InternalResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InternalResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

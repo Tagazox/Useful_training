@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Useful_training.Applicative.Application.Ports;
 using Useful_training.Core.NeuralNetwork.Trainers.Adapter;
 using Useful_training.Infrastructure.FileManager.Exception;
 using Useful_training.Infrastructure.FileManager.Warehouse;
-using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Infrastructure.FileManagerTests;
 

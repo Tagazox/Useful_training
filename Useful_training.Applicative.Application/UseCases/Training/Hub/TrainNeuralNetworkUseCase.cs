@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Useful_training.Applicative.Application.Adapter;
+using Useful_training.Applicative.Application.Ports;
 using Useful_training.Applicative.Application.UseCases.Training.Interfaces;
 using Useful_training.Core.NeuralNetwork.NeuralNetwork;
 using Useful_training.Core.NeuralNetwork.Observer.Interfaces;
 using Useful_training.Core.NeuralNetwork.Trainers;
 using Useful_training.Core.NeuralNetwork.Trainers.Interfaces;
 using Useful_training.Core.NeuralNetwork.ValueObject;
-using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Applicative.Application.UseCases.Training.Hub;
 
@@ -14,7 +14,7 @@ public class TrainNeuralNetworkUseCase : ITrainNeuralNetworkUseCase
 {
     private readonly INeuralNetworkWarehouse _neuralNetworkWarehouse;
     private readonly IDataSetsListWarehouse _datasetListWarehouse;
-    private INeuralNetworkTrainer _neuralNetworkTrainer;
+    private INeuralNetworkTrainer? _neuralNetworkTrainer;
     private IClientProxy? _httpClient;
 
     public TrainNeuralNetworkUseCase(INeuralNetworkWarehouse neuralNetworkWarehouse,
@@ -53,7 +53,7 @@ public class TrainNeuralNetworkUseCase : ITrainNeuralNetworkUseCase
 
     public void Cancel()
     {
-        _neuralNetworkTrainer.Destroy();
+        _neuralNetworkTrainer?.Destroy();
     }
 
     public void Update(INeuralNetworkObservableData subject)

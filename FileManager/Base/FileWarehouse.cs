@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using Newtonsoft.Json;
-using Useful_training.Core.NeuralNetwork.Warehouse.Interfaces;
+using Useful_training.Applicative.Application.Ports;
 using Useful_training.Infrastructure.FileManager.Exception;
 
 namespace Useful_training.Infrastructure.FileManager.Base;

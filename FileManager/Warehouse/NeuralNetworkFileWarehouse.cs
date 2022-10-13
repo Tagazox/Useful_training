@@ -1,6 +1,6 @@
-﻿using Useful_training.Core.NeuralNetwork.NeuralNetwork.Interfaces;
+﻿using Useful_training.Applicative.Application.Ports;
+using Useful_training.Core.NeuralNetwork.NeuralNetwork.Interfaces;
 using Useful_training.Infrastructure.FileManager.Base;
-using Useful_training.Infrastructure.FileManager.Warehouse.Interfaces;
 
 namespace Useful_training.Infrastructure.FileManager.Warehouse;
 
