@@ -8,7 +8,7 @@ namespace Useful_training.Core.NeuralNetwork.Neurons.Type;
 [Serializable]
 internal class TanhNeuron : Neuron
 {
-    public TanhNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
+    public TanhNeuron(IEnumerable<IInputNeuron> inputNeurons) : base(inputNeurons)
     {
     }
     public override void GetCalculationResult()

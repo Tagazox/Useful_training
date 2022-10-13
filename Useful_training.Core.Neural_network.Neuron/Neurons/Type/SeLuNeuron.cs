@@ -8,7 +8,7 @@ namespace Useful_training.Core.NeuralNetwork.Neurons.Type;
 [Serializable]
 internal class SeLuNeuron : Neuron
 {
-    public SeLuNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
+    public SeLuNeuron(IEnumerable<IInputNeuron> inputNeurons) : base(inputNeurons)
     {
     }
     public override void GetCalculationResult()

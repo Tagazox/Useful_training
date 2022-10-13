@@ -27,14 +27,14 @@ public class LayerOfNeuronsTests
         _neuronTypeAvailable = Enum.GetValues(typeof(NeuronType)).Cast<NeuronType>();
         _testLayerOfNeurons = new LayerOfNeurons();
     }
-    private static IEnumerable<IInputNeurons> MockInputNeuronsList()
+    private static IList<IInputNeuron> MockInputNeuronsList()
     {
-        IList<IInputNeurons> inputsNeurons = new List<IInputNeurons>();
+        IList<IInputNeuron> inputsNeurons = new List<IInputNeuron>();
         const int numberOfInputs = 5;
         const double inputsValue = 1;
         for (int i = 0; i < numberOfInputs; i++)
         {
-            Mock<IInputNeurons> mockedInputNeuron = new Mock<IInputNeurons>();
+            Mock<IInputNeuron> mockedInputNeuron = new Mock<IInputNeuron>();
             mockedInputNeuron.Setup(inputNeurons => inputNeurons.OutputResult).Returns(inputsValue);
             mockedInputNeuron.Setup(inputNeurons => inputNeurons.OutputSynapses).Returns(new List<Synapse>());
             inputsNeurons.Add(mockedInputNeuron.Object);
@@ -76,7 +76,7 @@ public class LayerOfNeuronsTests
     {
         foreach (NeuronType type in _neuronTypeAvailable)
         {
-            _layerOfInputNeuronesMocked.Setup(s => s.InputsNeurons).Returns(new List<InputNeuron>());
+            _layerOfInputNeuronesMocked.Setup(s => s.InputsNeurons).Returns(new List<IInputNeuron>());
 
             Action creationCase1 = () =>
             {

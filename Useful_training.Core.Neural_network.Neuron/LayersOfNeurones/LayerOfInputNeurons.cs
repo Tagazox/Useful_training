@@ -9,14 +9,14 @@ namespace Useful_training.Core.NeuralNetwork.LayersOfNeurones;
 
 internal class LayerOfInputNeurons : ILayerOfInputNeurons
 {
-    private readonly IList<IInputNeurons> _neurons;
-    IEnumerable<IInputNeurons> ILayerOfInputNeurons.InputsNeurons => _neurons;
+    private readonly IList<IInputNeuron> _neurons;
+    IList<IInputNeuron> ILayerOfInputNeurons.InputsNeurons => _neurons;
 
     public LayerOfInputNeurons(uint numberOfInputs)
     {
         if(numberOfInputs <= 0)
             throw new CantInitializeWithZeroInputException("You can't create a layer of inputs neurones with 0 input");
-        _neurons = new List<IInputNeurons>();
+        _neurons = new List<IInputNeuron>();
         for (int i = 0; i < numberOfInputs; i++)
             _neurons.Add(new InputNeuron());
     }

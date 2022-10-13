@@ -4,7 +4,6 @@ using Useful_training.Core.NeuralNetwork.Exceptions;
 using Useful_training.Core.NeuralNetwork.LayersOfNeurones;
 using Useful_training.Core.NeuralNetwork.LayersOfNeurones.Interfaces;
 using Useful_training.Core.NeuralNetwork.NeuralNetwork.Interfaces;
-using Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
 using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
 
 [assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests")]
@@ -14,18 +13,15 @@ namespace Useful_training.Core.NeuralNetwork.NeuralNetwork;
 [Serializable]
 public class NeuralNetwork : INeuralNetwork
 {
-    private ILayerOfInputNeurons? _inputsLayer;
-    private IList<double>? CalculationResults { get; set; }
+    private ILayerOfInputNeurons? InputsLayer;
     internal IList<ILayerOfNeurons> LayersOfNeurons { get; set; }
     private double LearnRate { get; set; }
     private double Momentum { get; set; }
-    public bool IsUnstable => CalculationResults?.Contains(double.NaN) ?? false;
-    public IList<double> LastCalculationResults => CalculationResults ??
-                                                   throw new InvalidOperationException(
-                                                       "You need to calculate using the neural network to get calculation results");
+    public bool IsUnstable => LastCalculationResults.Contains(double.NaN);
+    public IList<double> LastCalculationResults => LayersOfNeurons.LastOrDefault()?.Outputs ?? throw new NeedToBeCreatedByTheBuilderException("You need to initialize the neural network first");
+
     public NeuralNetwork()
     {
-        CalculationResults = null;
         LayersOfNeurons = new List<ILayerOfNeurons>();
     }
 
@@ -37,41 +33,49 @@ public class NeuralNetwork : INeuralNetwork
             throw new ArgumentException("Learn rate need to be between 0 and 1");
         if (momentum is <= 0 or > 1)
             throw new ArgumentException("Momentum need to be between 0 and 1");
-        _inputsLayer = new LayerOfInputNeurons(numberOfInput);
+        InputsLayer = new LayerOfInputNeurons(numberOfInput);
         LearnRate = learnRate ?? .4;
         Momentum = momentum ?? .9;
     }
 
     internal void AddHiddenLayer(uint numberOfNeuron, NeuronType typeOfNeurons)
     {
-        if (_inputsLayer == null)
-            throw new NeedToBeCreatedByTheBuilderException("You need to have initialized the neural network first");
+        if (InputsLayer == null)
+            throw new NeedToBeCreatedByTheBuilderException("You need to initialize the neural network first");
         if (numberOfNeuron == 0)
             throw new CantInitializeWithZeroNeuronException(
                 "Number of neuron need to be greater than 0, you can't create a layer with 0 neurons");
 
+        ILayerOfInputNeurons layerOfInputNeuronsForThisLayer = (LayersOfNeurons.Count == 0) ? InputsLayer : LayersOfNeurons.Last();
+
         LayerOfNeurons layerOfNeurons = new LayerOfNeurons();
-        layerOfNeurons.Initialize(numberOfNeuron, typeOfNeurons,
-            (LayersOfNeurons.Count == 0) ? _inputsLayer : LayersOfNeurons.Last());
+        layerOfNeurons.Initialize(numberOfNeuron, typeOfNeurons, layerOfInputNeuronsForThisLayer);
         LayersOfNeurons.Add(layerOfNeurons);
     }
 
     public IList<double> Calculate(IList<double> inputs)
     {
-        if (LayersOfNeurons == null || _inputsLayer == null)
+        if (LayersOfNeurons == null)
             throw new InvalidCastException("You need to create the neural network first");
-        if (inputs == null || inputs.Count == 0 || _inputsLayer.InputsNeurons.Count() != inputs.Count)
-            throw new WrongInputForCalculationException(
-                "Inputs for the calculation need to be equal as the input number specified at the creation of the neural network");
 
-        int inputCounter = 0;
-        foreach (IInputNeurons inputNeurons in _inputsLayer.InputsNeurons)
-            inputNeurons.OutputResult = inputs[inputCounter++];
+        GiveInputsToInputNeurons(inputs);
 
         foreach (ILayerOfNeurons layerOfNeurons in LayersOfNeurons)
             layerOfNeurons.Calculate();
 
-        return CalculationResults = LayersOfNeurons.Last().Outputs;
+        return LayersOfNeurons.Last().Outputs;
+    }
+
+    private void GiveInputsToInputNeurons(IList<double> inputs)
+    {
+        if (InputsLayer == null)
+            throw new InvalidCastException("You need to create the neural network first");
+        if (inputs == null || inputs.Count == 0 || InputsLayer.InputsNeurons.Count != inputs.Count)
+            throw new WrongInputForCalculationException(
+                "Inputs for the calculation need to be equal as the input number specified at the creation of the neural network");
+
+        for (int i = 0; i < inputs.Count; i++)
+            InputsLayer.InputsNeurons[i].OutputResult = inputs[i];
     }
 
 
@@ -103,7 +107,7 @@ public class NeuralNetwork : INeuralNetwork
     {
         Momentum = info.GetDouble("Momentum");
         LearnRate = info.GetDouble("LearnRate");
-        _inputsLayer = new LayerOfInputNeurons(info.GetUInt32("NumberOfInput"));
+        InputsLayer = new LayerOfInputNeurons(info.GetUInt32("NumberOfInput"));
         LayersOfNeurons = new List<ILayerOfNeurons>();
         dynamic? layerOfNeuronsData = info.GetValue("LayersOfNeurons", typeof(object));
         if (layerOfNeuronsData == null)
@@ -136,7 +140,7 @@ public class NeuralNetwork : INeuralNetwork
 
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        info.AddValue("NumberOfInput", (uint)_inputsLayer!.InputsNeurons.Count());
+        info.AddValue("NumberOfInput", (uint)InputsLayer!.InputsNeurons.Count());
         info.AddValue("Momentum", Momentum);
         info.AddValue("LearnRate", LearnRate);
         info.AddValue("LayersOfNeurons", LayersOfNeurons.ToArray());

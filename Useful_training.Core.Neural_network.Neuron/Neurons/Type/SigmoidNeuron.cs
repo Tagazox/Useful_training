@@ -8,7 +8,7 @@ namespace Useful_training.Core.NeuralNetwork.Neurons.Type;
 [Serializable]
 internal class SigmoidNeuron : Neuron
 {
-    public SigmoidNeuron(IEnumerable<IInputNeurons> inputNeurons) : base(inputNeurons)
+    public SigmoidNeuron(IEnumerable<IInputNeuron> inputNeurons) : base(inputNeurons)
     {
     }
     public override void GetCalculationResult()

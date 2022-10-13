@@ -13,7 +13,7 @@ internal abstract class Neuron : INeuron
     public double OutputResult { get; set; }
     public double Bias { protected get; set; }
     public double BiasDelta { protected get; set; }
-    List<Synapse> IInputNeurons.OutputSynapses { get; } = new List<Synapse>();
+    List<Synapse> IInputNeuron.OutputSynapses { get; } = new List<Synapse>();
     protected List<Synapse> InputSynapses { get; set; } = new List<Synapse>();
 
     #region serialization
@@ -47,15 +47,15 @@ internal abstract class Neuron : INeuron
     public abstract void GetCalculationResult();
     internal abstract double DerivativeFunctionResultCalculation();
 
-    protected Neuron(IEnumerable<IInputNeurons> inputNeurons)
+    protected Neuron(IEnumerable<IInputNeuron> inputNeurons)
     {
-        var inputNeuronsEnumerable = inputNeurons as IInputNeurons[] ?? inputNeurons.ToArray();
+        var inputNeuronsEnumerable = inputNeurons as IInputNeuron[] ?? inputNeurons.ToArray();
         if (inputNeurons == null || !inputNeuronsEnumerable.Any())
             throw new CantInitializeWithZeroInputException("Neuron need to be initialize with at least one input");
         Random random = new Random();
         BiasDelta = random.NextDouble()*2-1;
         Bias = random.NextDouble()*2-1;
-        foreach (IInputNeurons inputNeuron in inputNeuronsEnumerable)
+        foreach (IInputNeuron inputNeuron in inputNeuronsEnumerable)
         {
             Synapse synapse = new Synapse(inputNeuron, this);
             inputNeuron.OutputSynapses.Add(synapse);
@@ -75,10 +75,6 @@ internal abstract class Neuron : INeuron
 
     public void UpdateWeights(double learnRate, double momentum)
     {
-        if (learnRate is <= 0 or > 1)
-            throw new ArgumentException("Learn rate need to be between 0 and 1");
-        if (momentum is <= 0 or > 1)
-            throw new ArgumentException("Momentum need to be between 0 and 1");
         double prevDelta = BiasDelta;
         BiasDelta = learnRate * Gradiant;
         Bias += BiasDelta + momentum * prevDelta;
@@ -100,15 +96,15 @@ internal abstract class Neuron : INeuron
     public double CalculateGradient(double? target = null)
     {
         if (target == null)
-            return Gradiant = ((IInputNeurons)this).OutputSynapses.Sum(a => a.OutputNeuron.Gradiant * a.Weight) *
+            return Gradiant = ((IInputNeuron)this).OutputSynapses.Sum(a => a.OutputNeuron.Gradiant * a.Weight) *
                               DerivativeFunctionResultCalculation();
 
         return Gradiant = CalculateError(target.Value) * DerivativeFunctionResultCalculation();
     }
 
-    IInputNeurons IInputNeurons.Clone()
+    IInputNeuron IInputNeuron.Clone()
     {
-        return (IInputNeurons)MemberwiseClone();
+        return (IInputNeuron)MemberwiseClone();
     }
 
     #region serialization

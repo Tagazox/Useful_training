@@ -14,7 +14,7 @@ internal class LayerOfNeurons : ILayerOfNeurons
 {
     public IList<INeuron> Neurons { get; set; }
     public IList<double> Outputs => Neurons.Select(n => n.OutputResult).ToList();
-    public IEnumerable<IInputNeurons> InputsNeurons => Neurons.Select(n => (IInputNeurons) n);
+    public IList<IInputNeuron> InputsNeurons => Neurons.Select(n => (IInputNeuron) n).ToList();
 
     public LayerOfNeurons()
     {

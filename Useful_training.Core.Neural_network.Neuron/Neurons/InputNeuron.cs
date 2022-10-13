@@ -4,12 +4,12 @@ using Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
 [assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests")]
 namespace Useful_training.Core.NeuralNetwork.Neurons;
 
-internal class InputNeuron : IInputNeurons
+internal class InputNeuron : IInputNeuron
 {
 	public double OutputResult { get; set; }
-	List<Synapse> IInputNeurons.OutputSynapses { get; } = new List<Synapse>();
-	public IInputNeurons Clone()
+	List<Synapse> IInputNeuron.OutputSynapses { get; } = new List<Synapse>();
+	public IInputNeuron Clone()
 	{
-		return (IInputNeurons)MemberwiseClone();
+		return (IInputNeuron)MemberwiseClone();
 	}
 }

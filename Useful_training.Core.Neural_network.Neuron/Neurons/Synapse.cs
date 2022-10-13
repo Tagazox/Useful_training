@@ -5,11 +5,11 @@ namespace Useful_training.Core.NeuralNetwork.Neurons;
 internal class Synapse
 {
     private static readonly Random Rand = new Random();
-    public IInputNeurons InputNeuron { get; }
+    public IInputNeuron InputNeuron { get; }
     public INeuron OutputNeuron { get; }
     public double Weight { get; set; }
     public double WeightDelta { get; set; }
-    public Synapse(IInputNeurons inputNeuron, INeuron outputNeuron)
+    public Synapse(IInputNeuron inputNeuron, INeuron outputNeuron)
     {
         Random rand = new Random();
         InputNeuron = inputNeuron;

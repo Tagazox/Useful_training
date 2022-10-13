@@ -13,7 +13,7 @@ public class NeuronsTests
 	private readonly IList<INeuron> _neuronsToTest;
 	public NeuronsTests()
 	{
-		IList<IInputNeurons> inputsNeurons = MockInputNeuronsList();
+		IList<IInputNeuron> inputsNeurons = MockInputNeuronsList();
 
 		_neuronsToTest = new List<INeuron>();
 		_neuronsToTest.Add(new EluNeuron(inputsNeurons));
@@ -24,14 +24,14 @@ public class NeuronsTests
 		_neuronsToTest.Add(new SwishNeuron(inputsNeurons));
 		_neuronsToTest.Add(new TanhNeuron(inputsNeurons));
 	}
-	private IList<IInputNeurons> MockInputNeuronsList()
+	private IList<IInputNeuron> MockInputNeuronsList()
 	{
-		IList<IInputNeurons> inputsNeurons = new List<IInputNeurons>();
+		IList<IInputNeuron> inputsNeurons = new List<IInputNeuron>();
 		_numberOfInputs = 5;
 		_inputsValue = 1;
 		for (int i = 0; i < _numberOfInputs; i++)
 		{
-			Mock<IInputNeurons> mockedInputNeuron = new Mock<IInputNeurons>();
+			Mock<IInputNeuron> mockedInputNeuron = new Mock<IInputNeuron>();
 			mockedInputNeuron.Setup(inputNeurons => inputNeurons.OutputResult).Returns(_inputsValue);
 			mockedInputNeuron.Setup(inputNeurons => inputNeurons.OutputSynapses).Returns(new List<Synapse>());
 			inputsNeurons.Add(mockedInputNeuron.Object);
@@ -105,7 +105,7 @@ public class NeuronsTests
 	public void NeuroneCreationShouldThrowCantInitializeWithZeroInputException()
 	{
 		// ReSharper disable once CollectionNeverUpdated.Local
-		IList<IInputNeurons> badInputsNeurons = new List<IInputNeurons>();
+		IList<IInputNeuron> badInputsNeurons = new List<IInputNeuron>();
 		Action creationCase1 = () =>
 		{
 			INeuron unused = new EluNeuron(badInputsNeurons);

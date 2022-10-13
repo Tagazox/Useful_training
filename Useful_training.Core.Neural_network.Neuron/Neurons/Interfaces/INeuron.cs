@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 [assembly: InternalsVisibleTo("Useful_training.Core.NeuralNetwork.NeuralNetworkTests.Test")]
 namespace Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
 
-internal interface INeuron : IInputNeurons , ISerializable
+internal interface INeuron : IInputNeuron , ISerializable
 {
 	List<double> WeightDelta { set; }
 	List<double> Weight { set; }

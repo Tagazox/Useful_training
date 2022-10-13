@@ -6,6 +6,6 @@ namespace Useful_training.Core.NeuralNetwork.LayersOfNeurones.Interfaces;
 
 internal interface ILayerOfInputNeurons
 {
-    public IEnumerable<IInputNeurons> InputsNeurons { get; }
+    public IList<IInputNeuron> InputsNeurons { get; }
     public ILayerOfInputNeurons Clone();
 }
