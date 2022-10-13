@@ -99,7 +99,6 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
 
     private void NotifyObserver(INeuralNetworkObservableData data)
     {
-        if (DateTime.Now.Ticks % 5000 != 0) return;
         foreach (INeuralNetworkTrainerObserver observer in _observers)
             observer.Update(data);
     }

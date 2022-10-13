@@ -15,7 +15,6 @@ public class SearchNeuralNetworkByNameUseCase : ISearchNeuralNetworkByNameUseCas
 
     public NeuralNetworksFoundViewModel Execute(string? like, int start = 0, int count = 10)
     {
-        return new NeuralNetworksFoundViewModel(_neuralNetworkWarehouse.SearchAvailable(like, start, count)
-            .Select(Path.GetFileNameWithoutExtension)!);
+        return new NeuralNetworksFoundViewModel(_neuralNetworkWarehouse.SearchAvailable(like, start, count).Select(Path.GetFileNameWithoutExtension).OrderBy(vm=>vm)!);
     }
 }

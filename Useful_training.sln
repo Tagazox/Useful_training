@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Infrastructure.Warehouse", "FileManager\Useful_training.Infrastructure.Warehouse.csproj", "{41D71372-BB80-4293-9368-6C313B21F9D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Infrastructure.FileManagerTests", "FileManagerTests\Useful_training.Infrastructure.FileManagerTests.csproj", "{CD4024E9-DD70-4487-80E4-7B5A1B6BA590}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Infrastructure.WarehouseTests", "FileManagerTests\Useful_training.Infrastructure.WarehouseTests.csproj", "{CD4024E9-DD70-4487-80E4-7B5A1B6BA590}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful_training.Presentation.NeuralNetworkApi", "NeuralNetworkApi\Useful_training.Presentation.NeuralNetworkApi.csproj", "{017DF3A5-A742-4BA4-B9C5-02B227A53A4E}"
 EndProject

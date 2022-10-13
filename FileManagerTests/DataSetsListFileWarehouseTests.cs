@@ -35,15 +35,19 @@ public class DataSetsListFileWarehouseTests
             double input6 = rand.NextDouble() * 2 - 1;
             double input7 = rand.NextDouble() * 2 - 1;
 
-            double output = (input1*3 + input2*5 + input3*3) ;
+            double output = (input1 + input2 + input3 + input4 + input5 + input6 + input7);
 
             List<double> inputs = new List<double>
             {
-                input1 ,
-                input2 ,
-                input3 ,
+                input1,
+                input2,
+                input3,
+                input4,
+                input5,
+                input6,
+                input7
             };
-            List<double> outputs = new List<double> { output>0?  1:0 };
+            List<double> outputs = new List<double> { output > 0 ? 1 : 0 };
             dataSets.Add(new DataSet(inputs, outputs));
         }
 
@@ -54,6 +58,7 @@ public class DataSetsListFileWarehouseTests
         {
             dataSet.TargetOutputs[0] /= dataSets.Max(d => d.TargetOutputs[0]);
         }
+
         string toCopy = JsonConvert.SerializeObject(dataSetsToSave);
         Console.WriteLine(toCopy);
     }
@@ -61,10 +66,7 @@ public class DataSetsListFileWarehouseTests
     [Fact]
     public void SaveShouldBeGood()
     {
-        Action save = () =>
-        {
-            _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.DataSets, _nameOfTheDataSet).Wait();
-        };
+        Action save = () => { _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.DataSets, _nameOfTheDataSet).Wait(); };
         save.Should().NotThrow();
     }
 
@@ -111,10 +113,7 @@ public class DataSetsListFileWarehouseTests
     public void SaveShouldThrowAlreadyExistException()
     {
         SaveShouldBeGood();
-        Action save = () =>
-        {
-            _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.DataSets, _nameOfTheDataSet).Wait();
-        };
+        Action save = () => { _testSubject.Save(_neuralNetworkTrainerContainerMocked.Object.DataSets, _nameOfTheDataSet).Wait(); };
         save.Should().Throw<AlreadyExistException>();
     }
 

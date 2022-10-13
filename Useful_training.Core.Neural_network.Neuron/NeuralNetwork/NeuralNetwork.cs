@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Useful_training.Core.NeuralNetwork.Exceptions;
 using Useful_training.Core.NeuralNetwork.LayersOfNeurones;
@@ -95,6 +96,7 @@ public class NeuralNetwork : INeuralNetwork
 
     public void Reset()
     {
+        Console.WriteLine("Neural network rested");
         foreach (ILayerOfNeurons layer in LayersOfNeurons)
             layer.Reset();
     }
