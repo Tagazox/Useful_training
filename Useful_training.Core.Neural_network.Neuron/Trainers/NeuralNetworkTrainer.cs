@@ -104,7 +104,7 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
     }
 
     private int _counter = 0;
-    private const int CounterIterationReset  = 5000;
+    private const int CounterIterationReset  = 500;
     private bool IsItTimeToUpdateObserver()
     {
         return _counter++ % CounterIterationReset == 0;

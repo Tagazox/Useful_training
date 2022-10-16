@@ -27,8 +27,7 @@ public class NeuralNetworkBuilder : INeuralNetworkBuilder
         NeuronType typeOfNeurons)
     {
         if (numberOfNeuronesByLayer.Count != numberOfHiddenLayers)
-            throw new ArgumentException(
-                "count of numberOfNeuronesByLayers arrays need to be equal as the number of hidden layers.");
+            throw new ArgumentException("count of numberOfNeuronesByLayers arrays need to be equal as the number of hidden layers.");
 
         for (int i = 0; i < numberOfHiddenLayers; i++)
             _neuralNetwork.AddHiddenLayer(numberOfNeuronesByLayer[i], typeOfNeurons);

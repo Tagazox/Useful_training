@@ -13,11 +13,11 @@ internal class SeLuNeuron : Neuron
     }
     public override void GetCalculationResult()
     {
-        double result = GetInterpolationResult();
-        if (result >= 0)
-            OutputResult = result;
+        double interpolationResult = GetInterpolationResult();
+        if (interpolationResult >= 0)
+            OutputResult = interpolationResult;
         else
-            OutputResult = Math.Exp(result) - 1;
+            OutputResult = Math.Exp(interpolationResult) - 1;
     }
     internal override double DerivativeFunctionResultCalculation()
     {

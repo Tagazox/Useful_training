@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using Useful_training.Core.NeuralNetwork.Exceptions;
+using Useful_training.Core.NeuralNetwork.Helpers;
 using Useful_training.Core.NeuralNetwork.Neurons.Interfaces;
 using Useful_training.Core.NeuralNetwork.Neurons.Type.Enums;
 
@@ -8,7 +9,6 @@ namespace Useful_training.Core.NeuralNetwork.Neurons;
 [Serializable]
 internal abstract class Neuron : INeuron
 {
-    private static Random _random = new Random();
     public double Gradiant { get; set; }
     public double OutputResult { get; set; }
     public double Bias { protected get; set; }
@@ -17,6 +17,7 @@ internal abstract class Neuron : INeuron
     protected List<Synapse> InputSynapses { get; set; } = new List<Synapse>();
 
     #region serialization
+
     public List<double> WeightDelta
     {
         set
@@ -28,6 +29,7 @@ internal abstract class Neuron : INeuron
                 InputSynapses[i].WeightDelta = value[i];
         }
     }
+
     public List<double> Weight
     {
         set
@@ -40,8 +42,6 @@ internal abstract class Neuron : INeuron
         }
     }
 
-        
-
     #endregion
 
     public abstract void GetCalculationResult();
@@ -53,8 +53,8 @@ internal abstract class Neuron : INeuron
         if (inputNeurons == null || !inputNeuronsEnumerable.Any())
             throw new CantInitializeWithZeroInputException("Neuron need to be initialize with at least one input");
         Random random = new Random();
-        BiasDelta = random.NextDouble()*2-1;
-        Bias = random.NextDouble()*2-1;
+        BiasDelta = RandomNumber.GetMirrorDouble();
+        Bias = RandomNumber.GetMirrorDouble();
         foreach (IInputNeuron inputNeuron in inputNeuronsEnumerable)
         {
             Synapse synapse = new Synapse(inputNeuron, this);
@@ -75,22 +75,15 @@ internal abstract class Neuron : INeuron
 
     public void UpdateWeights(double learnRate, double momentum)
     {
+        UpdateBiasWeights(learnRate, momentum);
+        UpdateSynapsesWeights(learnRate, momentum);
+    }
+
+    private void UpdateBiasWeights(double learnRate, double momentum)
+    {
         double prevDelta = BiasDelta;
         BiasDelta = learnRate * Gradiant;
         Bias += BiasDelta + momentum * prevDelta;
-
-        foreach (var synapse in InputSynapses)
-        {
-            prevDelta = synapse.WeightDelta;
-            synapse.WeightDelta = learnRate * Gradiant * synapse.InputNeuron.OutputResult;
-            synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
-            synapse.Weight = synapse.Weight;
-        }
-    }
-
-    private double CalculateError(double target)
-    {
-        return target - OutputResult;
     }
 
     public double CalculateGradient(double? target = null)
@@ -100,6 +93,22 @@ internal abstract class Neuron : INeuron
                               DerivativeFunctionResultCalculation();
 
         return Gradiant = CalculateError(target.Value) * DerivativeFunctionResultCalculation();
+    }
+
+    private void UpdateSynapsesWeights(double learnRate, double momentum)
+    {
+        foreach (var synapse in InputSynapses)
+        {
+            double prevDelta = synapse.WeightDelta;
+            synapse.WeightDelta = learnRate * Gradiant * synapse.InputNeuron.OutputResult;
+            synapse.Weight += synapse.WeightDelta + momentum * prevDelta;
+            synapse.Weight = synapse.Weight;
+        }
+    }
+
+    private double CalculateError(double target)
+    {
+        return target - OutputResult;
     }
 
     IInputNeuron IInputNeuron.Clone()
@@ -123,13 +132,13 @@ internal abstract class Neuron : INeuron
 
     public void Reset()
     {
-        
         foreach (Synapse synapse in InputSynapses)
         {
-            Bias = _random.NextDouble()*2-1;
-            BiasDelta = _random.NextDouble()*2-1;
+            Bias = RandomNumber.GetMirrorDouble();
+            BiasDelta = RandomNumber.GetMirrorDouble();
             synapse.Reset();
         }
     }
+
     #endregion
 }

@@ -9,8 +9,5 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="Useful_training.Core.NeuralNetwork.Tests" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Warehouse\Interfaces" />
-	</ItemGroup>
 
 </Project>
