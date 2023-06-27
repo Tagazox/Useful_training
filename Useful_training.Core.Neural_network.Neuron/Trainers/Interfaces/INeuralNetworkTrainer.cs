@@ -2,6 +2,6 @@
 
 public interface INeuralNetworkTrainer : INeuralNetworkObservable
 {
-    void TrainNeuralNetwork();
+    void TrainNeuralNetwork(bool check);
     void Destroy();
 }

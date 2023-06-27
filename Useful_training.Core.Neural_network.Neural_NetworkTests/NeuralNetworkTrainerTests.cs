@@ -56,7 +56,7 @@ public class NeuralNetworkTrainerTests
             Thread.Sleep(5000);
             neuralNetworkTrainer.Destroy();
         } );
-        neuralNetworkTrainer.TrainNeuralNetwork();
+        neuralNetworkTrainer.TrainNeuralNetwork(true);
 
     }
     [Fact]

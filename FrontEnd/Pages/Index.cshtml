@@ -24,7 +24,7 @@
                     <select class="form-control bg-light border-0 small" aria-label="Search" aria-describedby="basic-addon2" id="NeuralNetwork_to_train_select">
                         <option> Select neural network to train</option>
                     </select>
-                   
+
                 </div>
             </form>
             <!-- Topbar Search -->
@@ -80,13 +80,12 @@
                         </div>
                         <!-- Card Body -->
                         <div class="card-body">
-                            <div  id="RowTemplaterContainer"></div>
+                            <div id="RowTemplaterContainer"></div>
                         </div>
                     </div>
                 </div>
 
             </div>
-
 
         </div>
         <!-- /.container-fluid -->
@@ -96,4 +95,15 @@
 </div>
 <!-- End of Content Wrapper -->
 
-<div id="templateMeanError" class="invisible"><div class="row"><div class="col-12"> <div class="meanError"></div></div></div></div>
+<div id="templateMeanError" class="invisible">
+    <div class="row">
+        <div class="col-12">
+            <div class="meanError"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/site.js"></script>
+}

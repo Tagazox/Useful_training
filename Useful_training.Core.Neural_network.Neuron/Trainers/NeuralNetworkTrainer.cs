@@ -8,7 +8,7 @@ namespace Useful_training.Core.NeuralNetwork.Trainers;
 
 public class NeuralNetworkTrainer : INeuralNetworkTrainer
 {
-    private const double ErrorThreshold = 0.001;
+    public double ErrorThreshold = 0.001;
     private readonly INeuralNetwork _neuralNetwork;
     private readonly List<DataSet> _dataSetsList;
     private readonly int _epochRoundedTo;
@@ -38,7 +38,7 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
         _observers = new List<INeuralNetworkTrainerObserver>();
     }
 
-    public void TrainNeuralNetwork()
+    public void TrainNeuralNetwork(bool checkIfEnought)
     {
         Random random = new Random();
 
@@ -57,7 +57,7 @@ public class NeuralNetworkTrainer : INeuralNetworkTrainer
                     resultsOfTheNeuralNetworkCalculation));
 
                 if (ErrorIsAcceptable(dataSetForThisIteration.TargetOutputs))
-                    _trainingIsFinished = CheckIfTheNeuralNetworkHasBeenEnoughTrained();
+                    _trainingIsFinished = checkIfEnought || CheckIfTheNeuralNetworkHasBeenEnoughTrained();
                 else
                     _neuralNetwork.BackPropagate(dataSetForThisIteration.TargetOutputs);
             }

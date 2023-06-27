@@ -7,10 +7,12 @@ namespace Useful_training.Core.NeuralNetwork.Factory;
 public class NeuralNetworkDirector
 {
     private INeuralNetworkBuilder? _networkBuilder;
+
     public INeuralNetworkBuilder NetworkBuilder
     {
         set => _networkBuilder = value;
     }
+
     public void BuildMinimalNeuralNetwork(uint numberOfInput, uint numberOfOutputs, NeuronType typeOfNeurons)
     {
         if (_networkBuilder == null)
@@ -37,5 +39,19 @@ public class NeuralNetworkDirector
         _networkBuilder.Initialize(numberOfInput, learnRate, momentum);
         _networkBuilder.AddHiddenLayers(numbersOfNeuronesByHiddenLayer, numberOfHiddenLayers, typeOfNeurons);
         _networkBuilder.AddOutputLayers(numberOfOutputs, typeOfNeurons);
+    }
+
+    public void BuildComplexNeuralNetwork(uint numberOfInput, double learnRate, double momentum, uint numberOfOutputs,
+        uint numberOfHiddenLayers, List<uint> numbersOfNeuronesByHiddenLayer, List<NeuronType> typeOfNeurons)
+    {
+        if (_networkBuilder == null)
+            throw new BuilderNotDefinedException("Builder need to be defined first");
+        _networkBuilder.Initialize(numberOfInput, learnRate, momentum);
+        for (int i = 0; i < typeOfNeurons.Count-1; i++)
+        {
+            _networkBuilder.AddHiddenLayers(numbersOfNeuronesByHiddenLayer[i], 1, typeOfNeurons[i]);
+        }
+
+        _networkBuilder.AddOutputLayers(numberOfOutputs, typeOfNeurons.Last());
     }
 }

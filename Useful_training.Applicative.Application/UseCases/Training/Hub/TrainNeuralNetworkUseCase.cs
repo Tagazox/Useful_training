@@ -38,7 +38,7 @@ public class TrainNeuralNetworkUseCase : ITrainNeuralNetworkUseCase
 
         try
         {
-            _neuralNetworkTrainer.TrainNeuralNetwork();
+            _neuralNetworkTrainer.TrainNeuralNetwork(true);
         }
         catch (Exception e)
         {
